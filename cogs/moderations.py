@@ -82,19 +82,12 @@ class moderations(commands.Cog):
   @commands.command()
   @commands.has_permissions(ban_members=True)
   @commands.bot_has_permissions(ban_members=True)
-  async def unban(self, ctx, *, member):
+  async def unban(self, ctx, *, member:discord.User):
     await ctx.trigger_typing()
+    member = discord.Object(id=member.id)
     try:
-      banned_peoples = await ctx.guild.bans()
-      member_name, member_discrimator = member.split("#")
-      for ban_entry in banned_peoples:
-          user = ban_entry.user
-          if (user.name, user.discriminator) == (member.name,
-                                                member.discriminator):
-              await ctx.guilds.unban(user)
-              await ctx.reply(f" unbanned {user}")
-    except:
-      return await ctx.send("The user don't exist")
+      await member.unban(reason=f"{ctx.author.id}: unbanned)
+  
 
     
 def setup(bot):

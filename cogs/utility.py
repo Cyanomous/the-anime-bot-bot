@@ -415,15 +415,7 @@ class utility(commands.Cog):
   @commands.command()
   async def replacespace(self, ctx, emoji, *, thing):
     await ctx.send(thing.replace(" ", emoji))
-  @commands.command()
-  async def redirectcheck(self, ctx, *, website):
-    website = website.strip("<>")
-    async with aiohttp.ClientSession(headers={'User-Agent': 'python-requests/2.20.0'}).get(website) as resp:
-      soup = BeautifulSoup(await resp.text(), features="lxml")
-      canonical = soup.find('link', {'rel': 'canonical'})
-      if canonical == None:
-        return await ctx.send(f"`{resp.real_url}`")
-      await ctx.send(f"`{canonical['href']}`")
+  
   @commands.command()
   async def mytime(self, ctx):
     embed=discord.Embed(color=self.bot.color, timestamp=datetime.utcnow())

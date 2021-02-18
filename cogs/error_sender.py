@@ -28,7 +28,7 @@ class error_sender(commands.Cog):
     embed = discord.Embed(color=0xFF0000, title="An error occured")
     [embed.add_field(name=f"**{n}**", value=f"```py\n{v}```", inline=False) for n, v in fields]
     async with aiohttp.ClientSession() as session:
-        webhook = Webhook.from_url("https://canary.discord.com/api/webhooks/804917398380478574/h8nlRZr8OUNjJg-FKp2EOgKdzwxjjCwe3y6gDxL3aNKmRFbLH70VwWGdSsYnct_Zu4c2", adapter=AsyncWebhookAdapter(session))
+        webhook = Webhook.from_url(wha, adapter=AsyncWebhookAdapter(session))
         await webhook.send(embed=embed)
         return
 

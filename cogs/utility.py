@@ -415,7 +415,10 @@ class utility(commands.Cog):
   @commands.command()
   async def replacespace(self, ctx, emoji, *, thing):
     await ctx.send(thing.replace(" ", emoji))
-  
+  @commands.command()
+  async def redirectcheck(self, ctx, *, website):
+    async with aiohttp.ClientSession().get(website) as resp:
+     await ctx.send(f"`{resp.real_url}`")
   @commands.command()
   async def mytime(self, ctx):
     embed=discord.Embed(color=self.bot.color, timestamp=datetime.utcnow())

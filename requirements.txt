@@ -193,7 +193,7 @@ sqlparse==0.4.1
 template==0.6.4
 tensorboard==2.2.2
 tensorboard-plugin-wit==1.8.0
-tensorflow-cpu==2.2.0
+tensorflow-cpu==2.4.0
 tensorflow-estimator==2.2.0
 termcolor==1.1.0
 toml==0.10.2

@@ -87,6 +87,8 @@ class moderations(commands.Cog):
     member = discord.Object(id=member.id)
     try:
       await member.unban(reason=f"{ctx.author.id}: unbanned)
+    except:
+      await ctx.send("can not unban")
   
 
     

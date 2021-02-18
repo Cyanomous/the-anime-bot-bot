@@ -8,8 +8,6 @@ from itertools import cycle
 import cse
 import os
 google_api_1 = os.getenv("google_api_1")
-google_api_2 = os.getenv("google_api_2")
-google_api_3 = os.getenv("google_api_3")
 from contextlib import suppress
 from menus import menus
 from googlesearch import search
@@ -166,9 +164,6 @@ class utility(commands.Cog):
         }
     bot.loop.create_task(self.build_rtfm_lookup_table(page_types=page_types))
     bot.cse1 = cse.Search(api_key=google_api_1)
-    bot.cse2 = cse.Search(api_key=google_api_2)
-    bot.cse3 = cse.Search(api_key=google_api_3)
-    bot.cse_lists = cycle([bot.cse1, bot.cse2, bot.cse3])
 
   def parse_object_inv(self, stream, url):
         # key: URL
@@ -431,7 +426,7 @@ class utility(commands.Cog):
     await ctx.send(await self.translate_(from_lang, to_lang, thing))
   @staticmethod
   async def google_(self, thing, ctx):
-      return await next(self.bot.cse_lists).search(thing, safe_search=not ctx.channel.is_nsfw())
+      return await bot.cse1.search(thing, safe_search=not ctx.channel.is_nsfw())
   @commands.command()
   async def google(self, ctx, *, thing: str):
     results = await self.google_(self, thing, ctx)

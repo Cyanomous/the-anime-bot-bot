@@ -18,7 +18,7 @@ gTTS==2.2.1
 humanize==3.2.0
 lavalink==3.1.4
 lxml==4.6.2
-lyricsgenius==2.0.2
+lyricsgenius==3.0.0
 mystbin.py==1.0.1
 numpy==1.19.5
 Pillow==8.1.0

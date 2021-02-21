@@ -1,23 +1,27 @@
-import os
 import asyncio
+import os
+
 import aioredis
 import uvloop
+
 asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 import warnings
+
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 os.system("python3 webserver.py &")
 os.system("python3 hmm.py &")
 TOKEN = os.getenv("TOKEN")
 import difflib
+import functools
 import re
 import sys
 import traceback
-from utils.HelpPaginator import HelpPaginator, CannotPaginate
-import discord
-from utils.subclasses import AnimeBot
-from discord.ext import commands
-import functools
 
+import discord
+from discord.ext import commands
+
+from utils.HelpPaginator import CannotPaginate, HelpPaginator
+from utils.subclasses import AnimeBot
 
 bot = AnimeBot()
 

@@ -5,12 +5,15 @@ from jishaku.paginators import PaginatorEmbedInterface
 class HelpCommand(commands.HelpCommand):
     def get_command_signature(self, command):
         return '%s%s %s' % (self.clean_prefix, command.qualified_name, command.signature)
+        
     async def send_group_help(self, group):
         embed = discord.Embed(color=self.context.bot.color, title=f"{self.clean_prefix}{group.qualified_name}", description=group.short_doc or "oh seems like my owner is too lazy to add help for this command sorry")
         await self.context.send(embed=embed)
+
     async def send_command_help(self, command):
         embed = discord.Embed(color=self.context.bot.color, title=f"{self.clean_prefix}{command.qualified_name}", description=command.short_doc or "oh seems like my owner is too lazy to add help for this command sorry")
         await self.context.send(embed=embed)
+
     async def send_cog_help(self, cog):
         paginator = commands.Paginator(prefix="", suffix="")
         commands_ = await self.filter_commands(cog.get_commands, sort=True)
@@ -19,6 +22,7 @@ class HelpCommand(commands.HelpCommand):
             paginator.add_line(i)
         interface = PaginatorEmbedInterface(self.context.bot, paginator, owner=self.contextauthor)
         await interface.send_to(self.context)
+
     async def send_bot_help(self, mapping):
         is_working = True
         dicts = {

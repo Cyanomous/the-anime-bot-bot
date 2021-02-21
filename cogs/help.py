@@ -37,7 +37,7 @@ class HelpCommand(commands.HelpCommand):
             744346239075877518: "utility"
         }
         embed = discord.Embed(color=self.context.bot.color, description="**Hi welcome to The Anime Bot's help menu**\n```diff\nBefore we start something you need to know about\n <argument> means that argument is require\n[requirment] mean that argument is optional\n```")
-        embed.add_field(name="Categorys", value="**Animes:** <:rooDuck:739614767941156874>\n**Fun:** <:rooAww:747680003021471825>\n**Moderations:** <:rooCop:596577110982918146>\n**Music:** <a:rooCool:747680120763973654>**Others:** <a:rooClap:759933903959228446>\n**Pictures:** <:rooBless:597589960270544916>\n**Utility:** <a:rooLove:744346239075877518>")
+        embed.add_field(name="Categorys", value="**Animes:** <:rooDuck:739614767941156874>\n**Fun:** <:rooAww:747680003021471825>\n**Moderations:** <:rooCop:596577110982918146>\n**Music:** <a:rooCool:747680120763973654>\n**Others:** <a:rooClap:759933903959228446>\n**Pictures:** <:rooBless:597589960270544916>\n**Utility:** <a:rooLove:744346239075877518>")
         channel = self.get_destination()
         message = await channel.send(embed=embed)
         for i in dicts.keys():

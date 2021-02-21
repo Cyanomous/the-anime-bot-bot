@@ -21,7 +21,7 @@ class HelpCommand(commands.HelpCommand):
 
     async def send_cog_help(self, cog):
         paginator = commands.Paginator(prefix="", suffix="")
-        commands_ = await self.filter_commands(cog.get_commands, sort=True)
+        commands_ = await self.filter_commands(cog.get_commands(), sort=True)
         commands_ = [self.get_command_signature(i) for i in commands_]
         for i in commands_:
             paginator.add_line(i)

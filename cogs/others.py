@@ -7,6 +7,7 @@ import random
 import time
 from collections import namedtuple
 
+from github import Github
 import discord
 import humanize
 import psutil
@@ -14,6 +15,8 @@ from discord.ext import commands
 from utils.fuzzy import finder
 
 start_time = time.time()
+gittoken = os.getenv("gittoken")
+g = Github(gittoken)
 TOKEN = os.getenv("TOKEN")
 import io
 import json
@@ -377,6 +380,11 @@ class others(commands.Cog):
                         value=f"```{round(self.bot.latency * 1000)} ms ```")
         embed.add_field(name="<a:typing:597589448607399949> API latency",
                         value=f"```{round(final_latency * 1000)} ms ```")
+        repo = g.get_repo("Cryptex-github/the-anime-bot-bot").get_commits()[:3]
+        lists = []
+        for i in repo:
+            lists.append(f"`[{i.sha}]({i.url})` {i.message}")
+        embed.add_field(name="Recent changes", value=)
         embed.add_field(
             name=" stats ",
             value=

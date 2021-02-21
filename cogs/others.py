@@ -383,7 +383,7 @@ class others(commands.Cog):
         repo = g.get_repo("Cryptex-github/the-anime-bot-bot").get_commits()[:3]
         lists = []
         for i in repo:
-            lists.append(f"`[{i.commit.sha}]({i.commit.url})` {i.commit.message}")
+            lists.append(f"[{i.commit.sha[5]}]({i.commit.url}) {i.commit.message}")
         embed.add_field(name="Recent changes", value="\n".join(lists))
         embed.add_field(
             name=" stats ",

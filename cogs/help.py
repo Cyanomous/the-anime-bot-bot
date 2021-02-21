@@ -26,7 +26,7 @@ class HelpCommand(commands.HelpCommand):
         for i in commands_:
             paginator.add_line(i)
         interface = PaginatorEmbedInterface(
-            self.context.bot, paginator, owner=self.contextauthor)
+            self.context.bot, paginator, owner=self.context.author)
         await interface.send_to(self.context)
 
     async def send_bot_help(self, mapping):

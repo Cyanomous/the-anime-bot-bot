@@ -336,6 +336,13 @@ class others(commands.Cog):
     #   embed.set_footer(text=f"requested by {ctx.author} response time : {round(self.bot.latency * 1000)} ms", icon_url=ctx.author.avatar_url)
     #   await ctx.send(embed=embed)
 
+    @commands.command()
+    async def commits(self, ctx):
+        lists = []
+        repo = g.get_repo("Cryptex-github/the-anime-bot-bot").get_commits()
+        for i in repo:
+            lists.append(f"[{i.commit.sha[:7]}]({i.commit.html_url}) {i.commit.message}")
+        embed = discord.Embed(color=self.bot.color, description="\n".join(lists))            
     @commands.command(aliases=["info"])
     async def about(self, ctx):
         p = pathlib.Path('./')

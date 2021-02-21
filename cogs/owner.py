@@ -321,6 +321,14 @@ class owners(commands.Cog):
     @commands.command()
     # @commands.is_owner()
     async def say(self, ctx, *, text: str):
+        if ctx.channel.nsfw == False:
+            lists = [
+                "dick", "pussy", "horny", "porn", "cum", "cunt", "cock",
+                "penis", "hole", "fuck", "shit", "bitch", "gore", "nsfw"
+            ]
+            if any(i in website_ for i in lists):
+                return await ctx.send(
+                    "Can not say nsfw words in non nsfw channel")
         # if ctx.author.id == 707250997407252531 or ctx.author.id == 590323594744168494:
         await ctx.send(text, allowed_mentions=discord.AllowedMentions.none())
 

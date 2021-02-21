@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from utils.subclasses import GlobalCooldown, AnimeContext
+from utils.subclasses import AnimeContext, GlobalCooldown
 
 
 class cooldown(commands.Cog):

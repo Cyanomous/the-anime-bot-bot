@@ -1,28 +1,28 @@
-import discord
-from discord.ext import commands, tasks
-from bs4 import BeautifulSoup
-from utils.asyncstuff import asyncexe
-from selenium import webdriver
+import asyncio
+import io
+import os
+import random
+import subprocess
+import textwrap
+import traceback
+import zipfile
+from contextlib import redirect_stdout
+from io import BytesIO
+
 import aiohttp
+import discord
+from bs4 import BeautifulSoup
+from discord.ext import commands, tasks
+from menus import menus
+from PIL import Image
+from selenium import webdriver
+from utils.asyncstuff import asyncexe
+from utils.embed import embedbase
+
 from jishaku.exception_handling import ReplResponseReactor
 from jishaku.features.baseclass import Feature
-from jishaku.paginators import WrappedPaginator
+from jishaku.paginators import PaginatorInterface, WrappedPaginator
 from jishaku.shell import ShellReader
-import subprocess
-from contextlib import redirect_stdout
-import traceback
-import io
-import textwrap
-import os
-from utils.embed import embedbase
-from utils.asyncstuff import asyncexe
-from menus import menus
-import random
-import zipfile
-from jishaku.paginators import PaginatorInterface
-from io import BytesIO
-from PIL import Image
-import asyncio
 
 
 class MyMenu(menus.Menu, timeout=9223372036854775807):

@@ -1,7 +1,8 @@
-import discord
-from discord.ext import commands
 import json
 import random
+
+import discord
+from discord.ext import commands
 
 # class functions(commands.Cog):
 #   async def buy_this(self, user,item_name,amount):

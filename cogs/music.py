@@ -1,19 +1,22 @@
-import discord
-from discord.ext import commands, tasks
-import typing
-from utils.subclasses import AnimeContext, AnimeBot
-from jishaku.paginators import PaginatorInterface
-from utils.asyncstuff import asyncexe
+import asyncio
 import functools
 import itertools
+import math
+import os
+import random
+import typing
+from datetime import datetime
+
+import discord
+import lyricsgenius as lg
 import youtube_dl
 from async_timeout import timeout
-from datetime import datetime
-import asyncio
-import random
-import math
-import lyricsgenius as lg
-import os
+from discord.ext import commands, tasks
+from utils.asyncstuff import asyncexe
+from utils.subclasses import AnimeBot, AnimeContext
+
+from jishaku.paginators import PaginatorInterface
+
 TOKEN_ACCESS = os.getenv("TOKEN_ACCESS")
 
 youtube_dl.utils.bug_reports_message = lambda: ''

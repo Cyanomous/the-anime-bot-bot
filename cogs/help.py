@@ -1,6 +1,8 @@
 import discord
 from discord.ext import commands
+
 from jishaku.paginators import PaginatorEmbedInterface
+
 
 class HelpCommand(commands.HelpCommand):
     def get_command_signature(self, command):

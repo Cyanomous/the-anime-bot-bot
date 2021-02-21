@@ -1,7 +1,9 @@
+from collections import Counter
+
 import discord
 from discord.ext import commands
+
 from jishaku.paginators import PaginatorInterface
-from collections import Counter
 
 
 class commandsusage(commands.Cog):

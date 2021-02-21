@@ -1,10 +1,11 @@
-import discord
-from discord.ext import commands
-from io import BytesIO
-from replit import db
-import requests
-import aiohttp
 import json
+from io import BytesIO
+
+import aiohttp
+import discord
+import requests
+from discord.ext import commands
+from replit import db
 
 
 class animes(commands.Cog):

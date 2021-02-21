@@ -1,7 +1,8 @@
-import discord
-from discord.ext import commands
 import copy
 import datetime
+
+import discord
+from discord.ext import commands
 
 
 class reactionrole(commands.Cog):

@@ -1,29 +1,34 @@
-import discord
-from discord.ext import commands, tasks
-from csv import writer
 import asyncio
 import logging
+from csv import writer
+
+import discord
+from discord.ext import commands, tasks
+
 logging.getLogger('asyncio').setLevel(logging.CRITICAL)
 import json
-import time
-from utils.subclasses import GlobalCooldown
-import asyncpg
 import os
+import time
+
+import asyncpg
+from utils.subclasses import GlobalCooldown
+
 discord_bot_list = os.getenv("discord_bot_list")
 bots_for_discord = os.getenv("bots_for_discord")
 topgg = os.getenv("topgg")
 discord_extreme_list = os.getenv("discord_extreme_list")
 botlist_space = os.getenv("botlist_space")
 POSTGRE_DATABASE_URL = os.getenv("POSTGRE_DATABASE_URL")
-import aiozaneapi
+import json
 import subprocess
-from utils.asyncstuff import asyncexe
-from menus import menus
-import aiohttp
 import sys
 import traceback
-import json
+
+import aiohttp
+import aiozaneapi
 import asyncdagpi
+from menus import menus
+from utils.asyncstuff import asyncexe
 
 
 class events(commands.Cog):

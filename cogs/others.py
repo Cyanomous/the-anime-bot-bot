@@ -1,25 +1,29 @@
-import discord
-from discord.ext import commands
-from collections import namedtuple
-import base64
-import random
-from utils.fuzzy import finder
-import inspect
 import asyncio
-import os
-import psutil
-import humanize
-import time
+import base64
 import datetime
+import inspect
+import os
+import random
+import time
+from collections import namedtuple
+
+import discord
+import humanize
+import psutil
+from discord.ext import commands
+from utils.fuzzy import finder
+
 start_time = time.time()
 TOKEN = os.getenv("TOKEN")
-from utils.subclasses import AnimeColor
-from utils.embed import embedbase
-from jishaku.paginators import WrappedPaginator, PaginatorInterface
-import json
-import aiohttp
 import io
+import json
 import pathlib
+
+import aiohttp
+from utils.embed import embedbase
+from utils.subclasses import AnimeColor
+
+from jishaku.paginators import PaginatorInterface, WrappedPaginator
 
 
 class others(commands.Cog):

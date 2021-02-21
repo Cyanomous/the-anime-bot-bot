@@ -52,8 +52,6 @@ class HelpCommand(commands.HelpCommand):
                 return payload.message_id == message.id and payload.author_id == self.context.author.id and payload.emoji.id in dicts.keys()
             payload = await self.context.bot.wait_for("raw_reaction_add", check=check)
             await self.context.bot.invoke(copy_context_with(self.context, author=self.context.author, content=self.context.prefix + "help " + dicts.get(payload.emoji.id)))
-            await self.send_cog_help(self.context.bot.get_cog(dicts.get(payload.emoji.id)))
-
 
 class help(commands.Cog):
     def __init__(self, bot):

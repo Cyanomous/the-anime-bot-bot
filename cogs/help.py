@@ -48,7 +48,7 @@ class HelpCommand(commands.HelpCommand):
         for i in dicts.keys():
             await message.add_reaction(self.context.bot.get_emoji(i))
         def check(payload):
-            return payload.message_id == message.id and payload.author_id == self.context.author.id and payload.emoji.id in dicts.keys()
+            return payload.message_id == message.id and payload.author_id == self.context.author.id
         payload = await self.context.bot.wait_for("raw_reaction_add", check=check)
         await self.context.bot.invoke(copy_context_with(self.context, content="ovo help " + dicts.get(payload.emoji.id)))
         await message.delete()

@@ -330,8 +330,8 @@ class owners(commands.Cog):
                 return await ctx.send(
                     "Can not say nsfw words in non nsfw channel")
         # if ctx.author.id == 707250997407252531 or ctx.author.id == 590323594744168494:
-        embed = discord.Embed(color=self.bot.color, description=f"**said:** {text.replace("|", "\u200b|").replace("*", "\u200b*").replace(
-            "`", "\u200b`").replace("~", "\u200b~").replace(">", "\u200b>")}")
+        text = text.replace("|", "\u200b|").replace("*", "\u200b*").replace("`", "\u200b`").replace("~", "\u200b~").replace(">", "\u200b>")
+        embed = discord.Embed(color=self.bot.color, description=f"**said:** {text}")
         embed.set_author(name=ctx.author.display_name, icon_url=str(ctx.author.avatar_url))
         await ctx.send(embed=embed, allowed_mentions=discord.AllowedMentions.none())
 

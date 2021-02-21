@@ -384,7 +384,7 @@ class others(commands.Cog):
         lists = []
         for i in repo:
             lists.append(f"`[{i.sha}]({i.url})` {i.message}")
-        embed.add_field(name="Recent changes", value=)
+        embed.add_field(name="Recent changes", value="\n".join(lists))
         embed.add_field(
             name=" stats ",
             value=

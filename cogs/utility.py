@@ -1,5 +1,7 @@
 import discord
 from discord.ext import commands
+import cv2
+import pyqrcode
 from bs4 import BeautifulSoup
 import requests
 import flags
@@ -12,7 +14,6 @@ google_api_2 = os.getenv("google_api_2")
 google_api_3 = os.getenv("google_api_3")
 from contextlib import suppress
 from menus import menus
-from googlesearch import search
 import typing
 import json
 from utils import fuzzy
@@ -442,6 +443,59 @@ class utility(commands.Cog):
         return Translator(from_lang=from_lang,
                           to_lang=to_lang).translate(thing)
 
+    @commands.group(invoke_without_command=True)
+    async def qrcode(self, ctx, *, thing):
+        q = pyqrcode.create(thing)
+        pic = BytesIO()
+        q.png(pic, scale=6)
+        pic.seek(0)
+        await ctx.send(file=discord.File(pic, "qrcode.png"))
+    @qrcode.command(name="decode")
+    async def qrcode_decode(self, ctx, *, link):
+        if link.startswith("https"):
+            async with aiohttp.ClientSession().get(link) as resp:
+                byte_ = await resp.read()
+                byte_ = base64.b64decode
+                pic = np.frombuffer(byte_, dtype=np.uint8)
+                img = cv2.imread(pic, flags=1)
+                detector = cv2.QRCodeDetector()
+                data, bbox, straight_qrcode = detector.detectAndDecode(img)
+                await ctx.send(data)
+                # qr = decode(pic)
+                # await ctx.send(qr.data)
+    @staticmethod
+    @asyncexe()
+    def txt_(thing):
+        return discord.File(BytesIO(thing.encode("utf-8")), "something.txt")
+    @commands.command()
+    async def txt(self, ctx, *, anything:str=None):
+        if anything.startswith("https://mystb.in/"):
+            return await ctx.send(file=await self.txt_(str(await self.bot.mystbin.get(anything))))
+        await ctx.send(file=await self.txt_(anything))
+
+    @commands.command()
+    async def mystbin(self, ctx, *, code:str=None):
+        if code == None:
+            message = ctx.message.attachments[0]
+            if message:
+                syntax = message.filename.split(".")[1]
+                if message.filename.endswith((".txt", ".py", ".json", ".html", ".csv")):
+                    message = await message.read()
+                    message = message.decode("utf-8")
+                    await ctx.send(str(await self.bot.mystbin.post(message, syntax=syntax)))
+        else:
+            if code.startswith("http"):
+                async with aiohttp.ClientSession().get(code) as resp:
+                    message = await resp.read()
+                    try:
+                        message = message.decode("utf-8")
+                        return await ctx.send(str(await self.bot.mystbin.post(message, syntax="html")))
+                    except:
+                        
+                        message = f"Unable to decode so here is the byte {message}"
+                        return await ctx.send(str(await self.bot.mystbin.post(message, syntax="python")))
+            await ctx.send(str(await self.bot.mystbin.post(code)))
+
     @staticmethod
     @asyncexe()
     def redirectcheck_(website):
@@ -818,15 +872,13 @@ class utility(commands.Cog):
     @commands.command(aliases=["cbo"])
     async def choosebestof(self, ctx, times: Optional[str],
                            *choices: commands.clean_content):
-        """Chooses between multiple choices N times.
-        To denote multiple choices, you should use double quotes.
-        You can choose up to 1000000 times and only the top 10 results are shown.
+        """Chooses between multiple choices x times. to choose multiple stuff you shouse use double quote
         """
         await ctx.channel.trigger_typing()
         if len(choices) < 2:
             return await ctx.send("Give me more choice to choose from")
         if times == "max":
-            times = 10000000000000000000000000000000000000000
+            times = 1000000
         times = int(times)
         embed = discord.Embed(color=self.bot.color,
                               description="<a:loading:747680523459231834>")

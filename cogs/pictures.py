@@ -8,7 +8,7 @@ import typing
 import os
 from utils.asyncstuff import asyncexe
 import polaroid
-from PIL import Image
+from PIL import Image, ImageDraw
 from io import BytesIO
 from asyncdagpi import ImageFeatures
 import typing
@@ -28,6 +28,28 @@ class pictures(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+    @staticmethod
+    @asyncexe()
+    def circle_(background_color, circle_color):
+        frames = []
+        mid = 100
+        for i in range(500):
+            img = Image.new("RGB", (200, 200), background_color)
+            imgr = ImageDraw.Draw(img)
+            imgr.ellipse((100-i*20, 100-i*20, 100+i*20, 100+i*20), fill=circle_color)
+            fobj = BytesIO()
+            img.save(fobj, "GIF")
+            img = Image.open(fobj)
+            frames.append(img)
+        igif = BytesIO()
+        frames[0].save(igif, format='GIF', append_images=frames[1:], save_all=True, duration=3, loop=0)
+        igif.seek(0)
+        return igif
+
+    @commands.command()
+    async def circle(self, ctx, background_color="white", circle_color="blue"):
+        igif = await self.circle_(background_color, circle_color)
+        await ctx.send(file=discord.File(igif, "circle.gif"))
 
     @commands.command()
     async def npc(self,
@@ -124,7 +146,7 @@ class pictures(commands.Cog):
         await ctx.send(embed=embed, file=image)
 
     @commands.command()
-    async def archieve(self, ctx, *, text):
+    async def archive(self, ctx, *, text):
         embed = discord.Embed(color=0x00ff6a).set_image(
             url="attachment://alex.png")
         image = discord.File(

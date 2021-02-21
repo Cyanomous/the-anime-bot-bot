@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands, tasks
+from csv import writer
 import asyncio
 import logging
 logging.getLogger('asyncio').setLevel(logging.CRITICAL)
@@ -31,13 +32,22 @@ class events(commands.Cog):
         self.bot.ws_recieved = 0
         self.bot.send = 0
         self.status.start(bot)
+        self.graph.start()
         self.post.start(bot)
         self.update.start(bot)
         self.chunk.start()
         # self.post.start()
         self.errors_list = []
         self.bot.counter = 0
+    @tasks.loop(seconds=30)
+    async def graph(self):
 
+        with open ("socket.csv", "a") as f:
+            writer_object = writer(f) 
+
+            writer_object.writerow([self.bot.socket_stats["MESSAGE_CREATE"], self.bot.socket_stats["GUILD_MEMBER_UPDATE"], self.bot.socket_stats["TYPING_START"]]) 
+        
+            f.close() 
     @tasks.loop(minutes=1)
     async def status(self, bot):
         await bot.wait_until_ready()
@@ -340,6 +350,8 @@ class events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message_edit(self, old, new):
+        if old.embeds != []:
+            return
         if new.embeds != []:
             return
         await self.bot.process_commands(new)

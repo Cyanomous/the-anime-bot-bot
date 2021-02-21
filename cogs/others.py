@@ -28,6 +28,16 @@ class others(commands.Cog):
         self.countdownused = []
         self.thing = {}
 
+    @commands.command()
+    async def snipe(self, ctx):
+        """
+        no this is never happening, people delete message for a reason and you just snipe that just not right.
+        """
+        await ctx.send("no this is never happening, people delete message for a reason and you just snipe that just not right.")
+    @commands.command()
+    async def support(self, ctx):
+        await ctx.send("https://discord.gg/bUpF6d6bP9")
+
     @commands.command(aliases=["randomtoken"])
     async def randombottoken(self, ctx, user: discord.User = None):
         """
@@ -414,7 +424,7 @@ class others(commands.Cog):
         embed.add_field(name="uptime ", value=text)
         embed.add_field(
             name="Check bot uptime",
-            value="[Check bot uptime](https://stats.uptimerobot.com/v935zFWnqv)"
+            value="[Check bot uptime](https://stats.uptimerobot.com/v935zFWnqv/786692111)"
         )
         await ctx.reply(embed=embed)
 

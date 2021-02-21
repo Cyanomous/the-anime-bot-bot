@@ -179,6 +179,24 @@ class fun(commands.Cog):
             return from_bottom(text)
 
     @commands.command()
+    async def pic(self, ctx, animal:str):
+        async with aiohttp.ClientSession().get(f"https://some-random-api.ml/img/{animal}") as resp:
+            if resp.status == 404:
+                return await ctx.send("we can't find picture of that animal")
+            pic = await resp.json()
+            async with aiohttp.ClientSession().get(pic["link"]) as resp:
+                pic = BytesIO(await resp.read())
+                await ctx.send(file=discord.File(pic, filename=animal+".png"))
+    
+    @commands.command()
+    async def fact(self, ctx, animal:str):
+        async with aiohttp.ClientSession().get(f"https://some-random-api.ml/facts/{animal}") as resp:
+            if resp.status == 404:
+                return await ctx.send("we can't find fact about that animal")
+            fact = await resp.json()
+            await ctx.send(fact["fact"])
+
+    @commands.command()
     async def http(self, ctx, *, code: str = "404"):
         async with aiohttp.ClientSession().get(
                 f"https://http.cat/{code}") as resp:
@@ -377,9 +395,9 @@ class fun(commands.Cog):
         return text_
 
     @commands.command(aliases=["grid", "toemoji"])
-    async def renderemoji(self, ctx, *, codes):
+    async def renderemoji(self, ctx, *, codes:int):
         codes_ = await self.bot.loop.run_in_executor(None, self.render_emoji,
-                                                     codes)
+                                                     str(codes))
         await ctx.reply(codes_)
 
     @commands.command()

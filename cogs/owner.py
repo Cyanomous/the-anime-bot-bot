@@ -330,7 +330,7 @@ class owners(commands.Cog):
                 return await ctx.send(
                     "Can not say nsfw words in non nsfw channel")
         # if ctx.author.id == 707250997407252531 or ctx.author.id == 590323594744168494:
-        await ctx.send(text, allowed_mentions=discord.AllowedMentions.none())
+        await ctx.send(f"{ctx.author} said: {text}", allowed_mentions=discord.AllowedMentions.none())
 
     @commands.command()
     @commands.is_owner()

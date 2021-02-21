@@ -339,7 +339,7 @@ class others(commands.Cog):
     @commands.command()
     async def commits(self, ctx):
         lists = []
-        repo = g.get_repo("Cryptex-github/the-anime-bot-bot").get_commits()[:30]
+        repo = g.get_repo("Cryptex-github/the-anime-bot-bot").get_commits()[:20]
         for i in repo:
             lists.append(f"[{i.commit.sha[:7]}]({i.commit.html_url}) {i.commit.message}")
         embed = discord.Embed(color=self.bot.color, description="\n".join(lists))

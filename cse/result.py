@@ -40,11 +40,11 @@ class SearchResult:
 		snip = data.get("snippet")
 		self.snippet: Optional[str] = snip and ''.join(snip.split('\n'))
 		self.link: str = data['link']
-		# imag = data['pagemap'].get('cse_image')
-		# self.image: Optional[str] = image and image[0]['src']
+		image = data['pagemap'].get('cse_image')
+		self.image: Optional[str] = image and image[0]['src']
 
 	def __repr__(self) -> str:
-		return "<SearchResult title={0.title!r} snippet={0.snippet!r} link={0.link!r} image=None>".format(self)
+		return "<SearchResult title={0.title!r} snippet={0.snippet!r} link={0.link!r} image={0.image!r}>".format(self)
 
 	def __eq__(self, other: object) -> bool:
 		return isinstance(other, SearchResult) and self.title == other.title

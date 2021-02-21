@@ -342,7 +342,8 @@ class others(commands.Cog):
         repo = g.get_repo("Cryptex-github/the-anime-bot-bot").get_commits()
         for i in repo:
             lists.append(f"[{i.commit.sha[:7]}]({i.commit.html_url}) {i.commit.message}")
-        embed = discord.Embed(color=self.bot.color, description="\n".join(lists))            
+        embed = discord.Embed(color=self.bot.color, description="\n".join(lists))
+        await ctx.send(embed=embed)   
     @commands.command(aliases=["info"])
     async def about(self, ctx):
         p = pathlib.Path('./')

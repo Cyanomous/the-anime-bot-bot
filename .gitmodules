@@ -1,3 +1,6 @@
 [submodule "jishaku-enchanted"]
 	path = jishaku-enchanted
 	url = https://github.com/Cryptex-github/jishaku-enchanted
+[submodule "discord-ext-menus"]
+	path = discord-ext-menus
+	url = https://github.com/Rapptz/discord-ext-menus

@@ -1,18 +1,18 @@
-[submodule "jishaku-enchanted"]
+[submodule "jishaku"]
 	path = jishaku
 	url = https://github.com/Cryptex-github/jishaku-enchanted
-[submodule "discord-ext-menus"]
+[submodule "menus"]
 	path = menus
 	url = https://github.com/Rapptz/discord-ext-menus
-[submodule "Flag-Parsing"]
+[submodule "flags"]
 	path = flags
 	url = https://github.com/XuaTheGrate/Flag-Parsing
-[submodule "discord-ext-ipc"]
+[submodule "ipc"]
 	path = ipc
 	url = https://github.com/Ext-Creators/discord-ext-ipc
-[submodule "python-cse"]
+[submodule "cse"]
 	path = cse
 	url = https://github.com/XuaTheGrate/python-cse
-[submodule "currencyconverter"]
+[submodule "currency_converter"]
 	path = currency_converter
 	url = https://github.com/alexprengere/currencyconverter

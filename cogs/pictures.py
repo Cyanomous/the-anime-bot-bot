@@ -137,8 +137,8 @@ class pictures(commands.Cog):
                              "alex.png")
         await ctx.send(embed=embed, file=image)
     @flags.add_flag("--text", type=str, default="type something")
-    @flags.add_flag("--dark", type="store_true", default=False)
-    @flags.add_flag("--light", type="store_true", default=True)
+    @flags.add_flag("--dark", action="store_true", default=False)
+    @flags.add_flag("--light", action="store_true", default=True)
     @flags.command()
     async def supreme(self, ctx, **flags):
         embed = discord.Embed(color=0x00ff6a).set_image(

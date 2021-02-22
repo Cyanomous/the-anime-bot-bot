@@ -17,7 +17,7 @@ class cooldown(commands.Cog):
         if not ctx.message.id in self.bot.concurrency:
             self.bot.concurrency.append(ctx.author.id)
 
-    @commands.Cog.listener
+    @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
         self.bot.concurrency.remove(ctx.author.id)
 

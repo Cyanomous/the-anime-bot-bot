@@ -11,7 +11,6 @@ import os
 import time
 
 import asyncpg
-from cogs.cooldown import MaxGlobalConcurrencyReached
 from utils.subclasses import GlobalCooldown
 
 discord_bot_list = os.getenv("discord_bot_list")

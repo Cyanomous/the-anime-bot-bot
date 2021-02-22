@@ -103,6 +103,7 @@ case_insensitive=True, allowed_mentions=discord.AllowedMentions(everyone=False, 
     # self.ipc.start()
     subprocess.check_output("pip install speedtest-cli", shell=True)
     self.deleted_message_cache = {}
+    self.concurrency = []
     self.vacefron_api=vacefron.Client()
     self.color = 0x00ff6a
     self.mystbin = mystbin.Client()

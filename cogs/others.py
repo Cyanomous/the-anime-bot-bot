@@ -345,6 +345,7 @@ class others(commands.Cog):
             paginator.add_line(i)
         return paginator
     @commands.command()
+    @commands.max_concurrency(1, commands.BucketType.user)
     async def commits(self, ctx):
         await ctx.send("Getting commits")
         paginator = await self.commits_()

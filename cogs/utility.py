@@ -525,7 +525,7 @@ class utility(commands.Cog):
         put " " between your word if you are translating only one word
     Translate text languages are in ISO 639-1 you may google to find the right language code or find them here https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
     """
-        await ctx.send(await self.translate_(thing, to_lang=to_lang))
+        await ctx.send(await self.translate_(thing, to_lang))
 
     @staticmethod
     async def google_(self, thing, ctx):

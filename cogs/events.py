@@ -410,19 +410,13 @@ class events(commands.Cog):
             for i in emojis:
                 if i == "":
                     continue
-                e = finder(search, self.bot.emojis, key=lambda i: i.name, lazy=False)[0]
+                e = finder(i, self.bot.emojis, key=lambda i: i.name, lazy=False)[0]
                 if e == None or emojis == []:
                     continue
                 if e.is_usable() == False:
                     pass
                 else:
                     lists.append(str(e))
-            search = message.content.replace(";;", "")
-            emojis = finder(search, self.bot.emojis, key=lambda i: i.name, lazy=False)[0]
-            if emojis == None or emojis == []:
-                return
-            if emojis.is_usable() == False:
-                return
             message_ = await message.channel.send("".join(lists))
             self.bot._message_cache[message.id] = message_
         # mentions = message.mentions

@@ -1,3 +1,10 @@
+from jishaku.paginators import PaginatorInterface, PaginatorEmbedInterface, WrappedPaginator
+from utils.subclasses import AnimeColor
+from utils.embed import embedbase
+import aiohttp
+import pathlib
+import json
+import io
 import asyncio
 import base64
 import datetime
@@ -18,15 +25,6 @@ start_time = time.time()
 gittoken = os.getenv("gittoken")
 g = Github(gittoken)
 TOKEN = os.getenv("TOKEN")
-import io
-import json
-import pathlib
-
-import aiohttp
-from utils.embed import embedbase
-from utils.subclasses import AnimeColor
-
-from jishaku.paginators import PaginatorInterface, WrappedPaginator
 
 
 class others(commands.Cog):
@@ -41,6 +39,7 @@ class others(commands.Cog):
         no this is never happening, people delete message for a reason and you just snipe that just not right.
         """
         await ctx.send("no this is never happening, people delete message for a reason and you just snipe that just not right.")
+
     @commands.command()
     async def support(self, ctx):
         await ctx.send("https://discord.gg/bUpF6d6bP9")
@@ -113,13 +112,11 @@ class others(commands.Cog):
         embed = discord.Embed(color=self.bot.color)
         embed.add_field(
             name="Click here to vote",
-            value=
-            "[Top.gg Link](https://top.gg/bot/787927476177076234/vote)\n[Bot for discord](https://botsfordiscord.com/bot/787927476177076234/vote)\n[discord bot list](https://discordbotlist.com/bots/anime-quotepic-bot/upvote)\n[botlist.space](https://botlist.space/bot/787927476177076234/upvote)\n[discord extreme list](https://discordextremelist.xyz/en-US/bots/787927476177076234)"
+            value="[Top.gg Link](https://top.gg/bot/787927476177076234/vote)\n[Bot for discord](https://botsfordiscord.com/bot/787927476177076234/vote)\n[discord bot list](https://discordbotlist.com/bots/anime-quotepic-bot/upvote)\n[botlist.space](https://botlist.space/bot/787927476177076234/upvote)\n[discord extreme list](https://discordextremelist.xyz/en-US/bots/787927476177076234)"
         )
         embed.set_footer(
             text="Thank you so much <3",
-            icon_url=
-            "https://media.tenor.com/images/c5caf59fd029c206db34cbb14956b8e2/tenor.gif"
+            icon_url="https://media.tenor.com/images/c5caf59fd029c206db34cbb14956b8e2/tenor.gif"
         )
         await ctx.send(embed=embed)
 
@@ -128,8 +125,7 @@ class others(commands.Cog):
         embed = discord.Embed(color=self.bot.color)
         embed.add_field(
             name="source of the bot",
-            value=
-            f"https://github.com/Cryptex-github/the-anime-bot-bot \n I don't always commit so dm me if you can't find something\n\n[Licensed under MPL 2.0](https://www.mozilla.org/en-US/MPL/2.0/)"
+            value=f"https://github.com/Cryptex-github/the-anime-bot-bot \n I don't always commit so dm me if you can't find something\n\n[Licensed under MPL 2.0](https://www.mozilla.org/en-US/MPL/2.0/)"
         )
         await ctx.send(embed=embed)
         # branch = 'main'
@@ -216,8 +212,7 @@ class others(commands.Cog):
         embed.set_author(name="Use this link to invite")
         embed.add_field(
             name="link ",
-            value=
-            "https://discord.com/api/oauth2/authorize?client_id=787927476177076234&permissions=2146823543&scope=bot"
+            value="https://discord.com/api/oauth2/authorize?client_id=787927476177076234&permissions=2146823543&scope=bot"
         )
         await ctx.reply(embed=embed)
 
@@ -226,8 +221,7 @@ class others(commands.Cog):
         await ctx.trigger_typing()
         embed = await embedbase.embed(self, ctx)
         embed.set_author(
-            name=
-            "Most commands can be done here if you don't want other people to see it"
+            name="Most commands can be done here if you don't want other people to see it"
         )
         await ctx.author.send(embed=embed)
         embed = await embedbase.embed(self, ctx)
@@ -299,8 +293,7 @@ class others(commands.Cog):
         embed = await embedbase.embed(self, ctx)
         embed.set_author(name=f"prefix changed to {prefixforbot}")
         embed.set_footer(
-            text=
-            f"requested by {ctx.author} response time : {round(self.bot.latency * 1000)} ms",
+            text=f"requested by {ctx.author} response time : {round(self.bot.latency * 1000)} ms",
             icon_url=ctx.author.avatar_url)
         await ctx.reply(embed=embed)
 
@@ -313,8 +306,7 @@ class others(commands.Cog):
         embed.set_author(name=ctx.author)
         embed.add_field(name=" suggestion ", value=suggestion)
         embed.set_footer(
-            text=
-            f"requested by {ctx.author} response time : {round(self.bot.latency * 1000)} ms",
+            text=f"requested by {ctx.author} response time : {round(self.bot.latency * 1000)} ms",
             icon_url=ctx.author.avatar_url)
         await channel.send(embed=embed,
                            allowed_mentions=discord.AllowedMentions.none())
@@ -339,11 +331,17 @@ class others(commands.Cog):
     @commands.command()
     async def commits(self, ctx):
         lists = []
-        repo = g.get_repo("Cryptex-github/the-anime-bot-bot").get_commits()[:10]
+        repo = g.get_repo(
+            "Cryptex-github/the-anime-bot-bot").get_commits()[:10]
         for i in repo:
-            lists.append(f"[{i.commit.sha[:7]}]({i.commit.html_url}) {i.commit.message}")
-        embed = discord.Embed(color=self.bot.color, description="\n".join(lists))
-        await ctx.send(embed=embed)   
+            lists.append(
+                f"[{i.commit.sha[:7]}]({i.commit.html_url}) {i.commit.message}")
+        paginator = commands.Paginator(prefix="", suffix="")
+        for i in lists:
+            paginator.add_line(i)
+        interface = PaginatorInterface(ctx.bot, paginator, owner=ctx.author)
+        await interface.send_to(ctx)
+
     @commands.command(aliases=["info"])
     async def about(self, ctx):
         p = pathlib.Path('./')
@@ -376,13 +374,11 @@ class others(commands.Cog):
         embed.set_author(name=self.bot.user, icon_url=self.bot.user.avatar_url)
         embed.add_field(
             name="infos",
-            value=
-            f"Guilds: {len(self.bot.guilds)} \n Members: {len(self.bot.users)} \n Creators: {owner} \n Libary: discord.py \n Command used (since last reboot): {self.bot.counter} \n Invite link:  [click ](https://discord.com/api/oauth2/authorize?client_id=787927476177076234&permissions=2146823543&scope=bot) \n Messages Cached: {len(self.bot.cached_messages)}",
+            value=f"Guilds: {len(self.bot.guilds)} \n Members: {len(self.bot.users)} \n Creators: {owner} \n Libary: discord.py \n Command used (since last reboot): {self.bot.counter} \n Invite link:  [click ](https://discord.com/api/oauth2/authorize?client_id=787927476177076234&permissions=2146823543&scope=bot) \n Messages Cached: {len(self.bot.cached_messages)}",
             inline=False)
         embed.add_field(
             name="System Infos",
-            value=
-            f"> `{humanize.naturalsize(m.rss)}` physical memory used\n> `{self.bot.psutil_process.cpu_percent()/psutil.cpu_count()}%` CPU usage\n> running on PID `{self.bot.psutil_process.pid}`\n> `{self.bot.psutil_process.num_threads()}` thread(s)",
+            value=f"> `{humanize.naturalsize(m.rss)}` physical memory used\n> `{self.bot.psutil_process.cpu_percent()/psutil.cpu_count()}%` CPU usage\n> running on PID `{self.bot.psutil_process.pid}`\n> `{self.bot.psutil_process.num_threads()}` thread(s)",
             inline=False)
         embed.add_field(name="<:stab:744345955637395586>  websocket latency",
                         value=f"```{round(self.bot.latency * 1000)} ms ```")
@@ -391,16 +387,16 @@ class others(commands.Cog):
         repo = g.get_repo("Cryptex-github/the-anime-bot-bot").get_commits()[:3]
         lists = []
         for i in repo:
-            lists.append(f"[{i.commit.sha[:7]}]({i.commit.html_url}) {i.commit.message}")
-        embed.add_field(name="Recent changes", value="\n".join(lists), inline=False)
+            lists.append(
+                f"[{i.commit.sha[:7]}]({i.commit.html_url}) {i.commit.message}")
+        embed.add_field(name="Recent changes",
+                        value="\n".join(lists), inline=False)
         embed.add_field(
             name=" stats ",
-            value=
-            f"```file: {fc}\nline: {ls:,}\ncharacters: {cc} \nclass: {cl}\nfunction: {fn}\ncoroutine: {cr}\ncomment: {cm:,}```",
+            value=f"```file: {fc}\nline: {ls:,}\ncharacters: {cc} \nclass: {cl}\nfunction: {fn}\ncoroutine: {cr}\ncomment: {cm:,}```",
             inline=False)
         embed.set_footer(
-            text=
-            f"requested by {ctx.author} response time : {round(self.bot.latency * 1000)} ms",
+            text=f"requested by {ctx.author} response time : {round(self.bot.latency * 1000)} ms",
             icon_url=ctx.author.avatar_url)
         await ctx.reply(embed=embed)
 
@@ -429,8 +425,7 @@ class others(commands.Cog):
         embed = await embedbase.embed(self, ctx)
         embed.add_field(name="policy", value=policy)
         embed.set_footer(
-            text=
-            f"requested by {ctx.author} response time : {round(self.bot.latency * 1000)} ms",
+            text=f"requested by {ctx.author} response time : {round(self.bot.latency * 1000)} ms",
             icon_url=ctx.author.avatar_url)
         await ctx.send(embed=embed)
 

@@ -33,6 +33,7 @@ TOKEN = os.getenv("TOKEN")
 class others(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.commit_cache.start()
         self.countdownused = []
         self.thing = {}
 
@@ -339,9 +340,9 @@ class others(commands.Cog):
     #   embed.set_footer(text=f"requested by {ctx.author} response time : {round(self.bot.latency * 1000)} ms", icon_url=ctx.author.avatar_url)
     #   await ctx.send(embed=embed)
 
-    @staticmethod
     @asyncexe()
-    def commits_():
+    def commits_(self):
+        paginator = commands.Paginator(prefix="", suffix="", max_size=500)
         for i in self.bot.commits:
             paginator.add_line(i)
         return paginator

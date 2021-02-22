@@ -1,30 +1,3 @@
-import random as rng
-import numpy as np
-import unicodedata
-import base64
-from datetime import datetime
-from jishaku.paginators import PaginatorInterface, PaginatorEmbedInterface
-from io import BytesIO
-from PIL import Image, ImageFont
-from twemoji_parser import emoji_to_url
-from utils.asyncstuff import asyncexe
-from currency_converter import CurrencyConverter
-from utils.format import plural
-from collections import Counter
-from typing import Optional
-import humanize
-import aiohttp
-import decimal
-import ast
-from pyfiglet import Figlet
-import re
-import io
-import zlib
-from utils import fuzzy
-import json
-import typing
-from menus import menus
-from contextlib import suppress
 import discord
 from discord.ext import commands
 import cv2
@@ -32,13 +5,40 @@ import pyqrcode
 from bs4 import BeautifulSoup
 import requests
 import flags
-from googletrans import Translator
+from translate import Translator
 from itertools import cycle
 import cse
 import os
 google_api_1 = os.getenv("google_api_1")
 google_api_2 = os.getenv("google_api_2")
 google_api_3 = os.getenv("google_api_3")
+from contextlib import suppress
+from menus import menus
+import typing
+import json
+from utils import fuzzy
+import zlib
+import io
+import re
+from pyfiglet import Figlet
+import ast
+import decimal
+import aiohttp
+import humanize
+from typing import Optional
+from collections import Counter
+from utils.format import plural
+from currency_converter import CurrencyConverter
+from utils.asyncstuff import asyncexe
+from twemoji_parser import emoji_to_url
+from PIL import Image, ImageFont
+from io import BytesIO
+from jishaku.paginators import PaginatorInterface, PaginatorEmbedInterface
+from datetime import datetime
+import base64
+import unicodedata
+import numpy as np
+import random as rng
 
 
 class googlemenu(menus.Menu):
@@ -52,12 +52,14 @@ class googlemenu(menus.Menu):
         embed = discord.Embed(
             color=self.bot.color,
             title=self.datas[self.counter].title,
-            description=f"{self.datas[self.counter].snippet or ''}\n{self.datas[self.counter].link}"
+            description=
+            f"{self.datas[self.counter].snippet or ''}\n{self.datas[self.counter].link}"
         )
         # if self.datas[self.counter].image != None and self.datas[self.counter].image.startswith("http"):
         #   embed.set_image(url=self.datas[self.counter].image)
         embed.set_footer(
-            text=f"Page: {self.counter + 1}/{len(self.datas)} Safe Search: {self.safe_search}"
+            text=
+            f"Page: {self.counter + 1}/{len(self.datas)} Safe Search: {self.safe_search}"
         )
         return await channel.send(embed=embed)
 
@@ -69,12 +71,14 @@ class googlemenu(menus.Menu):
         embed = discord.Embed(
             color=self.bot.color,
             title=self.datas[self.counter].title,
-            description=f"{self.datas[self.counter].snippet or ''}\n{self.datas[self.counter].link}"
+            description=
+            f"{self.datas[self.counter].snippet or ''}\n{self.datas[self.counter].link}"
         )
         # if self.datas[self.counter].image != None and self.datas[self.counter].image.startswith("http"):
         #   embed.set_image(url=self.datas[self.counter].image)
         embed.set_footer(
-            text=f"Page: {self.counter + 1}/{len(self.datas)} Safe Search: {self.safe_search}"
+            text=
+            f"Page: {self.counter + 1}/{len(self.datas)} Safe Search: {self.safe_search}"
         )
         await self.message.edit(embed=embed)
 
@@ -86,11 +90,13 @@ class googlemenu(menus.Menu):
         embed = discord.Embed(
             color=self.bot.color,
             title=self.datas[self.counter].title,
-            description=f"{self.datas[self.counter].snippet or ''}\n{self.datas[self.counter].link}"
+            description=
+            f"{self.datas[self.counter].snippet or ''}\n{self.datas[self.counter].link}"
         )
         # if self.datas[self.counter].image != None and self.datas[self.counter].image.startswith("http"):             embed.set_image(url=self.datas[self.counter].image)
         embed.set_footer(
-            text=f"Page: {self.counter + 1}/{len(self.datas)} Safe Search: {self.safe_search}"
+            text=
+            f"Page: {self.counter + 1}/{len(self.datas)} Safe Search: {self.safe_search}"
         )
         await self.message.edit(embed=embed)
 
@@ -433,8 +439,9 @@ class utility(commands.Cog):
     #   else:
     @staticmethod
     @asyncexe()
-    def translate_(thing, to_lang):
-        return Translator().translate(thing, dest=to_lang)
+    def translate_(from_lang, to_lang, thing):
+        return Translator(from_lang=from_lang,
+                          to_lang=to_lang).translate(thing)
 
     @commands.group(invoke_without_command=True)
     async def qrcode(self, ctx, *, thing):
@@ -443,7 +450,6 @@ class utility(commands.Cog):
         q.png(pic, scale=6)
         pic.seek(0)
         await ctx.send(file=discord.File(pic, "qrcode.png"))
-
     @qrcode.command(name="decode")
     async def qrcode_decode(self, ctx, *, link):
         if link.startswith("https"):
@@ -457,20 +463,18 @@ class utility(commands.Cog):
                 await ctx.send(data)
                 # qr = decode(pic)
                 # await ctx.send(qr.data)
-
     @staticmethod
     @asyncexe()
     def txt_(thing):
         return discord.File(BytesIO(thing.encode("utf-8")), "something.txt")
-
     @commands.command()
-    async def txt(self, ctx, *, anything: str = None):
+    async def txt(self, ctx, *, anything:str=None):
         if anything.startswith("https://mystb.in/"):
             return await ctx.send(file=await self.txt_(str(await self.bot.mystbin.get(anything))))
         await ctx.send(file=await self.txt_(anything))
 
     @commands.command()
-    async def mystbin(self, ctx, *, code: str = None):
+    async def mystbin(self, ctx, *, code:str=None):
         if code == None:
             message = ctx.message.attachments[0]
             if message:
@@ -487,7 +491,7 @@ class utility(commands.Cog):
                         message = message.decode("utf-8")
                         return await ctx.send(str(await self.bot.mystbin.post(message, syntax="html")))
                     except:
-
+                        
                         message = f"Unable to decode so here is the byte {message}"
                         return await ctx.send(str(await self.bot.mystbin.post(message, syntax="python")))
             await ctx.send(str(await self.bot.mystbin.post(code)))
@@ -520,12 +524,12 @@ class utility(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
-    async def translate(self, ctx, to_lang="en", *, thing):
+    async def translate(self, ctx, from_lang, to_lang, *, thing):
         """
         put " " between your word if you are translating only one word
     Translate text languages are in ISO 639-1 you may google to find the right language code or find them here https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
     """
-        await ctx.send(await self.translate_(thing, to_lang))
+        await ctx.send(await self.translate_(from_lang, to_lang, thing))
 
     @staticmethod
     async def google_(self, thing, ctx):
@@ -861,7 +865,8 @@ class utility(commands.Cog):
         embed.set_author(name=guild_name)
         embed.add_field(
             name="Infos",
-            value=f"**Categories Count**: {categories}\n**Channels Count**: {channels}\n**Created_at**: {created_at}\n**Default Role**: {default_role}\n**Emoji Count:** {emojis_count}\n**Features:** \n{features}\n**Description**: {description}\n**Emoji Limit**: {emoji_limit}\n**Guild Id**: {guild_id}\n**Guild Owner**: {guild_owner}\n**Guild Owner UserId**: {guild_owner_id}\n**Member Count**: {member_count}"
+            value=
+            f"**Categories Count**: {categories}\n**Channels Count**: {channels}\n**Created_at**: {created_at}\n**Default Role**: {default_role}\n**Emoji Count:** {emojis_count}\n**Features:** \n{features}\n**Description**: {description}\n**Emoji Limit**: {emoji_limit}\n**Guild Id**: {guild_id}\n**Guild Owner**: {guild_owner}\n**Guild Owner UserId**: {guild_owner_id}\n**Member Count**: {member_count}"
         )
         await ctx.reply(embed=embed)
 
@@ -955,10 +960,12 @@ class utility(commands.Cog):
             embed.set_thumbnail(url=member1.avatar_url_as(static_format="png"))
             embed.add_field(
                 name="User",
-                value=f"**Bot:** {bot}\n**Account Created at:** {created_at}\n**Nickname:** {nickname}\n**UserId:** {id}\n**Joined Server at:** {joined_at}\n**Boosted Server since since:** {premium_since}\n**Discord Staff:** {staff}\n**Discord Partner:** {partner}\n**Hypesquad:** {hypesquad}\n**Bug Hunter:** {bug_hunter}\n**Early Supporter:** {early_supporter}\n**Verified Bot:** {verified_bot}\n**Early Verified Bot Developer:** {verified_bot_developer}\n**Avatar Animated:** {avatar_animated}\n**Top Role:** {toprole}"
+                value=
+                f"**Bot:** {bot}\n**Account Created at:** {created_at}\n**Nickname:** {nickname}\n**UserId:** {id}\n**Joined Server at:** {joined_at}\n**Boosted Server since since:** {premium_since}\n**Discord Staff:** {staff}\n**Discord Partner:** {partner}\n**Hypesquad:** {hypesquad}\n**Bug Hunter:** {bug_hunter}\n**Early Supporter:** {early_supporter}\n**Verified Bot:** {verified_bot}\n**Early Verified Bot Developer:** {verified_bot_developer}\n**Avatar Animated:** {avatar_animated}\n**Top Role:** {toprole}"
             )
             embed.set_footer(
-                text=f"requested by {ctx.author} response time : {round(self.bot.latency * 1000)} ms",
+                text=
+                f"requested by {ctx.author} response time : {round(self.bot.latency * 1000)} ms",
                 icon_url=ctx.author.avatar_url)
             await ctx.reply(embed=embed)
         else:
@@ -1011,10 +1018,12 @@ class utility(commands.Cog):
             embed.set_thumbnail(url=member1.avatar_url_as(static_format="png"))
             embed.add_field(
                 name="User",
-                value=f"**Bot:** {bot}\n**Account Created at:** {created_at}\n**UserId:** {id}\n**Discord Staff:** {staff}\n**Discord Partner:** {partner}\n**Hypesquad:** {hypesquad}\n**Bug Hunter:** {bug_hunter}\n**Early Supporter:** {early_supporter}\n**Verified Bot:** {verified_bot}\n**Early Verified Bot Developer:** {verified_bot_developer}\n**Avatar Animated:** {avatar_animated}"
+                value=
+                f"**Bot:** {bot}\n**Account Created at:** {created_at}\n**UserId:** {id}\n**Discord Staff:** {staff}\n**Discord Partner:** {partner}\n**Hypesquad:** {hypesquad}\n**Bug Hunter:** {bug_hunter}\n**Early Supporter:** {early_supporter}\n**Verified Bot:** {verified_bot}\n**Early Verified Bot Developer:** {verified_bot_developer}\n**Avatar Animated:** {avatar_animated}"
             )
             embed.set_footer(
-                text=f"requested by {ctx.author} response time : {round(self.bot.latency * 1000)} ms",
+                text=
+                f"requested by {ctx.author} response time : {round(self.bot.latency * 1000)} ms",
                 icon_url=ctx.author.avatar_url)
             await ctx.reply(embed=embed)
 
@@ -1030,7 +1039,8 @@ class utility(commands.Cog):
         embed = discord.Embed(color=self.bot.color)
         embed.set_image(url=str(member1.avatar_url_as(static_format="png")))
         embed.set_footer(
-            text=f"requested by {ctx.author} response time : {round(self.bot.latency * 1000)} ms",
+            text=
+            f"requested by {ctx.author} response time : {round(self.bot.latency * 1000)} ms",
             icon_url=ctx.author.avatar_url)
         await ctx.reply(embed=embed)
 

@@ -406,7 +406,8 @@ class events(commands.Cog):
             )
         if message.content.startswith(";;"):
             lists = []
-            emojis = message.content.split(";;")
+            msg = message.content.replace(" ", "")
+            emojis = msg.split(";;")
             for i in emojis:
                 if i == "":
                     continue

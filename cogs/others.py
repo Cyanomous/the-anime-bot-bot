@@ -344,7 +344,7 @@ class others(commands.Cog):
     @asyncexe()
     def commits_(self):
         paginator = WrappedPaginator(prefix="", suffix="", max_size=500)
-        paginator.add_line(bot.commits)
+        paginator.add_line(self.bot.commits)
         return paginator
 
     @commands.command()

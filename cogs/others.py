@@ -45,6 +45,7 @@ class others(commands.Cog):
         for i in repo:
             self.bot.commits.append(
                 f"[{i.commit.sha[:7]}]({i.commit.html_url}) {i.commit.message}")
+
     @commands.command()
     async def snipe(self, ctx):
         """
@@ -342,16 +343,17 @@ class others(commands.Cog):
 
     @asyncexe()
     def commits_(self):
-        paginator = commands.Paginator(prefix="", suffix="", max_size=500)
-        for i in self.bot.commits:
-            paginator.add_line(i)
+        paginator = WrappedPaginator(prefix="", suffix="", max_size=500)
+        paginator.add_line(bot.commits)
         return paginator
+
     @commands.command()
     @commands.max_concurrency(1, commands.BucketType.user)
     async def commits(self, ctx):
         await ctx.send("Getting commits")
         paginator = await self.commits_()
-        interface = PaginatorEmbedInterface(ctx.bot, paginator, owner=ctx.author)
+        interface = PaginatorEmbedInterface(
+            ctx.bot, paginator, owner=ctx.author)
         await interface.send_to(ctx)
 
     @commands.command(aliases=["info"])

@@ -37,7 +37,7 @@ class others(commands.Cog):
         self.countdownused = []
         self.thing = {}
 
-    @tasks.loop(seconds=30)
+    @tasks.loop(minutes=1)
     async def commit_cache(self):
         lists = []
         self.bot.commits = commands.Paginator(prefix="", suffix="", max_size=500)

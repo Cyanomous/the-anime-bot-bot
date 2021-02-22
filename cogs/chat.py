@@ -16,7 +16,7 @@ class chat(commands.Cog):
         for i, (n,v) in enumerate(msg.most_common()):
             author.append(n)
             count.append(v)
-        fig = plt.figure(figsize =(20, 14), facecolor="black") 
+        fig = plt.figure(figsize =(10, 7), facecolor="black") 
         patches, texts = plt.pie(count, labels = author) 
         plt.legend(loc="best", title="User names")
         plt.axis('equal')

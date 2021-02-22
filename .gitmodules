@@ -16,3 +16,6 @@
 [submodule "currency_converter"]
 	path = currency_converter
 	url = https://github.com/alexprengere/currencyconverter
+[submodule "py-googletrans"]
+	path = py-googletrans
+	url = https://github.com/ssut/py-googletrans

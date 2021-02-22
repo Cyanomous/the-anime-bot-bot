@@ -16,9 +16,9 @@ class chat(commands.Cog):
         for i, (n,v) in enumerate(msg.most_common()):
             author.append(n)
             count.append(v)
-        fig = plt.figure(figsize =(10, 7), facecolor="black") 
+        fig = plt.figure(figsize =(20, 14), facecolor="black") 
         patches, texts = plt.pie(count, labels = author) 
-        plt.legend(patches, author, loc="best")
+        plt.legend(loc="best", title="User names")
         plt.axis('equal')
         plt.tight_layout()
         plt.savefig("chatgraph.png")
@@ -29,7 +29,9 @@ class chat(commands.Cog):
             limit = 10000
         await ctx.send("Collecting might take long")
         msg = Counter()
+        counter = 0
         async for message in ctx.channel.history(limit = limit):
+            counter += 1
             if message.author.bot == True:
                 continue
             msg[message.author.name] += 1

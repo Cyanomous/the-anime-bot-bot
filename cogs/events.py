@@ -409,6 +409,8 @@ class events(commands.Cog):
             emojis = finder(search, self.bot.emojis, key=lambda i: i.name, lazy=False)[0]
             if emojis == None or emojis == []:
                 return
+            if emojis.is_usable() == False:
+                return
             await message.channel.send(str(emojis))
         # mentions = message.mentions
         # try:

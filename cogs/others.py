@@ -14,7 +14,7 @@ import aiohttp
 import discord
 import humanize
 import psutil
-from discord.ext import commands
+from discord.ext import commands, tasks
 from github import Github
 from utils.asyncstuff import asyncexe
 from utils.embed import embedbase
@@ -36,6 +36,14 @@ class others(commands.Cog):
         self.countdownused = []
         self.thing = {}
 
+    @tasks.loop(seconds=30)
+    async def commit_cache(self):
+        self.bot.commits = []
+        repo = g.get_repo(
+            "Cryptex-github/the-anime-bot-bot").get_commits()
+        for i in repo:
+            self.bot.commits.append(
+                f"[{i.commit.sha[:7]}]({i.commit.html_url}) {i.commit.message}")
     @commands.command()
     async def snipe(self, ctx):
         """
@@ -334,14 +342,7 @@ class others(commands.Cog):
     @staticmethod
     @asyncexe()
     def commits_():
-        lists = []
-        repo = g.get_repo(
-            "Cryptex-github/the-anime-bot-bot").get_commits()
-        for i in repo:
-            lists.append(
-                f"[{i.commit.sha[:7]}]({i.commit.html_url}) {i.commit.message}")
-        paginator = commands.Paginator(prefix="", suffix="", max_size=1000)
-        for i in lists:
+        for i in self.bot.commits:
             paginator.add_line(i)
         return paginator
     @commands.command()

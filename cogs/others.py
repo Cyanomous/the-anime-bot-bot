@@ -346,6 +346,7 @@ class others(commands.Cog):
         return paginator
     @commands.command()
     async def commits(self, ctx):
+        await ctx.send("Getting commits")
         paginator = await self.commits_()
         interface = PaginatorEmbedInterface(ctx.bot, paginator, owner=ctx.author)
         await interface.send_to(ctx)

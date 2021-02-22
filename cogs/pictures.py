@@ -136,15 +136,21 @@ class pictures(commands.Cog):
         image = discord.File(await (await self.bot.alex.amiajoke(url)).read(),
                              "alex.png")
         await ctx.send(embed=embed, file=image)
-    @flags.add_flag("--text", type=str, default="type something")
-    @flags.add_flag("--dark", action="store_true", default=False)
-    @flags.add_flag("--light", action="store_true", default=True)
-    @flags.command()
-    async def supreme(self, ctx, **flags):
+
+    @commands.group(invoke_without_command=True)
+    async def supreme(self, ctx, *, text:str="enter something here"):
         embed = discord.Embed(color=0x00ff6a).set_image(
             url="attachment://alex.png")
         image = discord.File(
-            await (await self.bot.alex.supreme(text=flags["text"], dark=flags["dark"], light=flags["light"])).read(), "alex.png")
+            await (await self.bot.alex.supreme(text=text)).read(), "alex.png")
+        await ctx.send(embed=embed, file=image)
+
+    @supreme.command(name="dark")
+    async def supreme_dark(self, ctx, *, text:str="enter something here"):
+        embed = discord.Embed(color=0x00ff6a).set_image(
+            url="attachment://alex.png")
+        image = discord.File(
+            await (await self.bot.alex.supreme(text=text, dark=True)).read(), "alex.png")
         await ctx.send(embed=embed, file=image)
 
     @commands.command()

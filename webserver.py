@@ -1,10 +1,4 @@
-mport web
-import aiohttp_jinja2
-import jinja2
-from pathlib import Path
-import json
-from discord import Webhook, AsyncWebhookAdapter
-import aiohttp
+from aiohttp import web
 
 async def index(request):
     data = {"the best bot": "yes"}

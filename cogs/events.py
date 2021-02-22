@@ -453,9 +453,6 @@ class events(commands.Cog):
         if isinstance(error, commands.DisabledCommand):
             embed = await self.embed(f"{ctx.command} has been disabled.")
             return await ctx.send(embed=embed)
-        elif isinstance(error, MaxGlobalConcurrencyReached):
-            embed = await self.embed(error)
-            return await ctx.send(embed=embed)
         elif isinstance(error, commands.NSFWChannelRequired):
             embed = await self.embed(
                 "this command must be used in NSFW channel")

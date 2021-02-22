@@ -1,25 +1,28 @@
-from jishaku.paginators import PaginatorInterface, PaginatorEmbedInterface, WrappedPaginator
-from utils.subclasses import AnimeColor
-from utils.embed import embedbase
-import aiohttp
-import pathlib
-import json
-import io
 import asyncio
 import base64
 import datetime
 import inspect
+import io
+import json
 import os
+import pathlib
 import random
 import time
 from collections import namedtuple
 
-from github import Github
+import aiohttp
 import discord
 import humanize
 import psutil
 from discord.ext import commands
+from github import Github
+from utils.asyncstuff import asyncexe
+from utils.embed import embedbase
 from utils.fuzzy import finder
+from utils.subclasses import AnimeColor
+
+from jishaku.paginators import (PaginatorEmbedInterface, PaginatorInterface,
+                                WrappedPaginator)
 
 start_time = time.time()
 gittoken = os.getenv("gittoken")

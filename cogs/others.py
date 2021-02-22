@@ -39,12 +39,16 @@ class others(commands.Cog):
 
     @tasks.loop(seconds=30)
     async def commit_cache(self):
-        self.bot.commits = []
+        lists = []
+        self.bot.commits = commands.Paginator(prefix="", suffix="", max_size=500)
         repo = g.get_repo(
             "Cryptex-github/the-anime-bot-bot").get_commits()
         for i in repo:
-            self.bot.commits.append(
+            lists.append(
                 f"[{i.commit.sha[:7]}]({i.commit.html_url}) {i.commit.message}")
+        for i in lists:
+            self.bot.commits.add_line(i)
+            
 
     @commands.command()
     async def snipe(self, ctx):
@@ -341,17 +345,11 @@ class others(commands.Cog):
     #   embed.set_footer(text=f"requested by {ctx.author} response time : {round(self.bot.latency * 1000)} ms", icon_url=ctx.author.avatar_url)
     #   await ctx.send(embed=embed)
 
-    @asyncexe()
-    def commits_(self):
-        paginator = WrappedPaginator(prefix="", suffix="", max_size=500)
-        paginator.add_line(self.bot.commits)
-        return paginator
-
     @commands.command()
     @commands.max_concurrency(1, commands.BucketType.user)
     async def commits(self, ctx):
         await ctx.send("Getting commits")
-        paginator = await self.commits_()
+        paginator = self.bot.commits
         interface = PaginatorEmbedInterface(
             ctx.bot, paginator, owner=ctx.author)
         await interface.send_to(ctx)

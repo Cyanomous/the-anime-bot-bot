@@ -328,7 +328,7 @@ class owners(commands.Cog):
                     "Can not say nsfw words in non nsfw channel")
         # if ctx.author.id == 707250997407252531 or ctx.author.id == 590323594744168494:
         text = text.replace("|", "\u200b|").replace("*", "\u200b*").replace("`", "\u200b`").replace("~", "\u200b~").replace(
-            ">", "\u200b>").replace("[", "\u200b[").replace("]", "\u200b]").replace("(", "\u200b(").replace(")", "\u200b)")
+            ">", ">\u200b").replace("[", "\u200b[").replace("]", "\u200b]").replace("(", "\u200b(").replace(")", "\u200b)")
         embed = discord.Embed(color=self.bot.color,
                               description=f"**said:** {str(text)}")
         embed.set_author(name=ctx.author.display_name,

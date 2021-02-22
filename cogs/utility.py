@@ -433,8 +433,8 @@ class utility(commands.Cog):
     #   else:
     @staticmethod
     @asyncexe()
-    def translate_(thing, from_lang=None, to_lang=None):
-        return Translator().translate(thing, src=from_lang, dest=to_lang)
+    def translate_(thing, to_lang):
+        return Translator().translate(thing, dest=to_lang)
 
     @commands.group(invoke_without_command=True)
     async def qrcode(self, ctx, *, thing):
@@ -520,7 +520,7 @@ class utility(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
-    async def translate(self, ctx, to_lang, *, thing):
+    async def translate(self, ctx, to_lang="en", *, thing):
         """
         put " " between your word if you are translating only one word
     Translate text languages are in ISO 639-1 you may google to find the right language code or find them here https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes

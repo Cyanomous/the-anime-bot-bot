@@ -328,8 +328,9 @@ class others(commands.Cog):
     #   embed.set_footer(text=f"requested by {ctx.author} response time : {round(self.bot.latency * 1000)} ms", icon_url=ctx.author.avatar_url)
     #   await ctx.send(embed=embed)
 
-    @commands.command()
-    async def commits(self, ctx):
+    @staticmethod
+    @asyncexe()
+    def commits_():
         lists = []
         repo = g.get_repo(
             "Cryptex-github/the-anime-bot-bot").get_commits()
@@ -339,7 +340,11 @@ class others(commands.Cog):
         paginator = commands.Paginator(prefix="", suffix="", max_size=1000)
         for i in lists:
             paginator.add_line(i)
-        interface = PaginatorInterface(ctx.bot, paginator, owner=ctx.author)
+        return paginator
+    @commands.command()
+    async def commits(self, ctx):
+        paginator = await self.commits_()
+        interface = PaginatorEmbedInterface(ctx.bot, paginator, owner=ctx.author)
         await interface.send_to(ctx)
 
     @commands.command(aliases=["info"])

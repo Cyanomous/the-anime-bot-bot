@@ -30,11 +30,6 @@ os.environ["JISHAKU_NO_DM_TRACEBACK"] = "True"
 os.environ["JISHAKU_NO_UNDERSCORE"] = "True"
 
 
-@bot.check
-async def check(ctx):
-    return not ctx.author.id == 694296778106863636
-
-
 bot.remove_command("help")
 
 

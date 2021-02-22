@@ -411,7 +411,8 @@ class events(commands.Cog):
                 return
             if emojis.is_usable() == False:
                 return
-            await message.channel.send(str(emojis))
+            message_ = await message.channel.send(str(emojis))
+            self.bot._message_cache[message.id] = message_
         # mentions = message.mentions
         # try:
         #   for x in mentions:

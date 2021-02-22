@@ -11,6 +11,7 @@ import os
 import time
 
 import asyncpg
+from cogs.cooldown import MaxGlobalConcurrencyReached
 from utils.subclasses import GlobalCooldown
 
 discord_bot_list = os.getenv("discord_bot_list")
@@ -451,6 +452,9 @@ class events(commands.Cog):
         self.errors_list.append(error)
         if isinstance(error, commands.DisabledCommand):
             embed = await self.embed(f"{ctx.command} has been disabled.")
+            return await ctx.send(embed=embed)
+        elif isinstance(error, MaxGlobalConcurrencyReached):
+            embed = await self.embed(error)
             return await ctx.send(embed=embed)
         elif isinstance(error, commands.NSFWChannelRequired):
             embed = await self.embed(

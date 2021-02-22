@@ -2,8 +2,8 @@ import discord
 from discord.ext import commands
 from utils.subclasses import AnimeContext, GlobalCooldown
 
-class MaxGlobalConcurrencyReached(commands.MaxConcurrencyReached):
-    pass
+class MaxGlobalConcurrencyReached(commands.CommandError):
+    super().__init__("There can only be one command running at a time")
 class cooldown(commands.Cog):
     def __init__(self, bot):
         self.bot = bot

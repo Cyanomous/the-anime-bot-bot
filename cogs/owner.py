@@ -82,8 +82,7 @@ class owners(commands.Cog):
             text = "\n <:greenTick:596576670815879169>".join(list_)
             embed = discord.Embed(
                 color=0x00ff6a,
-                description=
-                f"Reloaded All Cogs \n <:greenTick:596576670815879169> {text}")
+                description=f"Reloaded All Cogs \n <:greenTick:596576670815879169> {text}")
             await message.edit(embed=embed)
 
     @staticmethod
@@ -265,8 +264,7 @@ class owners(commands.Cog):
             text = "\n <:greenTick:596576670815879169>".join(self.list)
             embed = discord.Embed(
                 color=0x00ff6a,
-                description=
-                f"Reloaded All Cogs \n <:greenTick:596576670815879169> {text}")
+                description=f"Reloaded All Cogs \n <:greenTick:596576670815879169> {text}")
             await message.edit(embed=embed)
         else:
             for file in os.listdir("./cogs"):
@@ -274,8 +272,7 @@ class owners(commands.Cog):
                     self.bot.reload_extension(f"cogs.{file[:-3]}")
                     embed = discord.Embed(
                         color=0x00ff6a,
-                        description=
-                        f" <:greenTick:596576670815879169> Reloaded {file[:-3]}"
+                        description=f" <:greenTick:596576670815879169> Reloaded {file[:-3]}"
                     )
                     await message.edit(embed=embed)
 
@@ -330,9 +327,12 @@ class owners(commands.Cog):
                 return await ctx.send(
                     "Can not say nsfw words in non nsfw channel")
         # if ctx.author.id == 707250997407252531 or ctx.author.id == 590323594744168494:
-        text = text.replace("|", "\u200b|").replace("*", "\u200b*").replace("`", "\u200b`").replace("~", "\u200b~").replace(">", "\u200b>").replace("[", "\u200b[").replace("]", "\u200b]").replace("(", "\u200b(").replace(")", "\u200b)")
-        embed = discord.Embed(color=self.bot.color, description=f"**said:** {text}")
-        embed.set_author(name=ctx.author.display_name, icon_url=str(ctx.author.avatar_url))
+        text = text.replace("|", "\u200b|").replace("*", "\u200b*").replace("`", "\u200b`").replace("~", "\u200b~").replace(
+            ">", "\u200b>").replace("[", "\u200b[").replace("]", "\u200b]").replace("(", "\u200b(").replace(")", "\u200b)")
+        embed = discord.Embed(color=self.bot.color,
+                              description=f"**said:** {str(text)}")
+        embed.set_author(name=ctx.author.display_name,
+                         icon_url=str(ctx.author.avatar_url))
         await ctx.send(embed=embed, allowed_mentions=discord.AllowedMentions.none())
 
     @commands.command()

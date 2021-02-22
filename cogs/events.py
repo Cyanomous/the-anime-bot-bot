@@ -1,3 +1,17 @@
+from utils.asyncstuff import asyncexe
+from menus import menus
+import asyncdagpi
+import aiozaneapi
+import aiohttp
+import traceback
+import sys
+import subprocess
+from utils.subclasses import GlobalCooldown
+import asyncpg
+from utils.fuzzy import finder
+import time
+import os
+import json
 import asyncio
 import logging
 from csv import writer
@@ -6,12 +20,7 @@ import discord
 from discord.ext import commands, tasks
 
 logging.getLogger('asyncio').setLevel(logging.CRITICAL)
-import json
-import os
-import time
 
-import asyncpg
-from utils.subclasses import GlobalCooldown
 
 discord_bot_list = os.getenv("discord_bot_list")
 bots_for_discord = os.getenv("bots_for_discord")
@@ -19,16 +28,6 @@ topgg = os.getenv("topgg")
 discord_extreme_list = os.getenv("discord_extreme_list")
 botlist_space = os.getenv("botlist_space")
 POSTGRE_DATABASE_URL = os.getenv("POSTGRE_DATABASE_URL")
-import json
-import subprocess
-import sys
-import traceback
-
-import aiohttp
-import aiozaneapi
-import asyncdagpi
-from menus import menus
-from utils.asyncstuff import asyncexe
 
 
 class events(commands.Cog):
@@ -44,15 +43,18 @@ class events(commands.Cog):
         # self.post.start()
         self.errors_list = []
         self.bot.counter = 0
+
     @tasks.loop(seconds=30)
     async def graph(self):
 
-        with open ("socket.csv", "a") as f:
-            writer_object = writer(f) 
+        with open("socket.csv", "a") as f:
+            writer_object = writer(f)
 
-            writer_object.writerow([self.bot.socket_stats["MESSAGE_CREATE"], self.bot.socket_stats["GUILD_MEMBER_UPDATE"], self.bot.socket_stats["TYPING_START"]]) 
-        
-            f.close() 
+            writer_object.writerow([self.bot.socket_stats["MESSAGE_CREATE"],
+                                    self.bot.socket_stats["GUILD_MEMBER_UPDATE"], self.bot.socket_stats["TYPING_START"]])
+
+            f.close()
+
     @tasks.loop(minutes=1)
     async def status(self, bot):
         await bot.wait_until_ready()
@@ -402,6 +404,12 @@ class events(commands.Cog):
             await message.channel.send(
                 "Hii there why u ping me smh oh i mean hii my prefix is `ovo ` "
             )
+        if message.content.startswith(";;"):
+            search = message.content.replace(";;", "")
+            emojis = finder(search, self.bot.emojis, key=lambda i: i.name, lazy=False)[0]
+            if emojis == None or emojis == []:
+                return
+            await message.channel.send(str(emojis))
         # mentions = message.mentions
         # try:
         #   for x in mentions:
@@ -526,6 +534,7 @@ class events(commands.Cog):
             # print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
             # # traceback.print_exception(''.join(prettify_exceptions.DefaultFormatter().format_exception(type(error), error, error.__traceback__)))
             # traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
+
     @commands.command()
     @commands.is_owner()
     async def fix_errors(self, ctx):

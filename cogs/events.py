@@ -411,7 +411,10 @@ class events(commands.Cog):
             for i in emojis:
                 if i == "":
                     continue
-                e = finder(i, self.bot.emojis, key=lambda i: i.name, lazy=False)[0]
+                e = finder(i, self.bot.emojis, key=lambda i: i.name, lazy=False)
+                if e == []:
+                    continue
+                e = e[0]
                 if e == None or emojis == []:
                     continue
                 if e.is_usable() == False:

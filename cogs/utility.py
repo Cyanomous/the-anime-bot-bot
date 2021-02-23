@@ -244,7 +244,7 @@ class utility(commands.Cog):
         cache = {}
         for key, page in page_types.items():
             sub = cache[key] = {}
-            async with aiohttp.ClientSession().get(page +
+            async with self.bot.session.get(page +
                                                    '/objects.inv') as resp:
                 if resp.status != 200:
                     raise RuntimeError(
@@ -331,10 +331,9 @@ class utility(commands.Cog):
         font = ImageFont.truetype("lexiereadable-bold.ttf", 30)
         return im, font
 
-    @staticmethod
-    async def get_incidents():
+    async def get_incidents(self):
         lists = []
-        async with aiohttp.ClientSession().get(
+        async with self.bot.session.get(
                 "https://srhpyqt94yxb.statuspage.io/api/v2/incidents.json"
         ) as resp:
             r = await resp.json()
@@ -344,10 +343,10 @@ class utility(commands.Cog):
                 lists.append(f"{name}: {status}")
         return lists
 
-    @staticmethod
-    async def get_status():
+
+    async def get_status(self):
         lists = []
-        async with aiohttp.ClientSession().get(
+        async with self.bot.session.get(
                 "https://srhpyqt94yxb.statuspage.io/api/v2/components.json"
         ) as resp:
             r = await resp.json()
@@ -453,7 +452,7 @@ class utility(commands.Cog):
     @qrcode.command(name="decode")
     async def qrcode_decode(self, ctx, *, link):
         if link.startswith("https"):
-            async with aiohttp.ClientSession().get(link) as resp:
+            async with self.bot.session.get(link) as resp:
                 byte_ = await resp.read()
                 byte_ = base64.b64decode
                 pic = np.frombuffer(byte_, dtype=np.uint8)
@@ -485,7 +484,7 @@ class utility(commands.Cog):
                     await ctx.send(str(await self.bot.mystbin.post(message, syntax=syntax)))
         else:
             if code.startswith("http"):
-                async with aiohttp.ClientSession().get(code) as resp:
+                async with self.bot.session.get(code) as resp:
                     message = await resp.read()
                     try:
                         message = message.decode("utf-8")
@@ -508,9 +507,7 @@ class utility(commands.Cog):
     @commands.command()
     async def redirectcheck(self, ctx, *, website):
         website = website.strip("<>")
-        async with aiohttp.ClientSession(headers={
-                'User-Agent': 'python-requests/2.20.0'
-        }).get(website) as resp:
+        async with self.bot.session.get(website) as resp:
             soup = BeautifulSoup(await resp.text(), features="lxml")
             canonical = soup.find('link', {'rel': 'canonical'})
             if canonical == None:

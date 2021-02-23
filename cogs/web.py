@@ -12,7 +12,7 @@ class web(commands.Cog):
     @tasks.loop(minutes=1)
     async def func(self, bot):
         try:
-            async with aiohttp.ClientSession().get(
+            async with bot.session.get(
                     "https://api.botlist.space/v1/bots") as resp:
                 bot.botlist = await resp.text()
         except:

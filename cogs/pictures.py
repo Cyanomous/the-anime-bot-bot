@@ -28,6 +28,7 @@ class pictures(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+
     @staticmethod
     @asyncexe()
     def circle_(background_color, circle_color):
@@ -36,13 +37,15 @@ class pictures(commands.Cog):
         for i in range(500):
             img = Image.new("RGB", (200, 200), background_color)
             imgr = ImageDraw.Draw(img)
-            imgr.ellipse((100-i*20, 100-i*20, 100+i*20, 100+i*20), fill=circle_color)
+            imgr.ellipse((100-i*20, 100-i*20, 100+i*20,
+                          100+i*20), fill=circle_color)
             fobj = BytesIO()
             img.save(fobj, "GIF")
             img = Image.open(fobj)
             frames.append(img)
         igif = BytesIO()
-        frames[0].save(igif, format='GIF', append_images=frames[1:], save_all=True, duration=3, loop=0)
+        frames[0].save(igif, format='GIF', append_images=frames[1:],
+                       save_all=True, duration=3, loop=0)
         igif.seek(0)
         return igif
 
@@ -138,7 +141,7 @@ class pictures(commands.Cog):
         await ctx.send(embed=embed, file=image)
 
     @commands.group(invoke_without_command=True)
-    async def supreme(self, ctx, *, text:str="enter something here"):
+    async def supreme(self, ctx, *, text: str = "enter something here"):
         embed = discord.Embed(color=0x00ff6a).set_image(
             url="attachment://alex.png")
         image = discord.File(
@@ -146,7 +149,7 @@ class pictures(commands.Cog):
         await ctx.send(embed=embed, file=image)
 
     @supreme.command(name="dark")
-    async def supreme_dark(self, ctx, *, text:str="enter something here"):
+    async def supreme_dark(self, ctx, *, text: str = "enter something here"):
         embed = discord.Embed(color=0x00ff6a).set_image(
             url="attachment://alex.png")
         image = discord.File(
@@ -1289,8 +1292,7 @@ class pictures(commands.Cog):
         await self.scared_(data)
         embed = discord.Embed(color=0x2ecc71)
         embed.set_footer(
-            text=
-            f"requested by {ctx.author} response time : {round(self.bot.latency * 1000)} ms",
+            text=f"requested by {ctx.author} response time : {round(self.bot.latency * 1000)} ms",
             icon_url=ctx.author.avatar_url)
         await ctx.reply(file=discord.File("profile.jpg"), embed=embed)
 

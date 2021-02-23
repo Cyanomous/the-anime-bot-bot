@@ -12,7 +12,7 @@ async def get_pic(ctx):
         if msg.reference.cached_message.embeds.url:
             return msg.reference.cached_message.embeds.url
     else:
-        if msg.reference.cached_message.message_id and msg.reference.cached_message.channel_id:
+        if msg.reference.message_id and msg.reference.channel_id:
             msg = await ctx.bot.get_channel(msg.channel_id).fetch_message(msg.message.id)
             if msg.attachments:
                 return msg.reference.cached_message.attachments.url

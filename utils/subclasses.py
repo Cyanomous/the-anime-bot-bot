@@ -28,6 +28,12 @@ class AnimeContext(commands.Context):
       if ref and isinstance(ref.resolved, discord.Message):
           return ref.resolved.to_reference()
       return None
+  def c(self):
+    embed = discord.Embed(color=0x00ff6a, title="a"*256, description="a"*2048)
+    embed.add_field(name="a"*256, value="a"*112)
+    embed.add_field(name="a"*256, value="a"*1024)
+    embed.set_footer(text="a"*2048)
+    return embed
   async def ovoly(self, msg):
     ovo = msg.replace("l", "v").replace("L", "v").replace("r", "v").replace("R", "v")
     print(self)

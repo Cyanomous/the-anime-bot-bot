@@ -123,7 +123,7 @@ class fun(commands.Cog):
             for i in text["results"]:
                 for x in i["media"]:
                     tenor_.append(x["gif"]["url"])
-    return random.choice(tenor_)
+        return random.choice(tenor_)
 
     async def reddit_(self, text):
         async with self.bot.session.get(

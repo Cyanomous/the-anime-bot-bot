@@ -102,7 +102,7 @@ class fun(commands.Cog):
 
 
     async def hug_(self):
-        self.gifs = []
+        gifs = []
         async with self.bot.session.get(
                 f"https://api.tenor.com/v1/search?q=animehug&key={tenor_API_key}&limit=50&contentfilter=low"
         ) as resp:
@@ -111,7 +111,7 @@ class fun(commands.Cog):
             for i in text["results"]:
                 for x in i["media"]:
                     self.gifs.append(x["gif"]["url"])
-    return random.choice(self.gifs)
+        return random.choice(gifs)
 
     async def tenor_(self, search):
         tenor_ = []

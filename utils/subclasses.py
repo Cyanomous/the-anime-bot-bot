@@ -123,8 +123,8 @@ case_insensitive=True, allowed_mentions=discord.AllowedMentions(everyone=False, 
     self.command_counter = 0
     self.commandsusages = Counter()
     self.session = aiohttp.ClientSession(headers={"User-Agent": f"python-requests/2.20.0 The Anime Bot/1.1.0 Python/{sys.version_info[0]}.{sys.version_info[1]}.{sys.version_info[2]} aiohttp/{aiohttp.__version__}"})
-    self.dag = Client(api_token)
-    self.alex=alexflipnote.Client(alex_)
+    self.dag = Client(api_token, session=self.session, loop=self.loop)
+    self.alex=alexflipnote.Client(alex_, session=self.session, loop=self.loop)
     self.ball = eight_ball.ball()
     self.zaneapi = aiozaneapi.Client(zane_api)
     for command in self.commands:

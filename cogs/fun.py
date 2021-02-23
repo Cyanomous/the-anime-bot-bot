@@ -1,3 +1,16 @@
+from utils.paginator import AnimePages
+from utils.embed import embedbase
+from utils.asyncstuff import asyncexe
+from menus import menus
+from cryptography.fernet import Fernet
+from bottom import from_bottom, to_bottom
+from asyncdagpi import Client
+import gtts
+import time
+import re
+import random
+import json
+import asyncio
 import os
 import textwrap
 import typing
@@ -12,48 +25,6 @@ from PIL import Image, ImageDraw, ImageFont
 talk_token = os.getenv("talk_token")
 rapid_api_key = os.getenv("rapid_api_key")
 tenor_API_key = os.getenv("tenor_API_key")
-import asyncio
-import json
-import random
-import re
-import time
-
-import gtts
-from asyncdagpi import Client
-from bottom import from_bottom, to_bottom
-from cryptography.fernet import Fernet
-from menus import menus
-from utils.asyncstuff import asyncexe
-from utils.embed import embedbase
-from utils.paginator import AnimePages
-
-
-class gifs():
-    async def tenor(self, search):
-        tenor_ = []
-        async with aiohttp.ClientSession() as cs:
-            async with cs.get(
-                    f"https://api.tenor.com/v1/search?q={search}&key={tenor_API_key}&limit=50&contentfilter=low"
-            ) as resp:
-                text = await resp.text()
-                text = json.loads(text)
-                for i in text["results"]:
-                    for x in i["media"]:
-                        tenor_.append(x["gif"]["url"])
-        return random.choice(tenor_)
-
-    async def hug(self):
-        self.gifs = []
-        async with aiohttp.ClientSession() as cs:
-            async with cs.get(
-                    f"https://api.tenor.com/v1/search?q=animehug&key={tenor_API_key}&limit=50&contentfilter=low"
-            ) as resp:
-                text = await resp.text()
-                text = json.loads(text)
-                for i in text["results"]:
-                    for x in i["media"]:
-                        self.gifs.append(x["gif"]["url"])
-        return random.choice(self.gifs)
 
 
 class UrbanDictionaryPageSource(menus.ListPageSource):
@@ -102,18 +73,21 @@ class UrbanDictionaryPageSource(menus.ListPageSource):
 
         return embed
 
+class fun(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+        self.talk_channels = []
 
-class functions(commands.Cog):
     async def get_quote(self):
         self.quotes = []
-        async with aiohttp.ClientSession().get(
+        async with self.bot.session.get(
                 "https://type.fit/api/quotes") as resp:
             for i in json.loads(await resp.text()):
                 self.quotes.append(i["text"])
         return random.choice(self.quotes)
-
-    async def getmeme():
-        async with aiohttp.ClientSession().get(
+    
+    async def getmeme(self):
+        async with self.bot.session.get(
                 "https://meme-api.herokuapp.com/gimme") as resp:
             meme = await resp.text()
             meme = json.loads(meme)
@@ -126,39 +100,33 @@ class functions(commands.Cog):
                 image = meme["preview"][-1]
                 return link, title, nsfw, image
 
-    async def in_lb(user):
-        with open("sushi.json", "r") as f:
-            users = json.load(f)
-            if str(user.id) in users:
-                return True
-            else:
-                users[str(user.id)] = None
-                with open("sushi.json", "w") as f:
-                    json.dump(users, f)
-                return False
 
-    async def get_lb(user):
-        with open("sushi.json", "r") as f:
-            users = json.load(f)
-            return users[str(user.id)]
+    async def hug_(self):
+        self.gifs = []
+        async with self.bot.session.get(
+                f"https://api.tenor.com/v1/search?q=animehug&key={tenor_API_key}&limit=50&contentfilter=low"
+        ) as resp:
+            text = await resp.text()
+            text = json.loads(text)
+            for i in text["results"]:
+                for x in i["media"]:
+                    self.gifs.append(x["gif"]["url"])
+    return random.choice(self.gifs)
 
-    async def update_lb(user, score):
-        with open("sushi.json", "r") as f:
-            users = json.load(f)
-        users[str(user.id)] = int(score)
-        with open("sushi.json", "w") as f:
-            json.dump(users, f)
-            return True
+    async def tenor_(self, search):
+        tenor_ = []
+        async with self.bot.session.get(
+                f"https://api.tenor.com/v1/search?q={search}&key={tenor_API_key}&limit=50&contentfilter=low"
+        ) as resp:
+            text = await resp.text()
+            text = json.loads(text)
+            for i in text["results"]:
+                for x in i["media"]:
+                    tenor_.append(x["gif"]["url"])
+    return random.choice(tenor_)
 
-
-class fun(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
-        self.talk_channels = []
-
-    @staticmethod
-    async def reddit_(text):
-        async with aiohttp.ClientSession().get(
+    async def reddit_(self, text):
+        async with self.bot.session.get(
                 f"https://meme-api.herokuapp.com/gimme/{text}") as resp:
             meme = await resp.text()
             meme = json.loads(meme)
@@ -179,18 +147,18 @@ class fun(commands.Cog):
             return from_bottom(text)
 
     @commands.command()
-    async def pic(self, ctx, animal:str):
-        async with aiohttp.ClientSession().get(f"https://some-random-api.ml/img/{animal}") as resp:
+    async def pic(self, ctx, animal: str):
+        async with self.bot.session.get(f"https://some-random-api.ml/img/{animal}") as resp:
             if resp.status == 404:
                 return await ctx.send("we can't find picture of that animal")
             pic = await resp.json()
-            async with aiohttp.ClientSession().get(pic["link"]) as resp:
+            async with self.bot.session.get(pic["link"]) as resp:
                 pic = BytesIO(await resp.read())
                 await ctx.send(file=discord.File(pic, filename=animal+".png"))
-    
+
     @commands.command()
-    async def fact(self, ctx, animal:str):
-        async with aiohttp.ClientSession().get(f"https://some-random-api.ml/facts/{animal}") as resp:
+    async def fact(self, ctx, animal: str):
+        async with self.bot.session.get(f"https://some-random-api.ml/facts/{animal}") as resp:
             if resp.status == 404:
                 return await ctx.send("we can't find fact about that animal")
             fact = await resp.json()
@@ -198,7 +166,7 @@ class fun(commands.Cog):
 
     @commands.command()
     async def http(self, ctx, *, code: str = "404"):
-        async with aiohttp.ClientSession().get(
+        async with self.bot.session.get(
                 f"https://http.cat/{code}") as resp:
             buffer = await resp.read()
         await ctx.send(
@@ -207,8 +175,7 @@ class fun(commands.Cog):
     @commands.command()
     async def robtea(self, ctx):
         embed = discord.Embed(
-            description=
-            "Click it in 10 seconds to get your tea in perfect tempature",
+            description="Click it in 10 seconds to get your tea in perfect tempature",
             color=0x00ff6a)
         message = await ctx.send(embed=embed)
         await message.add_reaction("\U0001f375")
@@ -233,8 +200,7 @@ class fun(commands.Cog):
         counter = 0
         embed = discord.Embed(
             color=0x00ff6a,
-            description=
-            "Rules:\nafter the countdown end you will spam click the reaction as fast as you can"
+            description="Rules:\nafter the countdown end you will spam click the reaction as fast as you can"
         )
         message = await ctx.send(embed=embed)
         await asyncio.sleep(5)
@@ -362,8 +328,7 @@ class fun(commands.Cog):
         embed.set_author(name=title, url=link)
         embed.set_image(url=image)
         embed.set_footer(
-            text=
-            f"requested by {ctx.author} response time : {round(self.bot.latency * 1000)} ms",
+            text=f"requested by {ctx.author} response time : {round(self.bot.latency * 1000)} ms",
             icon_url=ctx.author.avatar_url)
         await ctx.reply(embed=embed)
 
@@ -395,7 +360,7 @@ class fun(commands.Cog):
         return text_
 
     @commands.command(aliases=["grid", "toemoji"])
-    async def renderemoji(self, ctx, *, codes:int):
+    async def renderemoji(self, ctx, *, codes: int):
         codes_ = await self.bot.loop.run_in_executor(None, self.render_emoji,
                                                      str(codes))
         await ctx.reply(codes_)
@@ -410,23 +375,22 @@ class fun(commands.Cog):
             if any(i in search for i in lists):
                 return await ctx.send(
                     "Can not search nsfw words in non nsfw channel")
-        async with aiohttp.ClientSession() as cs:
-            async with cs.get(
-                    f"http://api.urbandictionary.com/v0/define?term={search}"
-            ) as resp:
-                if resp.status != 200:
-                    return await ctx.send(
-                        f'An error occurred: {resp.status} {resp.reason}')
-                js = await resp.json()
-                data = js.get('list', [])
-                if not data:
-                    return await ctx.send('No results found, sorry.')
+        async with self.bot.session.get(
+                f"http://api.urbandictionary.com/v0/define?term={search}"
+        ) as resp:
+            if resp.status != 200:
+                return await ctx.send(
+                    f'An error occurred: {resp.status} {resp.reason}')
+            js = await resp.json()
+            data = js.get('list', [])
+            if not data:
+                return await ctx.send('No results found, sorry.')
 
-            pages = AnimePages(UrbanDictionaryPageSource(data))
-            try:
-                await pages.start(ctx)
-            except menus.MenuError as e:
-                await ctx.send(e)
+        pages = AnimePages(UrbanDictionaryPageSource(data))
+        try:
+            await pages.start(ctx)
+        except menus.MenuError as e:
+            await ctx.send(e)
 
     @commands.command(aliases=["chat"])
     @commands.max_concurrency(1,
@@ -466,7 +430,7 @@ class fun(commands.Cog):
                     "text": message.content,
                     "context": [chats[-2], chats[-1]]
                 }
-                async with ctx.channel.typing(), aiohttp.ClientSession().post(
+                async with ctx.channel.typing(), self.bot.session.post(
                         "https://public-api.travitia.xyz/talk",
                         json=payload,
                         headers={"authorization": talk_token}) as res:
@@ -483,8 +447,7 @@ class fun(commands.Cog):
         if isinstance(error, commands.errors.MaxConcurrencyReached):
             embed = discord.Embed(
                 color=0x00ff6a,
-                description=
-                "A chat session has already been established in this channel")
+                description="A chat session has already been established in this channel")
             return await ctx.reply(embed=embed)
 
     @commands.command()
@@ -503,7 +466,7 @@ class fun(commands.Cog):
 
     @commands.command(aliases=["tr", "typerace"])
     async def typeracer(self, ctx):
-        quote = await functions.get_quote(self)
+        quote = await self.get_quote()
         font = ImageFont.truetype("lexiereadable-bold.ttf", 16)
         img = Image.new("RGB", (400, 100), color="black")
         draw = ImageDraw.Draw(img)
@@ -533,7 +496,7 @@ class fun(commands.Cog):
 
     @commands.command()
     async def tenor(self, ctx, *, search):
-        gif = await gifs.tenor(self, search)
+        gif = await self.tenor_(search)
         embed = await embedbase.embed(self, ctx)
         embed.set_image(url=gif)
         await ctx.send(embed=embed)
@@ -582,7 +545,7 @@ class fun(commands.Cog):
 
     @commands.command()
     async def hug(self, ctx, member: discord.Member = None):
-        gif = await gifs.hug(self)
+        gif = await self.hug_()
         member1 = member
         if member1 == None:
             member1 = "themself"
@@ -690,15 +653,14 @@ class fun(commands.Cog):
     @commands.command()
     async def meme(self, ctx):
         await ctx.trigger_typing()
-        link, title, nsfw, image = await functions.getmeme()
+        link, title, nsfw, image = await self.getmeme()
         if nsfw == True:
             return
         embed = discord.Embed(color=0x00ff6a)
         embed.set_author(name=title, url=link)
         embed.set_image(url=image)
         embed.set_footer(
-            text=
-            f"requested by {ctx.author} response time : {round(self.bot.latency * 1000)} ms",
+            text=f"requested by {ctx.author} response time : {round(self.bot.latency * 1000)} ms",
             icon_url=ctx.author.avatar_url)
         await ctx.reply(embed=embed)
 
@@ -746,10 +708,10 @@ class fun(commands.Cog):
         if member == self.bot.user or member.id == 590323594744168494:
             return await ctx.send("nope")
         await ctx.trigger_typing()
-        async with aiohttp.ClientSession().get(
+        async with self.bot.session.get(
                 "https://evilinsult.com/generate_insult.php") as resp:
             response = await resp.text()
-        async with aiohttp.ClientSession().get(
+        async with self.bot.session.get(
                 "https://insult.mattbas.org/api/insult") as resp:
             response3 = await resp.text()
         response2 = await self.bot.dag.roast()

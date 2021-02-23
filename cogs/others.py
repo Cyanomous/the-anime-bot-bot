@@ -162,8 +162,7 @@ class others(commands.Cog):
     @commands.command()
     async def charles(self, ctx, *, text):
         await ctx.trigger_typing()
-        session = aiohttp.ClientSession()
-        res = await session.post('https://bin.charles-bot.com/documents',
+        res = await self.bot.session.post('https://bin.charles-bot.com/documents',
                                  data=text)
         if res.status != 200:
             raise commands.CommandError(

@@ -158,11 +158,7 @@ class owners(commands.Cog):
         website = website.replace("<", "").replace(">", "")
         if not website.startswith("http"):
             return await ctx.send("not a valid website")
-        async with aiohttp.ClientSession(
-                headers={
-                    'User-Agent': 'python-requests/2.20.0'
-                },
-                timeout=aiohttp.ClientTimeout(total=20)).get(website) as resp:
+        async with self.bot.session.get(website) as resp:
             if resp.status != 200:
                 return await ctx.send(
                     f"can not screenshot that website status code: `{resp.status}`"
@@ -184,8 +180,7 @@ class owners(commands.Cog):
         lists2 = ["ip", "i+p", "ipv4", "ipv6"]
         if any(i in website_ for i in lists2):
             return await ctx.send("can not screenshot that website")
-        async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(
-                total=20)).get(
+        async with self.bot.session.get(
                     f"https://image.thum.io/get/png/{website}") as resp:
             pic = BytesIO(await resp.read())
         await ctx.send(file=discord.File(pic, f"website_{website}.png"))

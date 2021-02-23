@@ -88,14 +88,13 @@ class events(commands.Cog):
     @tasks.loop(minutes=1)
     async def post(self, bot):
         await bot.wait_until_ready()
-        session = aiohttp.ClientSession()
-        await session.post("https://top.gg/api/bots/787927476177076234/stats",
+        await bot.session.post("https://top.gg/api/bots/787927476177076234/stats",
                            headers={"Authorization": topgg},
                            data=json.dumps({
                                "server_count": len(bot.guilds),
                                "shard_count": bot.shard_count
                            }))
-        await session.post(
+        await bot.session.post(
             "https://discordbotlist.com/api/v1/bots/anime-quotepic-bot/stats",
             headers={"Authorization": discord_bot_list},
             data={
@@ -103,8 +102,7 @@ class events(commands.Cog):
                 "users": len(bot.users),
                 "guilds": len(bot.guilds)
             })
-        async with aiohttp.ClientSession(
-        ).post("https://api.discordextremelist.xyz/v2/bot/787927476177076234/stats",
+        async with bot.session.post("https://api.discordextremelist.xyz/v2/bot/787927476177076234/stats",
                headers={
                    "Authorization": discord_extreme_list,
                    "Content-Type": "application/json"
@@ -114,14 +112,14 @@ class events(commands.Cog):
                    "shardCount": len(bot.shards)
                })) as resp:
             pass
-        await session.post(
+        await bot.session.post(
             "https://botsfordiscord.com/api/bot/787927476177076234",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": bots_for_discord
             },
             data=json.dumps({"server_count": len(bot.guilds)}))
-        await session.post(
+        await bot.session.post(
             "https://api.botlist.space/v1/bots/787927476177076234",
             headers={
                 "Authorization": botlist_space,
@@ -130,7 +128,6 @@ class events(commands.Cog):
             data=json.dumps(
                 {"shards": [len(bot.guilds) / 2,
                             len(bot.guilds) / 2]}))
-        await session.close()
 
     @commands.Cog.listener()
     async def on_command_completion(self, ctx):

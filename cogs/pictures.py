@@ -15,10 +15,11 @@ import typing
 
 
 class pictures(commands.Cog):
-    @staticmethod
-    async def polaroid_(image, method):
-        async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(
-                total=30.0)).get(image) as resp:
+    def __init__(self, bot):
+        self.bot = bot
+    
+    async def polaroid_(self, image, method):
+        async with self.bot.session.get(image) as resp:
             image1 = await resp.read()
         im = polaroid.Image(image1)
         method1 = getattr(im, method)
@@ -26,8 +27,6 @@ class pictures(commands.Cog):
         file = discord.File(BytesIO(im.save_bytes()), filename="polaroid.png")
         return file
 
-    def __init__(self, bot):
-        self.bot = bot
 
     @staticmethod
     @asyncexe()
@@ -77,11 +76,11 @@ class pictures(commands.Cog):
     @commands.command()
     async def randompicture(self, ctx, *, seed: str = None):
         if seed:
-            async with aiohttp.ClientSession().get(
+            async with self.bot.session.get(
                     f"https://picsum.photos/seed/{seed}/3840/2160") as resp:
                 pic = BytesIO(await resp.read())
         else:
-            async with aiohttp.ClientSession().get(
+            async with self.bot.session.get(
                     "https://picsum.photos/3840/2160") as resp:
                 pic = BytesIO(await resp.read())
         await ctx.send(file=discord.File(pic, filename="randompicture.png"))

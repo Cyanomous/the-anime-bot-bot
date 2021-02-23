@@ -174,10 +174,10 @@ class others(commands.Cog):
     @commands.command()
     async def type(self, ctx, seconds: int):
         """
-  the bot will type for the time u provide yes idk what i made
+  the bot will type for the time u provide yes idk what i made the max is 5 minute :O
     """
-        def check(m):
-            return m.author == ctx.author and m.content == "end"
+        if seconds > 300:
+            seconds = 300
 
         async with ctx.channel.typing():
             await asyncio.sleep(seconds)

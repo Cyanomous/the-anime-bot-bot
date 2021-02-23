@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 
 
-async def get_pic(self, ctx):
+async def get_pic(ctx):
     msg = ctx.message
     if not msg.reference:
         return False

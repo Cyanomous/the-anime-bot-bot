@@ -7,16 +7,16 @@ async def get_pic(ctx):
     if not msg.reference:
         return False
     if msg.reference.cached_message:
-        if msg.reference.cached_message.attachments:
-            return msg.reference.cached_message.attachments.url
-        if msg.reference.cached_message.embeds.url:
-            return msg.reference.cached_message.embeds.url
+        if msg.reference.cached_message.attachments[0]:
+            return msg.reference.cached_message.attachments[0].url
+        if msg.reference.cached_message.embeds[0].url and msg.reference.cached_message.embeds[0].type == "image":
+            return msg.reference.cached_message.embeds[0].url
     else:
         if msg.reference.message_id and msg.reference.channel_id:
-            msg = await ctx.bot.get_channel(msg.channel_id).fetch_message(msg.message.id)
-            if msg.attachments:
-                return msg.reference.cached_message.attachments.url
-            if msg.embeds.url:
-                return msg.reference.cached_message.embeds.url
+            msg = await ctx.bot.get_channel(msg.reference.channel_id).fetch_message(msg.reference.message_id)
+            if msg.attachments[0]:
+                return msg.reference.cached_message.attachments[0].url
+            if msg.embeds[0].url and msg.embeds[0].type == "image":
+                return msg.reference.cached_message.embeds[0].url
 
     return False

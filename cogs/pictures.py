@@ -1,17 +1,18 @@
-import discord
-from discord.ext import commands
-import flags
-import aiohttp
 import asyncio
-from twemoji_parser import emoji_to_url
-import typing
 import os
-from utils.asyncstuff import asyncexe
-import polaroid
-from PIL import Image, ImageDraw
-from io import BytesIO
-from asyncdagpi import ImageFeatures
 import typing
+from io import BytesIO
+
+import aiohttp
+import discord
+import flags
+import polaroid
+from asyncdagpi import ImageFeatures
+from discord.ext import commands
+from PIL import Image, ImageDraw
+from twemoji_parser import emoji_to_url
+from utils.asyncstuff import asyncexe
+from utils.utils import get_pic
 
 
 class pictures(commands.Cog):
@@ -116,7 +117,10 @@ class pictures(commands.Cog):
         async with ctx.channel.typing():
             if level > 1:
                 level = 1
-            if thing == None:
+            url_ = await get_pic(ctx) or None
+            if url_:
+                url = url_
+            if thing == None and url == None:
                 url = str(ctx.author.avatar_url_as(static_format="png"))
             elif isinstance(thing, discord.PartialEmoji) or isinstance(
                     thing, discord.Emoji):
@@ -173,7 +177,10 @@ class pictures(commands.Cog):
         async with ctx.channel.typing():
             if level > 1:
                 level = 1
-            if thing == None:
+            url_ = await get_pic(ctx) or None
+            if url_:
+                url = url_
+            if thing == None and url == None:
                 url = str(ctx.author.avatar_url_as(static_format="png"))
             elif isinstance(thing, discord.PartialEmoji) or isinstance(
                     thing, discord.Emoji):
@@ -234,7 +241,10 @@ class pictures(commands.Cog):
                     thing: typing.Union[discord.Member, discord.PartialEmoji,
                                         discord.Emoji, str] = None):
         async with ctx.channel.typing():
-            if thing == None:
+            url_ = await get_pic(ctx) or None
+            if url_:
+                url = url_
+            if thing == None and url == None:
                 url = str(ctx.author.avatar_url_as(static_format="png"))
             elif isinstance(thing, discord.PartialEmoji) or isinstance(
                     thing, discord.Emoji):
@@ -259,7 +269,10 @@ class pictures(commands.Cog):
                       thing: typing.Union[discord.Member, discord.PartialEmoji,
                                           discord.Emoji, str] = None):
         async with ctx.channel.typing():
-            if thing == None:
+            url_ = await get_pic(ctx) or None
+            if url_:
+                url = url_
+            if thing == None and url == None:
                 url = str(ctx.author.avatar_url_as(static_format="png"))
             elif isinstance(thing, discord.PartialEmoji) or isinstance(
                     thing, discord.Emoji):

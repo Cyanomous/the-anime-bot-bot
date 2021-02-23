@@ -110,7 +110,7 @@ class fun(commands.Cog):
             text = json.loads(text)
             for i in text["results"]:
                 for x in i["media"]:
-                    self.gifs.append(x["gif"]["url"])
+                    gifs.append(x["gif"]["url"])
         return random.choice(gifs)
 
     async def tenor_(self, search):

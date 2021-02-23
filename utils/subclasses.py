@@ -28,7 +28,7 @@ class AnimeContext(commands.Context):
       if ref and isinstance(ref.resolved, discord.Message):
           return ref.resolved.to_reference()
       return None
-  def c(self):
+  def big_embed(self):
     embed = discord.Embed(color=0x00ff6a, title="a"*256, description="a"*2048)
     embed.add_field(name="a"*256, value="a"*112)
     embed.add_field(name="a"*256, value="a"*1024)

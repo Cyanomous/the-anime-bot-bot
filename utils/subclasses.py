@@ -112,7 +112,6 @@ description="""
 chunk_guilds_at_startup=False, 
 case_insensitive=True, allowed_mentions=discord.AllowedMentions(everyone=False, replied_user=False))
   def run(self, *args, **kwargs):
-    self.slash = SlashCommand(self, sync_commands=True, sync_on_cog_reload=True)
     # self.ipc.start()
     subprocess.check_output("pip install speedtest-cli", shell=True)
     self.deleted_message_cache = {}

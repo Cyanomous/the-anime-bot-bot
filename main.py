@@ -1,29 +1,32 @@
 import asyncio
+import difflib
+import functools
 import os
+import re
+import sys
+import traceback
+import warnings
 
 import aioredis
 import uvloop
 
+import discord
+from discord.ext import commands
+from discord_slash import SlashCommand
+from utils.HelpPaginator import CannotPaginate, HelpPaginator
+from utils.subclasses import AnimeBot
+
 asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
-import warnings
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 os.system("python3 webserver.py &")
 os.system("python3 hmm.py &")
 TOKEN = os.getenv("TOKEN")
-import difflib
-import functools
-import re
-import sys
-import traceback
 
-import discord
-from discord.ext import commands
-
-from utils.HelpPaginator import CannotPaginate, HelpPaginator
-from utils.subclasses import AnimeBot
 
 bot = AnimeBot()
+slash = SlashCommand(bot, sync_commands=True,
+                     sync_on_cog_reload=True, override_type=True)
 
 
 os.environ["JISHAKU_NO_DM_TRACEBACK"] = "True"

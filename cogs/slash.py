@@ -2,17 +2,17 @@ import discord
 from discord.ext import commands
 import time
 import discord_slash
-from discord_slash import cog_ext
+from discord_slash import cog_ext, SlashContext
 
 class slash(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     @cog_ext.cog_slash(name="test", guild_ids=[786359602241470464])
-    async def test(self, ctx):
-        await ctx.send("test test")
+    async def test(self, ctx: SlashContext):
+        await ctx.send(f"test test")
     @cog_ext.cog_slash(name="ping")
-    async def ping(self, ctx):
+    async def ping(self, ctx: SlashContext):
         embed = await discord.Embed(color=self.bot.color)
         embed.set_author(name="ping")
         embed.add_field(name="<:stab:744345955637395586>  websocket latency",

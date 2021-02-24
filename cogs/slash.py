@@ -8,7 +8,7 @@ class slash(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @cog_ext.cog_slash(name="test")
+    @cog_ext.cog_slash(name="test", guild_ids=[786359602241470464])
     async def test(self, ctx, arg1, arg2):
         await ctx.send(f"{arg1} {arg2}")
     @cog_ext.cog_slash(name="ping")

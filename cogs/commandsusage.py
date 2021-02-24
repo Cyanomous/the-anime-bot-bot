@@ -22,7 +22,7 @@ class commandsusage(commands.Cog):
         lists.append(f"Total {self.bot.command_counter} commands invoked")
         for i, (n, v) in enumerate(self.bot.commandsusages.most_common()):
             counter += 1
-            lists.append(f"`{counter}. {n:<10} {v}`")
+            lists.append(f"`{counter}. {n:<20} {v}`")
         paginator = commands.Paginator(max_size=1800,
                                         prefix="",
                                         suffix="")

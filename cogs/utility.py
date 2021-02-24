@@ -457,6 +457,7 @@ class utility(commands.Cog):
             Homepage: {package["home_page"]}
             License: {package["license"]}
             Version: {package["version"]}
+            Keywords: {package["keywords"]}
             Documentation: {package["project_urls"]["Documentation"]}
             """
             embed = discord.Embed(color=self.bot.color, title=package["name"], url=package["package_url"], description=package["summary"])

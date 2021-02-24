@@ -30,6 +30,7 @@ slash = SlashCommand(bot, sync_commands=True,
 
 @slash.slash(name="wtf", guild_ids=[786359602241470464])
 async def wtf(ctx):
+    await ctx.respond()
     await ctx.send("wtf wtf")
 
 

@@ -39,6 +39,10 @@ class AnimeContext(commands.Context):
     ovo = msg.replace("l", "v").replace("L", "v").replace("r", "v").replace("R", "v")
     print(self)
     return f"{ovo} ovo"
+  async def get(self, link):
+    return str(await self.bot.mystbin.get(link))
+  async def paste(self, content):
+    return str(await self.bot.mystbin.post(content))
   async def send(self, content=None, **kwargs):
     # if self.invoked_with("jishaku"):
     #   embed = discord.Embed(color=0x2ecc71, description=content)
@@ -112,7 +116,6 @@ case_insensitive=True, allowed_mentions=discord.AllowedMentions(everyone=False, 
     self.deleted_message_cache = {}
     self.concurrency = []
     self.color = 0x00ff6a
-    self.mystbin = mystbin.Client()
     self.psutil_process = psutil.Process()
     self._message_cache = {} 
     self.prefixes = {}
@@ -122,6 +125,7 @@ case_insensitive=True, allowed_mentions=discord.AllowedMentions(everyone=False, 
     self.command_counter = 0
     self.commandsusages = Counter()
     self.session = aiohttp.ClientSession(headers={"User-Agent": f"python-requests/2.20.0 The Anime Bot/1.1.0 Python/{sys.version_info[0]}.{sys.version_info[1]}.{sys.version_info[2]} aiohttp/{aiohttp.__version__}"})
+    self.mystbin = mystbin.Client(session=self.session)
     self.vacefron_api=vacefron.Client(session=self.session, loop=self.loop)
     self.dag = Client(api_token, session=self.session, loop=self.loop)
     self.alex=alexflipnote.Client(alex_, session=self.session, loop=self.loop)

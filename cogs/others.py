@@ -15,7 +15,7 @@ import discord
 import humanize
 import psutil
 from discord.ext import commands
-from github import Github
+# from github import Github
 from utils.asyncstuff import asyncexe
 from utils.embed import embedbase
 from utils.fuzzy import finder
@@ -26,7 +26,7 @@ from jishaku.paginators import (PaginatorEmbedInterface, PaginatorInterface,
 
 start_time = time.time()
 gittoken = os.getenv("gittoken")
-g = Github(gittoken)
+# g = Github(gittoken)
 TOKEN = os.getenv("TOKEN")
 
 
@@ -330,28 +330,28 @@ class others(commands.Cog):
     #   embed.set_footer(text=f"requested by {ctx.author} response time : {round(self.bot.latency * 1000)} ms", icon_url=ctx.author.avatar_url)
     #   await ctx.send(embed=embed)
 
-    @staticmethod
-    @asyncexe()
-    def commits_():
-        lists = []
-        repo = g.get_repo(
-            "Cryptex-github/the-anime-bot-bot").get_commits()
-        for i in repo:
-            lists.append(
-                f"[`{i.commit.sha[:7]}`]({i.commit.html_url}) {i.commit.message}")
-        paginator = commands.Paginator(prefix="", suffix="", max_size=1000)
-        for i in lists:
-            paginator.add_line(i)
-        return paginator
+    # @staticmethod
+    # @asyncexe()
+    # def commits_():
+    #     lists = []
+    #     repo = g.get_repo(
+    #         "Cryptex-github/the-anime-bot-bot").get_commits()
+    #     for i in repo:
+    #         lists.append(
+    #             f"[`{i.commit.sha[:7]}`]({i.commit.html_url}) {i.commit.message}")
+    #     paginator = commands.Paginator(prefix="", suffix="", max_size=1000)
+    #     for i in lists:
+    #         paginator.add_line(i)
+    #     return paginator
 
-    @commands.command()
-    @commands.max_concurrency(1, commands.BucketType.user)
-    async def commits(self, ctx):
-        await ctx.send("Getting commits")
-        paginator = await self.commits_()
-        interface = PaginatorEmbedInterface(
-            ctx.bot, paginator, owner=ctx.author)
-        await interface.send_to(ctx)
+    # @commands.command()
+    # @commands.max_concurrency(1, commands.BucketType.user)
+    # async def commits(self, ctx):
+    #     await ctx.send("Getting commits")
+    #     paginator = await self.commits_()
+    #     interface = PaginatorEmbedInterface(
+    #         ctx.bot, paginator, owner=ctx.author)
+    #     await interface.send_to(ctx)
 
     @commands.command(aliases=["info"])
     async def about(self, ctx):
@@ -395,13 +395,13 @@ class others(commands.Cog):
                         value=f"```{round(self.bot.latency * 1000)} ms ```")
         embed.add_field(name="<a:typing:597589448607399949> API latency",
                         value=f"```{round(final_latency * 1000)} ms ```")
-        repo = g.get_repo("Cryptex-github/the-anime-bot-bot").get_commits()[:3]
-        lists = []
-        for i in repo:
-            lists.append(
-                f"[{i.commit.sha[:7]}]({i.commit.html_url}) {i.commit.message}")
-        embed.add_field(name="Recent changes",
-                        value="\n".join(lists), inline=False)
+        # repo = g.get_repo("Cryptex-github/the-anime-bot-bot").get_commits()[:3]
+        # lists = []
+        # for i in repo:
+        #     lists.append(
+        #         f"[{i.commit.sha[:7]}]({i.commit.html_url}) {i.commit.message}")
+        # embed.add_field(name="Recent changes",
+        #                 value="\n".join(lists), inline=False)
         embed.add_field(
             name=" stats ",
             value=f"```file: {fc}\nline: {ls:,}\ncharacters: {cc} \nclass: {cl}\nfunction: {fn}\ncoroutine: {cr}\ncomment: {cm:,}```",

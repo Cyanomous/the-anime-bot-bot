@@ -28,6 +28,10 @@ bot = AnimeBot()
 slash = SlashCommand(bot, sync_commands=True,
                      sync_on_cog_reload=True, override_type=True)
 
+@slash.slash(name="wtf", guild_ids=[786359602241470464])
+async def wtf(ctx):
+    await ctx.send("wtf wtf")
+
 
 os.environ["JISHAKU_NO_DM_TRACEBACK"] = "True"
 os.environ["JISHAKU_NO_UNDERSCORE"] = "True"

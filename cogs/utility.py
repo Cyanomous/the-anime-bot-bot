@@ -722,6 +722,7 @@ class utility(commands.Cog):
         """
     Shows emoji info
     """
+        emoji = emoji.replace("\U0000fe0f", "")
         # im, font = await self.emojiinfo_()
         # parser = TwemojiParser(im, parse_discord_emoji=True)
         # await parser.draw_text((0, 0), emoji, font=font, fill=(0, 0, 0))
@@ -747,7 +748,7 @@ class utility(commands.Cog):
                                           emoji, "Can not find emoji\'s name"), description="Unicode emoji/Discord Emoji")
                 embed.set_image(url=emoji_link)
                 await ctx.send(embed=embed)
-        except commands.PartialEmojiConversionFailure:
+        except:
             emoji_link = await emoji_to_url(emoji)
             embed = discord.Embed(color=self.bot.color,
                                   title=unicodedata.name(

@@ -3,7 +3,7 @@ from collections import Counter
 import discord
 from discord.ext import commands
 
-from jishaku.paginators import PaginatorInterface
+from jishaku.paginators import PaginatorInterface, PaginatorEmbedInterface
 
 
 class commandsusage(commands.Cog):
@@ -17,24 +17,21 @@ class commandsusage(commands.Cog):
 
     @commands.command()
     async def commandsusage(self, ctx):
+        counter = 0
         lists = []
         lists.append(f"Total {self.bot.command_counter} commands invoked")
         for i, (n, v) in enumerate(self.bot.commandsusages.most_common()):
-            lists.append(f"{n:<30} {v:<15}")
-        if len(str(lists)) > 1800:
-            paginator = commands.Paginator(max_size=1800,
-                                           prefix="```",
-                                           suffix="```")
-            for i in lists:
-                paginator.add_line(i)
-            interface = PaginatorInterface(ctx.bot,
-                                           paginator,
-                                           owner=ctx.author)
-            return await interface.send_to(ctx)
-        else:
-            lists = "\n".join(lists)
-            await ctx.send(f"```\n{lists}\n```")
-
+            counter += 1
+            lists.append(f"`{counter}. {n:<10} {v}`")
+        paginator = commands.Paginator(max_size=1800,
+                                        prefix="",
+                                        suffix="")
+        for i in lists:
+            paginator.add_line(i)
+        interface = PaginatorEmbedInterface(ctx.bot,
+                                        paginator,
+                                        owner=ctx.author)
+        return await interface.send_to(ctx)
 
 def setup(bot):
     bot.add_cog(commandsusage(bot))

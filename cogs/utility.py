@@ -449,7 +449,19 @@ class utility(commands.Cog):
                 return await ctx.send(f"We are unable to find your package either because you made a typo or the package don't exist or pypi is down Status code: `{resp.status}`")
             package = await resp.json()
             package = package["info"]
-            embed = discord.Embed(color=self.bot.color, description=f"Author: {package['author']}")
+            Author = f"""
+            Author: {package['author']}
+            Author email: {package["author_email"]}
+            """
+            Package = f"""
+            Homepage: {package["home_page"]}
+            License: {package["license"]}
+            Downloads: 
+                   Last day:   {package["downloads"]["last_day"]}
+                   Last month:   {package["downloads"]["last_month"]}
+                   Last weeek:   {package["downloads"]["last_week"]}
+            """
+            embed = discord.Embed(color=self.bot.color, title=package["name"], url=package["package_url"], description=package["summary"])
             await ctx.send(embed=embed)
     @commands.group(invoke_without_command=True)
     async def qrcode(self, ctx, *, thing):

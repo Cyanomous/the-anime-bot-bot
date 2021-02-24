@@ -56,44 +56,37 @@ class pictures(commands.Cog):
                                                 discord.Emoji, str]]):
         if woman == None:
                 url = str(ctx.author.avatar_url_as(static_format="png"))
-            elif isinstance(woman, discord.PartialEmoji) or isinstance(
-                    thing, discord.Emoji):
-                url = str(thing.url)
-            elif isinstance(woman, discord.Member) or isinstance(
-                    woman, discord.User):
-                url = str(woman.avatar_url_as(static_format="png"))
+        elif isinstance(woman, discord.PartialEmoji) or isinstance(
+                thing, discord.Emoji):
+            url = str(thing.url)
+        elif isinstance(woman, discord.Member) or isinstance(
+                woman, discord.User):
+            url = str(woman.avatar_url_as(static_format="png"))
+        else:
+            woman = str(woman)
+            if woman.startswith("http") or woman.startswith(
+                    "https") or woman.startswith("www"):
+                url = woman
             else:
-                woman = str(woman)
-                if woman.startswith("http") or woman.startswith(
-                        "https") or woman.startswith("www"):
-                    url = woman
-                else:
-                    url = await emoji_to_url(woman)
-            if cat == None:
-                url1 = str(ctx.me.avatar_url_as(static_format="png"))
-            elif isinstance(cat, discord.PartialEmoji) or isinstance(
-                    cat, discord.Emoji):
-                url1 = str(cat.url)
-            elif isinstance(woman, discord.Member) or isinstance(
-                    cat, discord.User):
-                url1 = str(cat.avatar_url_as(static_format="png"))
+                url = await emoji_to_url(woman)
+        if cat == None:
+            url1 = str(ctx.me.avatar_url_as(static_format="png"))
+        elif isinstance(cat, discord.PartialEmoji) or isinstance(
+                cat, discord.Emoji):
+            url1 = str(cat.url)
+        elif isinstance(woman, discord.Member) or isinstance(
+                cat, discord.User):
+            url1 = str(cat.avatar_url_as(static_format="png"))
+        else:
+            cat = str(cat)
+            if cat.startswith("http") or cat.startswith(
+                    "https") or cat.startswith("www"):
+                url1 = cat
             else:
-                cat = str(cat)
-                if cat.startswith("http") or cat.startswith(
-                        "https") or cat.startswith("www"):
-                    url1 = cat
-                else:
-                    url1 = await emoji_to_url(cat)
-            pic = await self.bot.vacefrom_api.woman_yelling_at_cat(woman=url, cat=url1)
-            await ctx.send(file=discord.File(await pic.read(),
-                                         filename=f"woman_yelling_at_cat.png"))
-        
-        embed = discord.Embed(color=0x00ff6a).set_image(
-            url="attachment://alex.png")
-        image = discord.File(await (await self.bot.alex.amiajoke(url)).read(),
-                             "alex.png")
-        await ctx.send(embed=embed, file=image)
-
+                url1 = await emoji_to_url(cat)
+        pic = await self.bot.vacefrom_api.woman_yelling_at_cat(woman=url, cat=url1)
+        await ctx.send(file=discord.File(await pic.read(),
+                                        filename=f"woman_yelling_at_cat.png"))
 
     @commands.command()
     async def circle(self, ctx, background_color="white", circle_color="blue"):

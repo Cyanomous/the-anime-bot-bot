@@ -451,15 +451,13 @@ class utility(commands.Cog):
             package = package["info"]
             Author = f"""
             Author: {package['author']}
-            Author email: {package["author_email"]}
+            Author email: {package["author_email"] or "None"}
             """
             Package = f"""
             Homepage: {package["home_page"]}
             License: {package["license"]}
-            Downloads: 
-                   Last day:   {package["downloads"]["last_day"]}
-                   Last month:   {package["downloads"]["last_month"]}
-                   Last weeek:   {package["downloads"]["last_week"]}
+            Version: {package["version"]}
+            Documentation: {package["docs_url"]}
             """
             embed = discord.Embed(color=self.bot.color, title=package["name"], url=package["package_url"], description=package["summary"])
             embed.add_field(name="Author", value=Author, inline=False)

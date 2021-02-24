@@ -7,6 +7,10 @@ from discord_slash import cog_ext
 class slash(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+
+    @cog_ext.cog_slash(name="test")
+    async def test(self, ctx, arg1, arg2):
+        await ctx.send(f"{arg1} {arg2}")
     @cog_ext.cog_slash(name="ping")
     async def ping(self, ctx):
         embed = await discord.Embed(color=self.bot.color)

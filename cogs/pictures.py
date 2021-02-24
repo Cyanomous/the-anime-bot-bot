@@ -57,8 +57,8 @@ class pictures(commands.Cog):
         if woman == None:
                 url = str(ctx.author.avatar_url_as(static_format="png"))
         elif isinstance(woman, discord.PartialEmoji) or isinstance(
-                thing, discord.Emoji):
-            url = str(thing.url)
+                woman, discord.Emoji):
+            url = str(woman.url)
         elif isinstance(woman, discord.Member) or isinstance(
                 woman, discord.User):
             url = str(woman.avatar_url_as(static_format="png"))
@@ -84,7 +84,7 @@ class pictures(commands.Cog):
                 url1 = cat
             else:
                 url1 = await emoji_to_url(cat)
-        pic = await self.bot.vacefrom_api.woman_yelling_at_cat(woman=url, cat=url1)
+        pic = await self.bot.vacefron_api.woman_yelling_at_cat(woman=url, cat=url1)
         await ctx.send(file=discord.File(await pic.read(),
                                         filename=f"woman_yelling_at_cat.png"))
 

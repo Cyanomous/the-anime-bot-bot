@@ -441,7 +441,15 @@ class utility(commands.Cog):
     def translate_(from_lang, to_lang, thing):
         return Translator(from_lang=from_lang,
                           to_lang=to_lang).translate(thing)
-
+    
+    @commands.command()
+    async def pypi(self, ctx, name):
+        async with self.bot.session.get(f"https://pypi.org/pypi/{name}/json") as resp:
+            if resp.status != 200:
+                return await ctx.send(f"We are unable to find your package either because you made a typo or the package don't exist or pypi is down Status code: `{resp.status}`")
+            package = await resp.json()
+            embed = discord.Embed(color=self.bot.color, description=f"Author: {package["author"]}")
+            await ctx.send(embed=embed)
     @commands.group(invoke_without_command=True)
     async def qrcode(self, ctx, *, thing):
         q = pyqrcode.create(thing)

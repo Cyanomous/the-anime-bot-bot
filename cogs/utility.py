@@ -747,7 +747,7 @@ class utility(commands.Cog):
                                           emoji, "Can not find emoji\'s name"), description="Unicode emoji/Discord Emoji")
                 embed.set_image(url=emoji_link)
                 await ctx.send(embed=embed)
-        except:
+        except commands.PartialEmojiConversionFailure:
             emoji_link = await emoji_to_url(emoji)
             embed = discord.Embed(color=self.bot.color,
                                   title=unicodedata.name(

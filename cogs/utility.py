@@ -450,17 +450,18 @@ class utility(commands.Cog):
             package = await resp.json()
             package = package["info"]
             Author = f"""
-            Author: {package['author']}
+            Author: {package['author'] or "None"}
             Author email: {package["author_email"] or "None"}
             """
             Package = f"""
-            Homepage: {package["home_page"]}
-            License: {package["license"]}
-            Version: {package["version"]}
-            Keywords: {package["keywords"]}
-            Documentation: {package["project_urls"]["Documentation"]}
+            Homepage: {package["home_page"] or "None"}
+            License: {package["license"] or "None"}
+            Version: {package["version"] or "None"}
+            Keywords: {package["keywords"] or "None"}
+            Documentation: {package["project_urls"]["Documentation"] or "None"}
             """
             embed = discord.Embed(color=self.bot.color, title=package["name"], url=package["package_url"], description=package["summary"])
+            embed.set_thumbnail(url="https://pypi.org/static/images/logo-small.6eef541e.svg")
             embed.add_field(name="Author", value=Author, inline=False)
             embed.add_field(name="Package", value=Package, inline=False)
             await ctx.send(embed=embed)

@@ -738,21 +738,21 @@ class utility(commands.Cog):
                 asset = partialemoji.url
                 link = str(asset)
                 embed = discord.Embed(color=self.bot.color,
-                                      title=partialemoji.name)
+                                      title=partialemoji.name, description=f"`{str(partialemoji)}`\nCustom Emoji")
                 embed.set_image(url=link)
                 await ctx.send(embed=embed)
             else:
                 emoji_link = await emoji_to_url(emoji)
                 embed = discord.Embed(color=self.bot.color,
                                       title=unicodedata.name(
-                                          emoji, "Can not find emoji\'s name"))
+                                          emoji, "Can not find emoji\'s name"), description="Unicode emoji/Discord Emoji")
                 embed.set_image(url=emoji_link)
                 await ctx.send(embed=embed)
         except:
             emoji_link = await emoji_to_url(emoji)
             embed = discord.Embed(color=self.bot.color,
                                   title=unicodedata.name(
-                                      emoji, "Can not find emoji\'s name"))
+                                      emoji, "Can not find emoji\'s name"), description="Unicode emoji/Discord Emoji")
             embed.set_image(url=emoji_link)
             await ctx.send(embed=embed)
 

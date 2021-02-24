@@ -9,8 +9,8 @@ class slash(commands.Cog):
         self.bot = bot
 
     @cog_ext.cog_slash(name="test", guild_ids=[786359602241470464])
-    async def test(self, ctx, arg1, arg2):
-        await ctx.send(f"{arg1} {arg2}")
+    async def test(self, ctx):
+        await ctx.send("test test")
     @cog_ext.cog_slash(name="ping")
     async def ping(self, ctx):
         embed = await discord.Embed(color=self.bot.color)

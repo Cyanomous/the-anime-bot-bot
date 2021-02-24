@@ -462,6 +462,8 @@ class utility(commands.Cog):
                    Last weeek:   {package["downloads"]["last_week"]}
             """
             embed = discord.Embed(color=self.bot.color, title=package["name"], url=package["package_url"], description=package["summary"])
+            embed.add_field(name="Author", value=Author, inline=False)
+            embed.add_field(name="Package", value=Package, inline=False)
             await ctx.send(embed=embed)
     @commands.group(invoke_without_command=True)
     async def qrcode(self, ctx, *, thing):

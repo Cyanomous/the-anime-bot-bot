@@ -723,6 +723,7 @@ class utility(commands.Cog):
     Shows emoji info
     """
         emoji = emoji.replace("\U0000fe0f", "")
+        emoji = emoji.replace("\\", "")
         # im, font = await self.emojiinfo_()
         # parser = TwemojiParser(im, parse_discord_emoji=True)
         # await parser.draw_text((0, 0), emoji, font=font, fill=(0, 0, 0))

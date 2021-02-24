@@ -732,8 +732,7 @@ class utility(commands.Cog):
         # file = discord.File(fp=obj, filename="emoji.png")
         # await ctx.send(file=file)
         try:
-            partialemoji = await commands.PartialEmojiConverter.convert(
-                self, ctx, emoji)
+            partialemoji = await commands.PartialEmojiConverter().convert(ctx, emoji)
             if partialemoji.is_custom_emoji() == True:
                 asset = partialemoji.url
                 link = str(asset)

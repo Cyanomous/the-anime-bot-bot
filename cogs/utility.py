@@ -448,6 +448,7 @@ class utility(commands.Cog):
             if resp.status != 200:
                 return await ctx.send(f"We are unable to find your package either because you made a typo or the package don't exist or pypi is down Status code: `{resp.status}`")
             package = await resp.json()
+            package = package["info"]
             embed = discord.Embed(color=self.bot.color, description=f"Author: {package['author']}")
             await ctx.send(embed=embed)
     @commands.group(invoke_without_command=True)

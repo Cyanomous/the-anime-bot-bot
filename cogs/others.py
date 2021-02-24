@@ -128,7 +128,7 @@ class others(commands.Cog):
         embed = discord.Embed(color=self.bot.color)
         embed.add_field(
             name="source of the bot",
-            value=f"https://github.com/Cryptex-github/the-anime-bot-bot \n I don't always commit so dm me if you can't find something\n\n[Licensed under MPL 2.0](https://www.mozilla.org/en-US/MPL/2.0/)"
+            value=f"oh hi another source rob rob human\nMy sources are on github find it yourself\n\n[Licensed under MPL 2.0](https://www.mozilla.org/en-US/MPL/2.0/)"
         )
         await ctx.send(embed=embed)
         # branch = 'main'

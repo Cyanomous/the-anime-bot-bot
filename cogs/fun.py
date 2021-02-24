@@ -1,26 +1,26 @@
-from utils.paginator import AnimePages
-from utils.embed import embedbase
-from utils.asyncstuff import asyncexe
-from menus import menus
-from cryptography.fernet import Fernet
-from bottom import from_bottom, to_bottom
-from asyncdagpi import Client
-import gtts
-import time
-import re
-import random
-import json
 import asyncio
+import json
 import os
+import random
+import re
 import textwrap
+import time
 import typing
 from io import BytesIO
 
 import aiohttp
 import async_timeout
 import discord
+import gtts
+from asyncdagpi import Client
+from bottom import from_bottom, to_bottom
+from cryptography.fernet import Fernet
 from discord.ext import commands
+from menus import menus
 from PIL import Image, ImageDraw, ImageFont
+from utils.asyncstuff import asyncexe
+from utils.embed import embedbase
+from utils.paginator import AnimePages
 
 talk_token = os.getenv("talk_token")
 rapid_api_key = os.getenv("rapid_api_key")

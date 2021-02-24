@@ -111,7 +111,6 @@ case_insensitive=True, allowed_mentions=discord.AllowedMentions(everyone=False, 
     subprocess.check_output("pip install speedtest-cli", shell=True)
     self.deleted_message_cache = {}
     self.concurrency = []
-    self.vacefron_api=vacefron.Client()
     self.color = 0x00ff6a
     self.mystbin = mystbin.Client()
     self.psutil_process = psutil.Process()
@@ -123,6 +122,7 @@ case_insensitive=True, allowed_mentions=discord.AllowedMentions(everyone=False, 
     self.command_counter = 0
     self.commandsusages = Counter()
     self.session = aiohttp.ClientSession(headers={"User-Agent": f"python-requests/2.20.0 The Anime Bot/1.1.0 Python/{sys.version_info[0]}.{sys.version_info[1]}.{sys.version_info[2]} aiohttp/{aiohttp.__version__}"})
+    self.vacefron_api=vacefron.Client(session=self.session, loop=self.loop)
     self.dag = Client(api_token, session=self.session, loop=self.loop)
     self.alex=alexflipnote.Client(alex_, session=self.session, loop=self.loop)
     self.ball = eight_ball.ball()

@@ -548,14 +548,20 @@ class fun(commands.Cog):
         embed.set_image(url=gif)
         await ctx.send(embed=embed)
 
+    @staticmethod
+    @asyncexe()
+    def tts_(text):
+        t = gtts.gTTS(text=text)
+        t.save("audio.mp3")
+        file=discord.File("audio.mp3")
+        return file
+
+
     @commands.command()
     async def tts(self, ctx, *, text="enter something "):
         async with ctx.typing():
-            t = gtts.gTTS(text=f"{text}")
-            t.save("audio.mp3")
-            await ctx.reply(file=discord.File("audio.mp3"))
-            await asyncio.sleep(1)
-            os.remove("audio.mp3")
+            file = await self.tts_(text)
+            await ctx.send(file=file)
 
     @commands.command()
     async def sushi(self, ctx):

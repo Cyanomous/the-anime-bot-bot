@@ -34,7 +34,7 @@ class AnimeContext(commands.Context):
       return None
   @asyncexe()
   def all_possible_caps_(self, text):
-    return list(''.join, itertools.product(*((c.upper(), c.lower()) for c in text)))
+    return list(map(''.join, itertools.product(*((c.upper(), c.lower()) for c in text))))
 
   async def all_possible_caps(self, text):
     return await self.all_possible_caps_(text)

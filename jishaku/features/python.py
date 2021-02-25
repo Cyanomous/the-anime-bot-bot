@@ -92,6 +92,8 @@ class PythonFeature(Feature):
                     if argument.content.startswith("http"):
                         try:
                             content = await ctx.get(argument.content)
+                            if not content:
+                                raise Exception("can't convert")
                         except:
                             content = argument.content
                     executor = AsyncCodeExecutor(content, scope, arg_dict=arg_dict)

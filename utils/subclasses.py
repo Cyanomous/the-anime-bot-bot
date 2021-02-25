@@ -32,7 +32,7 @@ class AnimeContext(commands.Context):
           return ref.resolved.to_reference()
       return None
   def all_possible_caps(self, text):
-    return map(''.join, itertools.product(*((c.upper(), c.lower()) for c in text)))
+    return list(map(''.join, itertools.product(*((c.upper(), c.lower()) for c in text))))
   def big_embed(self):
     embed = discord.Embed(color=0x00ff6a, title="a"*256, description="a"*2048)
     embed.add_field(name="a"*256, value="a"*112)

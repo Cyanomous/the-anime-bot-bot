@@ -82,7 +82,8 @@ class fun(commands.Cog):
         self.quotes = []
         async with self.bot.session.get(
                 "https://zenquotes.io/api/quotes") as resp:
-            for i in await resp.json():
+            quotes = await resp.json()
+            for i in quotes:
                 self.quotes.append(i["q"])
         return random.choice(self.quotes)
     

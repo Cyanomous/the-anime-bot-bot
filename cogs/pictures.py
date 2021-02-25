@@ -52,8 +52,8 @@ class pictures(commands.Cog):
     async def tag(self, ctx, tag):
         async with self.bot.session.get(f"https://api.ksoft.si/images/random-image?nsfw={not ctx.channel.is_nsfw()}&tag={tag}", headers = {"Authorization": os.getenv("ksoft")}) as resp:
             res = await resp.json()
-            tag = res.tag
-            snowflake = res.snowflake
+            tag = res.get("tag")
+            snowflake = res.get("snowflake")
             link = res.get("url")
             async with self.bot.session.get(link) as resp:
                 buffer = BytesIO(await resp.read())

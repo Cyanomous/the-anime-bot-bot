@@ -79,13 +79,10 @@ class fun(commands.Cog):
         self.talk_channels = []
 
     async def get_quote(self):
-        self.quotes = []
         async with self.bot.session.get(
-                "https://zenquotes.io/api/quotes") as resp:
-            quotes = await resp.json()
-            for i in quotes:
-                self.quotes.append(i["q"])
-        return random.choice(self.quotes)
+                "https://zenquotes.io/api/random") as resp:
+            quotes = json.loads(await resp.text())
+        return quotes[0]["q"]
     
     async def getmeme(self):
         async with self.bot.session.get(

@@ -49,7 +49,10 @@ class AnimeContext(commands.Context):
     print(self)
     return f"{ovo} ovo"
   async def get(self, link):
-    return str(await self.bot.mystbin.get(link))
+    try:
+      return str(await self.bot.mystbin.get(link))
+    except:
+      return None
   async def paste(self, content):
     return str(await self.bot.mystbin.post(content))
   async def send(self, content=None, **kwargs):

@@ -470,9 +470,7 @@ class fun(commands.Cog):
         buffer = BytesIO()
         img.save(buffer, "png")
         file_ = discord.File(buffer, filename="quote.png")
-        embed = await embedbase.embed(self, ctx)
-        embed.set_image(url="attachment://quote.png")
-        message = await ctx.reply(file=file_, embed=embed)
+        message = await ctx.reply(file=file_)
 
         def check(m):
             return m.channel == ctx.message.channel and m.content == quote

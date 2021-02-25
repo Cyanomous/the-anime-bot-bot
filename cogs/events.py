@@ -401,7 +401,7 @@ class events(commands.Cog):
             await message.channel.send(
                 "Hii there why u ping me smh oh i mean hii my prefix is `ovo ` "
             )
-        if message.content.startswith(";;"):
+        if message.content.startswith(";;") and not message.author.bot:
             lists = []
             msg = message.content.replace(" ", "")
             emojis = msg.split(";;")

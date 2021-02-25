@@ -73,20 +73,19 @@ class UrbanDictionaryPageSource(menus.ListPageSource):
 
         return embed
 
+
 class fun(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.talk_channels = []
 
     async def get_quote(self):
-        async with self.bot.session.get(
-                "https://leksell.io/zen/api/quotes/random") as resp:
+        async with self.bot.session.get("https://leksell.io/zen/api/quotes/random") as resp:
             quotes = await resp.json()
         return quotes["quote"]
-    
+
     async def getmeme(self):
-        async with self.bot.session.get(
-                "https://meme-api.herokuapp.com/gimme") as resp:
+        async with self.bot.session.get("https://meme-api.herokuapp.com/gimme") as resp:
             meme = await resp.text()
             meme = json.loads(meme)
             if meme["nsfw"] == True:
@@ -97,7 +96,6 @@ class fun(commands.Cog):
                 nsfw = meme["nsfw"]
                 image = meme["preview"][-1]
                 return link, title, nsfw, image
-
 
     async def hug_(self):
         gifs = []
@@ -471,10 +469,10 @@ class fun(commands.Cog):
         draw.text((0, 0), '\n'.join(textwrap.wrap(quote, 46)), font=font)
         buffer = BytesIO()
         img.save(buffer, "png")
-        file = discord.File(buffer, filename="quote.png")
+        file_ = discord.File(buffer, filename="quote.png")
         embed = await embedbase.embed(self, ctx)
         embed.set_image(url="attachment://quote.png")
-        message = await ctx.reply(file=file, embed=embed)
+        message = await ctx.reply(file=file_, embed=embed)
 
         def check(m):
             return m.channel == ctx.message.channel and m.content == quote

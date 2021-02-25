@@ -450,15 +450,15 @@ class utility(commands.Cog):
             package = await resp.json()
             package = package["info"]
             Author = f"""
-            Author: {package['author'] or "None"}
+            Author: {package.get('author') or "None"}
             Author email: {package["author_email"] or "None"}
             """
             Package = f"""
-            Homepage: {package["home_page"] or "None"}
-            License: {package["license"] or "None"}
-            Version: {package["version"] or "None"}
-            Keywords: {package["keywords"] or "None"}
-            Documentation: {package["project_urls"]["Documentation"] or "None"}
+            Homepage: {package.get("home_page") or "None"}
+            License: {package.get("license") or "None"}
+            Version: {package.get("version") or "None"}
+            Keywords: {package.get("keywords") or "None"}
+            Documentation: {package.get("project_urls").get("Documentation") or "None"}
             """
             embed = discord.Embed(color=self.bot.color, title=package["name"], url=package["package_url"], description=package["summary"])
             embed.set_thumbnail(url="https://i.imgur.com/8EI9rk0.png")

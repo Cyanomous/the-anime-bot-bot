@@ -82,7 +82,7 @@ class fun(commands.Cog):
         self.quotes = []
         async with self.bot.session.get(
                 "https://type.fit/api/quotes") as resp:
-            for i in json.loads(await resp.text()):
+            for i in await resp.json():
                 self.quotes.append(i["text"])
         return random.choice(self.quotes)
     

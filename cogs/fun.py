@@ -81,9 +81,9 @@ class fun(commands.Cog):
     async def get_quote(self):
         self.quotes = []
         async with self.bot.session.get(
-                "https://type.fit/api/quotes") as resp:
+                "https://zenquotes.io/api/quotes") as resp:
             for i in await resp.json():
-                self.quotes.append(i["text"])
+                self.quotes.append(i["q"])
         return random.choice(self.quotes)
     
     async def getmeme(self):

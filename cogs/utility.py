@@ -829,7 +829,7 @@ class utility(commands.Cog):
     #   await ctx.send(file=discord.File(fp=buffer, filename="wordcloud.png"))
 
     @commands.command()
-    async def convert(self, ctx, amount: float, from_: lambda x: x.upper(), to: lambda x: x.upper()):
+    async def convert(self, ctx, amount: float, from_: str.upper(), to: str.upper()):
         """
     Convert from one currency to another.
     """

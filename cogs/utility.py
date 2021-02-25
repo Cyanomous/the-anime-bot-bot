@@ -462,8 +462,8 @@ class utility(commands.Cog):
             """
             embed = discord.Embed(color=self.bot.color, title=package["name"], url=package["package_url"], description=package["summary"])
             embed.set_thumbnail(url="https://i.imgur.com/8EI9rk0.png")
-            embed.add_field(name="Author", value=Author, inline=False)
             embed.add_field(name="Package", value=Package, inline=False)
+            embed.add_field(name="Author", value=Author, inline=False)
             await ctx.send(embed=embed)
     @commands.group(invoke_without_command=True)
     async def qrcode(self, ctx, *, thing):

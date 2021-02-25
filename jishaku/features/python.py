@@ -96,7 +96,7 @@ class PythonFeature(Feature):
                                 raise Exception("can't convert")
                         except:
                             content = argument.content
-                    executor = AsyncCodeExecutor(content, scope, arg_dict=arg_dict)
+                    executor = AsyncCodeExecutor(content or argument.content, scope, arg_dict=arg_dict)
                     async for send, result in AsyncSender(executor):
                         if result is None:
                             continue

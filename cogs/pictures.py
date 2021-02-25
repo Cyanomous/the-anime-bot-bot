@@ -49,8 +49,8 @@ class pictures(commands.Cog):
         return igif
 
     @commands.command()
-    async def tag(self, ctx, tag):
-        async with self.bot.session.get(f"https://api.ksoft.si/images/random-image?nsfw={not ctx.channel.is_nsfw()}&tag={tag}", headers = {"Authorization": os.getenv("ksoft")}) as resp:
+    async def tag(self, ctx, tag:str):
+        async with self.bot.session.get(f"https://api.ksoft.si/images/random-image?nsfw={str(not ctx.channel.is_nsfw())}&tag={tag}", headers = {"Authorization": os.getenv("ksoft")}) as resp:
             res = await resp.json()
             tag = res.get("tag")
             snowflake = res.get("snowflake")

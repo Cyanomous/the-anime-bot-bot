@@ -1,5 +1,7 @@
 import aiohttp
 import discord
+import os
+webhook_url = os.getenv("webhook")
 from discord import AsyncWebhookAdapter, Webhook
 from discord.ext import commands
 
@@ -29,7 +31,7 @@ class error_sender(commands.Cog):
                             inline=False) for n, v in fields
         ]
         webhook = Webhook.from_url(
-            "https://canary.discord.com/api/webhooks/804917398380478574/h8nlRZr8OUNjJg-FKp2EOgKdzwxjjCwe3y6gDxL3aNKmRFbLH70VwWGdSsYnct_Zu4c2",
+            webhook_url,
             adapter=AsyncWebhookAdapter(self.bot.session))
         await webhook.send(embed=embed)
         return

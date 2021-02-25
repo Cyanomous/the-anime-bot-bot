@@ -835,7 +835,6 @@ class utility(commands.Cog):
     """
         async with self.bot.session.get("https://api.ksoft.si/kumo/currency", headers = {"Authorization": os.getenv("ksoft")}, params = {"from": from_, "to": to, "value": amount}) as resp:
             res = await resp.json()
-            print(res)
             if res.get("message"):
                 return await ctx.send(res.get("message"))
             await ctx.send(f"{amount} {from_.upper()} is equal to {round(int(res.get('pretty')), 2)}")

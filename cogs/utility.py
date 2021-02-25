@@ -244,7 +244,7 @@ class utility(commands.Cog):
         cache = {}
         for key, page in page_types.items():
             sub = cache[key] = {}
-            async with self.bot.session.geta(page + '/objects.inv') as resp:
+            async with self.bot.session.get(page + '/objects.inv') as resp:
                 if resp.status != 200:
                     raise RuntimeError(
                         'Cannot build rtfm lookup table, try again later.')

@@ -445,8 +445,10 @@ class utility(commands.Cog):
     @commands.command()
     async def pypi(self, ctx, name):
         async with self.bot.session.get(f"https://pypi.org/pypi/{name}/json") as resp:
-            if resp.status != 200:
-                return await ctx.send(f"We are unable to find your package either because you made a typo or the package don't exist or pypi is down Status code: `{resp.status}`")
+            if resp.status == 404:
+                return await ctx.send(f"We are unable to find your package")
+            if resp.status >= 400:
+                return await ctx.send(f"Pypi is down with status code `{resp.status}`")
             package = await resp.json()
             package = package["info"]
             Author = f"""

@@ -497,6 +497,24 @@ class utility(commands.Cog):
 
     @commands.command()
     async def mystbin(self, ctx, *, code:str=None):
+        if ctx.message.reference:
+            if ctx.message.reference.cached_message:
+                if ctx.message.reference.cached_message.attachments:
+                    if ctx.message.reference.cached_message.attachments[0].filename.endswith((".txt", ".py", ".json", ".html", ".csv")):
+                        message = await ctx.message.reference.cached_message.attachments[0].read()
+                        message = message.decode("utf-8")
+                        return await ctx.send(str(await self.bot.mystbin.post(message, syntax=tx.message.reference.cached_message.attachments[0].filename.split(".")[1])))
+            else:
+                message = self.bot.get_channel(ctx.message.reference.channel_id).fetch_message(ctx.message.reference.message_id)
+                if message.attachments:
+                    if message.attachments.filename.endswith((".txt", ".py", ".json", ".html", ".csv")):
+                        message_ = await message.attachments[0].read()
+                        message_ = message_.decode("utf-8")
+                        return await ctx.send(str(await self.bot.mystbin.post(message_, syntax=message.attachments[0].filename.split(".")[1])))
+
+                    
+
+
         if code == None:
             message = ctx.message.attachments[0]
             if message:

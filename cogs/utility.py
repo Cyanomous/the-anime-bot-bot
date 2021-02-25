@@ -837,7 +837,7 @@ class utility(commands.Cog):
             res = await resp.json()
             if res.get("message"):
                 return await ctx.send(res.get("message"))
-            await ctx.send(f"{amount} {from_.upper()} is equal to {round(res.get('pretty'), 2)}")
+            await ctx.send(f"{amount} {from_.upper()} is equal to {res.get('pretty')}")
     @commands.command()
     async def charinfo(self, ctx, *, characters: str):
         """Shows you information about a number of characters.

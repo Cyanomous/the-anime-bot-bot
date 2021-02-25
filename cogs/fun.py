@@ -460,7 +460,7 @@ class fun(commands.Cog):
         embed = discord.Embed(color=0x00ff6a, description=f"{emojis}")
         await ctx.send(embed=embed)
 
-    @commands.command(aliases=["tr", "typerace"])
+    # @commands.command(aliases=["tr", "typerace"])
     async def typeracer(self, ctx):
         quote = await self.get_quote()
         font = ImageFont.truetype("lexiereadable-bold.ttf", 16)

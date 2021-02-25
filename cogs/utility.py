@@ -831,14 +831,14 @@ class utility(commands.Cog):
     @commands.command()
     async def convert(self, ctx, amount: float, from_: lambda x: str(x).upper(), to: lambda x: str(x).upper()):
         """
-    Convert from one currency to another.
+    Convert from one currency to another. Currency code are listed here https://en.wikipedia.org/wiki/ISO_4217#Active_codes
     """
         async with self.bot.session.get("https://api.ksoft.si/kumo/currency", headers = {"Authorization": os.getenv("ksoft")}, params = {"from": from_, "to": to, "value": amount}) as resp:
             res = await resp.json()
             print(res)
             if res.get("message"):
                 return await ctx.send(res.get("message"))
-            await ctx.send(f"{amount} {from_.upper()} is equal to {res.get('pretty')}")
+            await ctx.send(f"{amount} {from_.upper()} is equal to {round(int(res.get('pretty')), 2)}")
     @commands.command()
     async def charinfo(self, ctx, *, characters: str):
         """Shows you information about a number of characters.

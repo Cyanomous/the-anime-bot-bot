@@ -100,7 +100,7 @@ class AnimeColor(discord.Color):
     def lighter_green(cls):
         return cls(0x00ff6a)
 async def prefix_get(bot, message):
-  ctx = bot.get_context(message)
+  ctx = await bot.get_context(message)
   return await ctx.all_possible_caps("ovo ")
 
 class AnimeBot(commands.AutoShardedBot):

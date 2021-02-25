@@ -554,6 +554,7 @@ class fun(commands.Cog):
         t = gtts.gTTS(text=text)
         buffer = BytesIO()
         t.write_to_fp(buffer)
+        buffer.seek(0)
         file=discord.File(buffer, filename="audio.mp3")
         return file
 

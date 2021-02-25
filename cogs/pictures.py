@@ -63,7 +63,7 @@ class pictures(commands.Cog):
                 return await ctx.send("can't find that tag")
             async with self.bot.session.get(link) as resp:
                 buffer = BytesIO(await resp.read())
-        await ctx.send(file=discord.File(buffer, f"{tag}_{snowflake}"))
+        await ctx.send(file=discord.File(buffer, f"{tag}_{snowflake}.png"))
     @commands.command()
     async def aww(self, ctx):
         async with self.bot.session.get("https://api.ksoft.si/images/random-aww", headers = {"Authorization": os.getenv("ksoft")}) as resp:

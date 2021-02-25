@@ -89,14 +89,14 @@ class PythonFeature(Feature):
         try:
             async with ReplResponseReactor(ctx.message):
                 with self.submit(ctx):
-                    if argument.content.startswith("http"):
-                        try:
-                            content = await ctx.get(argument.content)
-                            if not content:
-                                raise Exception("can't convert")
-                        except:
-                            content = argument.content
-                    executor = AsyncCodeExecutor(content or argument.content, scope, arg_dict=arg_dict)
+                    # if argument.content.startswith("http"):
+                    #     try:
+                    #         content = await ctx.get(argument.content)
+                    #         if not content:
+                    #             raise Exception("can't convert")
+                    #     except:
+                    #         content = argument.content
+                    executor = AsyncCodeExecutor(argument.content or argument.content, scope, arg_dict=arg_dict)
                     async for send, result in AsyncSender(executor):
                         if result is None:
                             continue

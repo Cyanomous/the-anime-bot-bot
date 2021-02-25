@@ -59,7 +59,8 @@ class pictures(commands.Cog):
             tag = res.get("tag")
             snowflake = res.get("snowflake")
             link = res.get("url")
-            print(link)
+            if link == None:
+                return await ctx.send("can't find that tag")
             async with self.bot.session.get(link) as resp:
                 buffer = BytesIO(await resp.read())
         await ctx.send(file=discord.File(buffer, f"{tag}_{snowflake}"))

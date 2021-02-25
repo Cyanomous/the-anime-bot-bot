@@ -50,12 +50,14 @@ class pictures(commands.Cog):
 
     @commands.command()
     async def tag(self, ctx, tag):
-        async with self.bot.session.get(f"https://api.ksoft.si/images/random-image?nsfw={not ctx.channel.}", headers = {"Authorization": os.getenv("ksoft")}) as resp:
+        async with self.bot.session.get(f"https://api.ksoft.si/images/random-image?nsfw={not ctx.channel.is_nsfw()}&tag={tag}", headers = {"Authorization": os.getenv("ksoft")}) as resp:
             res = await resp.json()
-            link = res.get("image_url")
+            tag = res.tag
+            snowflake = res.snowflake
+            link = res.get("url")
             async with self.bot.session.get(link) as resp:
                 buffer = BytesIO(await resp.read())
-        await ctx.send(file=discord.File(buffer, "aww.png"))
+        await ctx.send(file=discord.File(buffer, f"{tag} {snowflake}"))
     @commands.command()
     async def aww(self, ctx):
         async with self.bot.session.get("https://api.ksoft.si/images/random-aww", headers = {"Authorization": os.getenv("ksoft")}) as resp:

@@ -556,10 +556,7 @@ class fun(commands.Cog):
         t.write_to_fp(buffer)
         buffer.seek(0)
         file=discord.File(buffer, filename="audio.mp3")
-        try:
-            return file
-        finally:
-            buffer.close()
+        return file
 
 
     @commands.command()

@@ -487,11 +487,7 @@ class utility(commands.Cog):
     @staticmethod
     @asyncexe()
     def txt_(thing):
-        buffer = BytesIO(thing.encode("utf-8"))
-        try:
-            return discord.File(buffer, "something.txt")
-        finally:
-            buffer.close()
+        return discord.File(BytesIO(thing.encode("utf-8")), "something.txt")
     @commands.command()
     async def txt(self, ctx, *, anything:str=None):
         if anything.startswith("https://mystb.in/"):

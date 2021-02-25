@@ -60,6 +60,8 @@ class AnimeContext(commands.Context):
     #   embed = discord.Embed(color=0x2ecc71, description=content)
     #   message = super().send(content=None, embed=embed)
     #   return message
+    if not self.message.channel.permissions_for(self.me).text():
+      return False
     if self.message.id in self.bot._message_cache:
       if self.message.edited_at:
         msg = self.bot._message_cache[self.message.id]

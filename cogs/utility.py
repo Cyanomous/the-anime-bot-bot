@@ -833,20 +833,11 @@ class utility(commands.Cog):
         """
     Convert from one currency to another.
     """
-        stat, final = await self.bot.loop.run_in_executor(
-            None, self.convertcal, amount, from_, to)
-        if stat == True:
-            if final > 10000:
-                await ctx.reply(
-                    f"{humanize.intword(amount)} {from_.upper()} is equal to {humanize.intword(final)} {to.upper()}"
-                )
-            else:
-                await ctx.reply(
-                    f"{amount} {from_.upper()} is equal to {round(final, 3)} {to.upper()}"
-                )
-        else:
-            await ctx.reply(final)
-
+        async with self.bot.session.get("https://api.ksoft.si/kumo/currency", headers = {"Authorization": os.getenv("ksoft")}, params = {"from": from_, "to": to, value: amount}) as resp:
+            res = await resp.json()
+            if res.get("message"):
+                return await ctx.send(res.get("message"))
+            await ctx.send(f"{amount} {from_.upper()} is equal to {res.get('pretty')}")
     @commands.command()
     async def charinfo(self, ctx, *, characters: str):
         """Shows you information about a number of characters.

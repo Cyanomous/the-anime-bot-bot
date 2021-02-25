@@ -33,8 +33,7 @@ class error_sender(commands.Cog):
         webhook = Webhook.from_url(
             webhook_url,
             adapter=AsyncWebhookAdapter(self.bot.session))
-        await webhook.send(embed=embed)
-        return
+        return await webhook.send(embed=embed)
 
 
 def setup(bot):

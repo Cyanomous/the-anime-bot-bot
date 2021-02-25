@@ -833,7 +833,7 @@ class utility(commands.Cog):
         """
     Convert from one currency to another.
     """
-        async with self.bot.session.get("https://api.ksoft.si/kumo/currency", headers = {"Authorization": os.getenv("ksoft")}, params = {"from": from_, "to": to, value: amount}) as resp:
+        async with self.bot.session.get("https://api.ksoft.si/kumo/currency", headers = {"Authorization": os.getenv("ksoft")}, params = {"from": from_, "to": to, "value": amount}) as resp:
             res = await resp.json()
             if res.get("message"):
                 return await ctx.send(res.get("message"))

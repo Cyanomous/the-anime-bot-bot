@@ -11,6 +11,7 @@ import psutil
 import time
 from collections import Counter
 from asyncdagpi import Client
+from utils.asyncstuff import asyncexe
 import alexflipnote
 import aiozaneapi
 import eight_ball
@@ -31,8 +32,12 @@ class AnimeContext(commands.Context):
       if ref and isinstance(ref.resolved, discord.Message):
           return ref.resolved.to_reference()
       return None
-  def all_possible_caps(self, text):
-    return list(map(''.join, itertools.product(*((c.upper(), c.lower()) for c in text))))
+  @asyncexe()
+  def all_possible_caps_(self, text):
+    return list(''.join, itertools.product(*((c.upper(), c.lower()) for c in text)))
+
+  async def all_possible_caps(self, text):
+    return await self.all_possible_caps_(text)
   def big_embed(self):
     embed = discord.Embed(color=0x00ff6a, title="a"*256, description="a"*2048)
     embed.add_field(name="a"*256, value="a"*112)

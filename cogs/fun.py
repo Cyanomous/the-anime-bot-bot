@@ -552,8 +552,9 @@ class fun(commands.Cog):
     @asyncexe()
     def tts_(text):
         t = gtts.gTTS(text=text)
-        t.save("audio.mp3")
-        file=discord.File("audio.mp3")
+        buffer = BytesIO()
+        t.write_to_fp(buffer)
+        file=discord.File(buffer, filename="audio.mp3")
         return file
 
 

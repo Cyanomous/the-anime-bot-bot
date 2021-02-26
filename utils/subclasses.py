@@ -1,6 +1,7 @@
 import discord
 import itertools
 from discord_slash import SlashCommand
+from utils.utils import utils
 import sys
 import vacefron
 import ipc
@@ -26,18 +27,16 @@ from discord.ext import commands
 from utils.HelpPaginator import HelpPaginator, CannotPaginate
 token=re.compile(r"([a-zA-Z0-9]{24}\.[a-zA-Z0-9]{6}\.[a-zA-Z0-9_\-]{27}|mfa\.[a-zA-Z0-9_\-]{84})")
 class AnimeContext(commands.Context):
+  def __init__(self, *args, **kwargs):
+    self.utils = utils
+    super().__init__(*args, **kwargs)
   @discord.utils.cached_property
   def replied_reference(self):
       ref = self.message.reference
       if ref and isinstance(ref.resolved, discord.Message):
           return ref.resolved.to_reference()
       return None
-  @asyncexe()
-  def all_possible_caps_(self, text):
-    return list(map(''.join, itertools.product(*((c.upper(), c.lower()) for c in text))))
-
-  async def all_possible_caps(self, text):
-    return await self.all_possible_caps_(text)
+  
   def big_embed(self):
     embed = discord.Embed(color=0x00ff6a, title="a"*256, description="a"*2048)
     embed.add_field(name="a"*256, value="a"*112)
@@ -127,6 +126,7 @@ case_insensitive=True, allowed_mentions=discord.AllowedMentions(everyone=False, 
   def run(self, *args, **kwargs):
     # self.ipc.start()
     subprocess.check_output("pip install speedtest-cli", shell=True)
+    self.utils = utils
     self.deleted_message_cache = {}
     self.concurrency = []
     self.color = 0x00ff6a

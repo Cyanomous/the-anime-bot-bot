@@ -82,9 +82,12 @@ class Pages:
     async def show_page(self, page, *, first=False):
         self.current_page = page
         entries = self.get_page(page)
-        p = []
-        for index, entry in enumerate(entries, 1 + ((page - 1) * self.per_page)):
-            p.append(f'{index}. {entry}')
+        p = [
+            f'{index}. {entry}'
+            for index, entry in enumerate(
+                entries, 1 + ((page - 1) * self.per_page)
+            )
+        ]
 
         if self.maximum_pages > 1:
             if self.show_entry_count:

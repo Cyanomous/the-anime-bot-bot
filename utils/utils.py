@@ -8,8 +8,11 @@ from utils.asyncstuff import asyncexe
 class utils:
     @asyncexe()
     def all_possible_caps(self, text):
-        result = list(map(''.join, itertools.product(*((c.upper(), c.lower()) for c in text))))
-        return result
+        return list(
+            map(
+                ''.join, itertools.product(*((c.upper(), c.lower()) for c in text))
+            )
+        )
 
     async def get_pic(self, ctx):
         msg = ctx.message

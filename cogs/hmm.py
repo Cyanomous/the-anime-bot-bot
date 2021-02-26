@@ -16,12 +16,7 @@ class reactionrole(commands.Cog):
         }
 
     def cog_check(self, ctx):
-        if not ctx.guild:
-            return False
-        elif not ctx.guild.id == 701251070977900584:
-            return False
-        else:
-            return True
+        return bool(ctx.guild and ctx.guild.id == 701251070977900584)
 
     # @commands.Cog.listener()
     # async def on_raw_message_delete(self, payload):

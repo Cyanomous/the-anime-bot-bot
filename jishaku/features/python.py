@@ -131,10 +131,9 @@ class PythonFeature(Feature):
                                 if len(result) < 50:
                                   return send(await ctx.send(result))
                                 if result.startswith("```"):
-                                  return send(await ctx.send(f"```py\n{result}\n```"))
-                                else:
-                                  embed = discord.Embed(color=0x00ff6a, description=result.replace(self.bot.http.token, "ayo don't try to look at my token >:)))"))
-                                  send(await ctx.send(embed=embed))
+                                    return send(await ctx.send(f"```py\n{result}\n```"))
+                                embed = discord.Embed(color=0x00ff6a, description=result.replace(self.bot.http.token, "ayo don't try to look at my token >:)))"))
+                                send(await ctx.send(embed=embed))
         finally:
             scope.clear_intersection(arg_dict)
 

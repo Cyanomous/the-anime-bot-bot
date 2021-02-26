@@ -415,11 +415,9 @@ class events(commands.Cog):
                 if e == []:
                     continue
                 e = e[0]
-                if e == None or emojis == []:
+                if e is None or emojis == []:
                     continue
-                if e.is_usable() == False:
-                    pass
-                else:
+                if e.is_usable() != False:
                     lists.append(str(e))
             message_ = await message.channel.send("".join(lists))
             self.bot._message_cache[message.id] = message_
@@ -455,10 +453,9 @@ class events(commands.Cog):
     @staticmethod
     @asyncexe()
     def embed(text):
-        embed = discord.Embed(color=0xFF0000,
+        return discord.Embed(color=0xFF0000,
                               title="An error occured",
                               description=text)
-        return embed
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
@@ -529,10 +526,6 @@ class events(commands.Cog):
         elif isinstance(error, commands.MissingPermissions):
             embed = await self.embed("you do not have permission to do that")
             await ctx.reply(embed=embed)
-        elif isinstance(error, commands.BotMissingPermissions):
-            embed = await self.embed(
-                "the bot do not have permission to do that")
-            await ctx.reply(embed=embed)
         elif isinstance(error, asyncdagpi.errors.BadUrl):
             embed = await self.embed("You did not pass in the right arguments")
             await ctx.reply(embed=embed)
@@ -551,9 +544,7 @@ class events(commands.Cog):
     @commands.command()
     @commands.is_owner()
     async def fix_errors(self, ctx):
-        counter = 0
-        for count in self.errors_list:
-            counter += 1
+        counter = sum(1 for _ in self.errors_list)
         self.errors_list.clear()
         await ctx.reply(f"thanks for fixing {counter} errors")
 

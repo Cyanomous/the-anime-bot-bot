@@ -210,7 +210,7 @@ def generate_options(function: Callable, description: str = "No description.", c
             args = getattr(param.annotation, "__args__", None)
             if args:
                 param = param.replace(annotation=args[0])
-                required = not args[-1] is type(None)
+                required = args[-1] is not type(None)
 
         option_type = SlashCommandOptionType.from_type(param.annotation) or SlashCommandOptionType.STRING
         name = param.name if not connector else connector[param.name]

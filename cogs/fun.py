@@ -90,12 +90,11 @@ class fun(commands.Cog):
             meme = json.loads(meme)
             if meme["nsfw"] == True:
                 return True
-            else:
-                link = meme["postLink"]
-                title = meme["title"]
-                nsfw = meme["nsfw"]
-                image = meme["preview"][-1]
-                return link, title, nsfw, image
+            link = meme["postLink"]
+            title = meme["title"]
+            nsfw = meme["nsfw"]
+            image = meme["preview"][-1]
+            return link, title, nsfw, image
 
     async def hug_(self):
         gifs = []
@@ -123,17 +122,16 @@ class fun(commands.Cog):
 
     async def reddit_(self, text):
         async with self.bot.session.get(
-                f"https://meme-api.herokuapp.com/gimme/{text}") as resp:
+                    f"https://meme-api.herokuapp.com/gimme/{text}") as resp:
             meme = await resp.text()
             meme = json.loads(meme)
             if meme["nsfw"] == True:
                 return True
-            else:
-                link = meme["postLink"]
-                title = meme["title"]
-                nsfw = meme["nsfw"]
-                image = meme["preview"][-1]
-                return link, title, nsfw, image
+            link = meme["postLink"]
+            title = meme["title"]
+            nsfw = meme["nsfw"]
+            image = meme["preview"][-1]
+            return link, title, nsfw, image
 
     @staticmethod
     def bottoms(mode, text):
@@ -236,7 +234,7 @@ class fun(commands.Cog):
     async def latest(self, ctx, user: discord.Member = None):
         async with ctx.typing():
             user1 = user
-            if user1 == None:
+            if user1 is None:
                 user1 = ctx.author
             async for message in ctx.channel.history(limit=10000):
                 if message.author.id == user1.id:
@@ -265,8 +263,7 @@ class fun(commands.Cog):
     @commands.command(aliases=["rm"])
     @commands.max_concurrency(1, commands.BucketType.user)
     async def randommessage(self, ctx, limit=300):
-        if limit > 10000:
-            limit = 10000
+        limit = min(limit, 10000)
         if limit <= 0:
             limit = 300
         async with ctx.typing():
@@ -346,14 +343,13 @@ class fun(commands.Cog):
 
     @staticmethod
     def render_emoji(text):
-        text_ = text.replace("0", "\U00002b1b").replace(
+        return text.replace("0", "\U00002b1b").replace(
             "1", "\U00002b1c").replace("2", "\U0001f7e6").replace(
                 "3", "\U0001f7eb").replace("4", "\U0001f7e9").replace(
                     "5", "\U0001f7e7").replace("6", "\U0001f7ea").replace(
                         "7",
                         "\U0001f7e5").replace("8",
                                               "\U0001f7e8").replace("9", "")
-        return text_
 
     @commands.command(aliases=["grid", "toemoji"])
     async def renderemoji(self, ctx, *, codes: int):
@@ -453,9 +449,7 @@ class fun(commands.Cog):
                 color=0x00ff6a,
                 description=f"The level must be 70 or lower then 70")
             return await ctx.send(embed=embed)
-        emojis2 = []
-        for i in range(level):
-            emojis2.append("<:rooSob:744345453923139714>")
+        emojis2 = ["<:rooSob:744345453923139714>" for _ in range(level)]
         emojis = " ".join(emojis2)
         embed = discord.Embed(color=0x00ff6a, description=f"{emojis}")
         await ctx.send(embed=embed)
@@ -498,17 +492,14 @@ class fun(commands.Cog):
     @commands.command(aliases=["sw", "speedwatch"])
     async def speedwatcher(self, ctx, member: discord.Member = None):
         member1 = member
-        if member1 == None:
+        if member1 is None:
             member1 = ctx.author
         variable = random.randint(1, 2)
         variable2 = random.randint(0, 10)
         random.seed(member1.id)
         speed_ = random.random()
         speed = round(speed_ * 100)
-        if variable == 1:
-            speed = speed + variable2
-        else:
-            speed = speed - variable2
+        speed = speed + variable2 if variable == 1 else speed - variable2
         if speed < 0:
             bar_ = "\u2800"
         elif speed <= 10:
@@ -541,7 +532,7 @@ class fun(commands.Cog):
     async def hug(self, ctx, member: discord.Member = None):
         gif = await self.hug_()
         member1 = member
-        if member1 == None:
+        if member1 is None:
             member1 = "themself"
         embed = await embedbase.embed(self, ctx)
         embed.set_author(name=f"{ctx.author} just hugged {member1}")
@@ -555,8 +546,7 @@ class fun(commands.Cog):
         buffer = BytesIO()
         t.write_to_fp(buffer)
         buffer.seek(0)
-        file=discord.File(buffer, filename="audio.mp3")
-        return file
+        return discord.File(buffer, filename="audio.mp3")
 
 
     @commands.command()
@@ -705,7 +695,7 @@ class fun(commands.Cog):
 
     @commands.command()
     async def roast(self, ctx, member: discord.Member = None):
-        if member == None:
+        if member is None:
             member = ctx.author
         if member == self.bot.user or member.id == 590323594744168494:
             return await ctx.send("nope")

@@ -20,12 +20,7 @@ class reactionrole(commands.Cog):
         }
 
     def cog_check(self, ctx):
-        if not ctx.guild:
-            return False
-        elif not ctx.guild.id == 810331898278182952:
-            return False
-        else:
-            return True
+        return bool(ctx.guild and ctx.guild.id == 810331898278182952)
 
     @commands.command()
     async def wattpad(self, ctx):

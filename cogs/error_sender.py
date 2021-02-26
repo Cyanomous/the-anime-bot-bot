@@ -16,11 +16,9 @@ class error_sender(commands.Cog):
             return
         if not ctx.guild:
             server = "DM "
-        else:
-            server = "Server"
-        if not ctx.guild:
             name = ctx.author
         else:
+            server = "Server"
             name = ctx.guild.name
         fields = [["Error", error], ["Author", ctx.author], [server, name],
                   ["Message", ctx.message.content]]

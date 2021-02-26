@@ -37,10 +37,11 @@ class DontExitArgumentParser(argparse.ArgumentParser):
                     pass
 
         # for custom converter compatibility
-        if inspect.isclass(type_func):
-            if issubclass(type_func, commands.Converter):
-                type_func = type_func().convert
-                param.insert(0, self.ctx)
+        if inspect.isclass(type_func) and issubclass(
+            type_func, commands.Converter
+        ):
+            type_func = type_func().convert
+            param.insert(0, self.ctx)
 
         if not callable(type_func):
             msg = '%r is not callable'

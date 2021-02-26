@@ -141,11 +141,7 @@ class ConnectionState:
 
         status = options.get('status', None)
         if status:
-            if status is Status.offline:
-                status = 'invisible'
-            else:
-                status = str(status)
-
+            status = 'invisible' if status is Status.offline else str(status)
         intents = options.get('intents', None)
         if intents is not None:
             if not isinstance(intents, Intents):
@@ -928,10 +924,9 @@ class ConnectionState:
 
     def parse_guild_ban_remove(self, data):
         guild = self._get_guild(int(data['guild_id']))
-        if guild is not None:
-            if 'user' in data:
-                user = self.store_user(data['user'])
-                self.dispatch('member_unban', guild, user)
+        if guild is not None and 'user' in data:
+            user = self.store_user(data['user'])
+            self.dispatch('member_unban', guild, user)
 
     def parse_guild_role_create(self, data):
         guild = self._get_guild(int(data['guild_id']))

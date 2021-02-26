@@ -32,16 +32,15 @@ class animes(commands.Cog):
     """
         await ctx.trigger_typing()
         async with self.bot.session.get(
-                "https://meme-api.herokuapp.com/gimme/Animemes") as resp:
+                    "https://meme-api.herokuapp.com/gimme/Animemes") as resp:
             meme = await resp.text()
             meme = json.loads(meme)
             if meme["nsfw"] == True:
                 return True
-            else:
-                link = meme["postLink"]
-                title = meme["title"]
-                nsfw = meme["nsfw"]
-                image = meme["preview"][-1]
+            link = meme["postLink"]
+            title = meme["title"]
+            nsfw = meme["nsfw"]
+            image = meme["preview"][-1]
         if nsfw == True:
             return
         embed = discord.Embed(color=0x2ecc71)

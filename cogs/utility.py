@@ -443,7 +443,7 @@ class utility(commands.Cog):
 
     @commands.command()
     async def ip(self, ctx, ip:int):
-        async with self.bot.session.get("https://api.ksoft.si/kumo/geoip", headers = {"Authorization": os.getenv("ksoft")}, params = {"ip": str(ip)}}) as resp:
+        async with self.bot.session.get("https://api.ksoft.si/kumo/geoip", headers = {"Authorization": os.getenv("ksoft")}, params = {"ip": str(ip)}) as resp:
             res = await resp.json()
             res.get("datas").pop("api")
             await ctx.send(json.dumps(res, indent=4))

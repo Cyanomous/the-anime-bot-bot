@@ -40,14 +40,12 @@ async def send_traceback(destination: discord.abc.Messageable, verbosity: int, *
 
     paginator = commands.Paginator(prefix='```py')
     for line in traceback_content.split('\n'):
-        line = line.replace("/home/runner/kageyama-bot/", "OMITTED PATH/")
         paginator.add_line(line)
 
     message = None
 
     for page in paginator.pages:
-        embed = discord.Embed(color=0xFF0000, description=page)
-        message = await destination.send(embed=embed)
+        message = await destination.send(page)
 
     return message
 

@@ -25,15 +25,13 @@ __all__ = ('EmojiSettings', 'PaginatorInterface', 'PaginatorEmbedInterface',
 
 
 # emoji settings, this sets what emoji are used for PaginatorInterface
-EmojiSettings = collections.namedtuple('EmojiSettings', 'start back forward end teleport close')
-# <a:anime_arrow_right:803836812816678912>
-# <a:anime_arrow_left:803836812757434378>
+EmojiSettings = collections.namedtuple('EmojiSettings', 'start back forward end close')
+
 EMOJI_DEFAULT = EmojiSettings(
     start="\N{BLACK LEFT-POINTING DOUBLE TRIANGLE WITH VERTICAL BAR}",
     back="\N{BLACK LEFT-POINTING TRIANGLE}",
     forward="\N{BLACK RIGHT-POINTING TRIANGLE}",
     end="\N{BLACK RIGHT-POINTING DOUBLE TRIANGLE WITH VERTICAL BAR}",
-    teleport="\N{INPUT SYMBOL FOR NUMBERS}",
     close="\N{BLACK SQUARE FOR STOP}"
 )
 
@@ -78,6 +76,7 @@ class PaginatorInterface:  # pylint: disable=too-many-instance-attributes
     def __init__(self, bot: commands.Bot, paginator: commands.Paginator, **kwargs):
         if not isinstance(paginator, commands.Paginator):
             raise TypeError('paginator must be a commands.Paginator instance')
+
         self._display_page = 0
 
         self.bot = bot
@@ -94,7 +93,8 @@ class PaginatorInterface:  # pylint: disable=too-many-instance-attributes
 
         self.task: asyncio.Task = None
         self.send_lock: asyncio.Event = asyncio.Event()
-        self.update_lock: asyncio.Lock = asyncio.Semaphore(value=kwargs.pop('update_max', 2))
+
+        self.close_exception: Exception = None
 
         if self.page_size > self.max_page_size:
             raise ValueError(
@@ -166,7 +166,6 @@ class PaginatorInterface:  # pylint: disable=too-many-instance-attributes
         display_page = self.display_page
         page_num = f'\nPage {display_page + 1}/{self.page_count}'
         content = self.pages[display_page] + page_num
-        embed = discord.Embed(color=0x00ff6a, description=content)
         return {'content': content}
 
     async def add_line(self, *args, **kwargs):
@@ -185,7 +184,9 @@ class PaginatorInterface:  # pylint: disable=too-many-instance-attributes
         if display_page + 1 == page_count:
             # To keep position fixed on the end, update position to new last page and update message.
             self._display_page = new_page_count
-            self.bot.loop.create_task(self.update())
+
+        # Unconditionally set send lock to try and guarantee page updates on unfocused pages
+        self.send_lock.set()
 
     async def send_to(self, destination: discord.abc.Messageable):
         """
@@ -237,19 +238,30 @@ class PaginatorInterface:  # pylint: disable=too-many-instance-attributes
             return False
         return self.task.done()
 
-    async def wait_loop(self):
+    async def send_lock_delayed(self):
+        """
+        A coroutine that returns 1 second after the send lock has been released
+        This helps reduce release spam that hits rate limits quickly
+        """
+
+        gathered = await self.send_lock.wait()
+        self.send_lock.clear()
+        await asyncio.sleep(1)
+        return gathered
+
+    async def wait_loop(self):  # pylint: disable=too-many-branches,too-many-statements
         """
         Waits on a loop for reactions to the message. This should not be called manually - it is handled by `send_to`.
         """
 
-        start, back, forward, end, teleport, close = self.emojis
+        start, back, forward, end, close = self.emojis
 
         def check(payload: discord.RawReactionActionEvent):
             """
             Checks if this reaction is related to the paginator interface.
             """
 
-            owner_check = payload.user_id == self.owner.id
+            owner_check = not self.owner or payload.user_id == self.owner.id
 
             emoji = payload.emoji
             if isinstance(emoji, discord.PartialEmoji) and emoji.is_unicode_emoji():
@@ -264,46 +276,75 @@ class PaginatorInterface:  # pylint: disable=too-many-instance-attributes
             )
 
             return all(tests)
-        def check2(m):
-          return m.author.id == self.owner.id
-        try:
+
+        task_list = [
+            self.bot.loop.create_task(coro) for coro in {
+                self.bot.wait_for('raw_reaction_add', check=check),
+                self.bot.wait_for('raw_reaction_remove', check=check),
+                self.send_lock_delayed()
+            }
+        ]
+
+        try:  # pylint: disable=too-many-nested-blocks
+            last_kwargs = None
+
             while not self.bot.is_closed():
-                tasks = [
-                    asyncio.ensure_future(self.bot.wait_for('raw_reaction_add', check=check)),
-                    asyncio.ensure_future(self.bot.wait_for('raw_reaction_remove', check=check))
-                ]
-                done, pending = await asyncio.wait(tasks, timeout=self.timeout, return_when=asyncio.FIRST_COMPLETED)
-                for task in pending:
-                    task.cancel()
-                if len(done) == 0:
-                    raise asyncio.TimeoutError()
-                payload = done.pop().result()
+                done, _ = await asyncio.wait(task_list, timeout=self.timeout, return_when=asyncio.FIRST_COMPLETED)
 
-                emoji = payload.emoji
-                if isinstance(emoji, discord.PartialEmoji) and emoji.is_unicode_emoji():
-                    emoji = emoji.name
+                for task in done:
+                    task_list.remove(task)
+                    payload = task.result()
 
-                if emoji == close:
-                    await self.message.delete()
-                    return
-                if emoji == start:
-                    self._display_page = 0
-                elif emoji == end:
-                    self._display_page = self.page_count - 1
-                elif emoji == teleport:
-                  message3 = await self.message.channel.send("Which page you want to teleport to?")
-                  message = await self.bot.wait_for("message", timeout=30, check=check2)
-                  self._display_page = int(message.content) - 1
-                  await message3.delete()
+                    if isinstance(payload, discord.RawReactionActionEvent):
+                        emoji = payload.emoji
+                        if isinstance(emoji, discord.PartialEmoji) and emoji.is_unicode_emoji():
+                            emoji = emoji.name
 
-                elif emoji == back:
-                    self._display_page -= 1
-                elif emoji == forward:
-                    self._display_page += 1
+                        if emoji == close:
+                            await self.message.delete()
+                            return
 
-                self.bot.loop.create_task(self.update())
+                        if emoji == start:
+                            self._display_page = 0
+                        elif emoji == end:
+                            self._display_page = self.page_count - 1
+                        elif emoji == back:
+                            self._display_page -= 1
+                        elif emoji == forward:
+                            self._display_page += 1
 
-        except (asyncio.CancelledError, asyncio.TimeoutError):
+                        if payload.event_type == 'REACTION_ADD':
+                            task_list.append(self.bot.loop.create_task(
+                                self.bot.wait_for('raw_reaction_add', check=check)
+                            ))
+                        elif payload.event_type == 'REACTION_REMOVE':
+                            task_list.append(self.bot.loop.create_task(
+                                self.bot.wait_for('raw_reaction_remove', check=check)
+                            ))
+                    else:
+                        # Send lock was released
+                        task_list.append(self.bot.loop.create_task(self.send_lock_delayed()))
+
+                if not self.sent_page_reactions and self.page_count > 1:
+                    self.bot.loop.create_task(self.send_all_reactions())
+                    self.sent_page_reactions = True  # don't spawn any more tasks
+
+                if self.send_kwargs != last_kwargs:
+                    try:
+                        await self.message.edit(**self.send_kwargs)
+                    except discord.NotFound:
+                        # something terrible has happened
+                        return
+
+                    last_kwargs = self.send_kwargs
+
+        except (asyncio.CancelledError, asyncio.TimeoutError) as exception:
+            self.close_exception = exception
+
+            if self.bot.is_closed():
+                # Can't do anything about the messages, so just close out to avoid noisy error
+                return
+
             if self.delete_message:
                 return await self.message.delete()
 
@@ -313,36 +354,9 @@ class PaginatorInterface:  # pylint: disable=too-many-instance-attributes
                 except (discord.Forbidden, discord.NotFound):
                     pass
 
-    async def update(self):
-        """
-        Updates this interface's messages with the latest data.
-        """
-
-        if self.update_lock.locked():
-            return
-
-        await self.send_lock.wait()
-
-        async with self.update_lock:
-            if self.update_lock.locked():
-                # if this engagement has caused the semaphore to exhaust,
-                # we are overloaded and need to calm down.
-                await asyncio.sleep(1)
-
-            if not self.message:
-                # too fast, stagger so this update gets through
-                await asyncio.sleep(0.5)
-
-            if not self.sent_page_reactions and self.page_count > 1:
-                self.bot.loop.create_task(self.send_all_reactions())
-                self.sent_page_reactions = True  # don't spawn any more tasks
-
-            try:
-                await self.message.edit(**self.send_kwargs)
-            except discord.NotFound:
-                # something terrible has happened
-                if self.task:
-                    self.task.cancel()
+        finally:
+            for task in task_list:
+                task.cancel()
 
 
 class PaginatorEmbedInterface(PaginatorInterface):
@@ -417,15 +431,16 @@ class WrappedPaginator(commands.Paginator):
                     break
 
             if not wrapped:
-                if not self.force_wrap:
+                if self.force_wrap:
+                    super().add_line(line[0:true_max_size - 1])
+                    line = line[true_max_size - 1:]
+                else:
                     raise ValueError(
                         f"Line of length {original_length} had sequence of {len(line)} characters"
                         f" (max is {true_max_size}) that WrappedPaginator could not wrap with"
                         f" delimiters: {self.wrap_on}"
                     )
 
-                super().add_line(line[0:true_max_size - 1])
-                line = line[true_max_size - 1:]
         super().add_line(line, empty=empty)
 
 

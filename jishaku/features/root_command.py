@@ -12,6 +12,7 @@ The jishaku root command.
 """
 
 import sys
+import typing
 
 import discord
 import humanize
@@ -45,7 +46,7 @@ class RootCommand(Feature):
         """
 
         summary = [
-            f"Jishaku v{__version__}, discord.py `{discord.__version__}`, "
+            f"Jishaku v{__version__}, discord.py `{package_version('discord.py')}`, "
             f"`Python {sys.version}` on `{sys.platform}`".replace("\n", ""),
             f"Module was loaded {humanize.naturaltime(self.load_time)}, "
             f"cog was loaded {humanize.naturaltime(self.start_time)}.",
@@ -113,8 +114,8 @@ class RootCommand(Feature):
 
         # Show websocket latency in milliseconds
         summary.append(f"Average websocket latency: {round(self.bot.latency * 1000, 2)}ms")
-        embed = discord.Embed(color=0x00ff6a, description="\n".join(summary))
-        await ctx.send(embed=embed)
+
+        await ctx.send("\n".join(summary))
 
     # pylint: disable=no-member
     @Feature.Command(parent="jsk", name="hide")
@@ -161,7 +162,7 @@ class RootCommand(Feature):
         return await interface.send_to(ctx)
 
     @Feature.Command(parent="jsk", name="cancel")
-    async def jsk_cancel(self, ctx: commands.Context, *, index: int):
+    async def jsk_cancel(self, ctx: commands.Context, *, index: typing.Union[int, str]):
         """
         Cancels a task with the given index.
 
@@ -170,6 +171,19 @@ class RootCommand(Feature):
 
         if not self.tasks:
             return await ctx.send("No tasks to cancel.")
+
+        if index == "~":
+            task_count = len(self.tasks)
+
+            for task in self.tasks:
+                task.task.cancel()
+
+            self.tasks.clear()
+
+            return await ctx.send(f"Cancelled {task_count} tasks.")
+
+        if isinstance(index, str):
+            raise commands.BadArgument('Literal for "index" not recognized.')
 
         if index == -1:
             task = self.tasks.pop()

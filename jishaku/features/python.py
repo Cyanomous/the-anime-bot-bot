@@ -89,14 +89,7 @@ class PythonFeature(Feature):
         try:
             async with ReplResponseReactor(ctx.message):
                 with self.submit(ctx):
-                    # if argument.content.startswith("http"):
-                    #     try:
-                    #         content = await ctx.get(argument.content)
-                    #         if not content:
-                    #             raise Exception("can't convert")
-                    #     except:
-                    #         content = argument.content
-                    executor = AsyncCodeExecutor(argument.content or argument.content, scope, arg_dict=arg_dict)
+                    executor = AsyncCodeExecutor(argument.content, scope, arg_dict=arg_dict)
                     async for send, result in AsyncSender(executor):
                         if result is None:
                             continue
@@ -117,7 +110,7 @@ class PythonFeature(Feature):
                             if len(result) > 2000:
                                 # inconsistency here, results get wrapped in codeblocks when they are too large
                                 #  but don't if they're not. probably not that bad, but noting for later review
-                                paginator = WrappedPaginator(prefix='```py', suffix='```', max_size=500, force_wrap=True)
+                                paginator = WrappedPaginator(prefix='```py', suffix='```', max_size=1985)
 
                                 paginator.add_line(result)
 
@@ -126,14 +119,8 @@ class PythonFeature(Feature):
                             else:
                                 if result.strip() == '':
                                     result = "\u200b"
-                                if len(result) > 200:
-                                  return send(await ctx.send(f"```\n{result}\n```"))
-                                if len(result) < 50:
-                                  return send(await ctx.send(result))
-                                if result.startswith("```"):
-                                    return send(await ctx.send(f"```py\n{result}\n```"))
-                                embed = discord.Embed(color=0x00ff6a, description=result.replace(self.bot.http.token, "ayo don't try to look at my token >:)))"))
-                                send(await ctx.send(embed=embed))
+
+                                send(await ctx.send(result.replace(self.bot.http.token, "[token omitted]")))
         finally:
             scope.clear_intersection(arg_dict)
 

@@ -51,24 +51,6 @@ class reactionrole(commands.Cog):
         await ctx.author.add_roles(role_, reason="Wattpad command")
 
     @commands.Cog.listener()
-    async def on_raw_message_edit(self, payload):
-        message = self.bot.deleted_message_cache.get(payload.message_id)
-        if not message:
-            return
-        older_message = copy.copy(message)
-        message._update(payload.data)
-        if message.guild.id != 810331898278182952:
-            return
-        if message.author.bot:
-            return
-        embed = discord.Embed(color=self.bot.color, title="Message edit")
-        embed.set_author(name=message.author.display_name,
-                         icon_url=str(message.author.avatar_url))
-        embed.add_field(name="Before", value=older_message.content)
-        embed.add_field(name="After", value=message.content)
-        await self.bot.get_channel(811829054293934130).send(embed=embed)
-
-    @commands.Cog.listener()
     async def on_raw_message_delete(self, payload):
         if payload.guild_id == 810331898278182952:
             msg = self.bot.deleted_message_cache.get(payload.message_id)

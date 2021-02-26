@@ -16,7 +16,6 @@ import math
 import time
 import traceback
 
-import discord
 from discord.ext import commands
 
 from jishaku.features.baseclass import Feature
@@ -136,16 +135,20 @@ class ManagementFeature(Feature):
             else:
                 text += f"\nWebsocket latency: {self.bot.latency * 1000:.2f}ms"
 
-            embed = discord.Embed(color=0x00ff6a, description=text)
-            before = time.perf_counter()
             # Now do the actual request and reading
             if message:
-                await message.edit(embed=embed)
-            else:
-                message = await ctx.send(embed=embed)
-            after = time.perf_counter()
+                before = time.perf_counter()
+                await message.edit(content=text)
+                after = time.perf_counter()
 
-            api_readings.append(after - before)
+                api_readings.append(after - before)
+            else:
+                before = time.perf_counter()
+                message = await ctx.send(content=text)
+                after = time.perf_counter()
+
+                api_readings.append(after - before)
+
             # Ignore websocket latencies that are 0 or negative because they usually mean we've got bad heartbeats
             if self.bot.latency > 0.0:
                 websocket_readings.append(self.bot.latency)

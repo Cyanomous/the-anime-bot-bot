@@ -538,12 +538,9 @@ class Music(commands.Cog):
         start = (page - 1) * items_per_page
         end = start + items_per_page
 
-        queue = ''
-        for i, song in enumerate(ctx.voice_state.songs[start:end],
-                                 start=start):
-            queue += '`{0}.` [**{1.source.title}**]({1.source.url})\n'.format(
-                i + 1, song)
-
+        queue = ''.join('`{0}.` [**{1.source.title}**]({1.source.url})\n'.format(
+                i + 1, song) for i, song in enumerate(ctx.voice_state.songs[start:end],
+                                 start=start))
         embed = (discord.Embed(description='**{} tracks:**\n\n{}'.format(
             len(ctx.voice_state.songs), queue)).set_footer(
                 text='Viewing page {}/{}'.format(page, pages)))
@@ -630,10 +627,12 @@ class Music(commands.Cog):
             raise commands.CommandError(
                 'You are not connected to any voice channel.')
 
-        if ctx.voice_client:
-            if ctx.voice_client.channel != ctx.author.voice.channel:
-                raise commands.CommandError(
-                    'Bot is already in a voice channel.')
+        if (
+            ctx.voice_client
+            and ctx.voice_client.channel != ctx.author.voice.channel
+        ):
+            raise commands.CommandError(
+                'Bot is already in a voice channel.')
 
 
 def setup(bot):

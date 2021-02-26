@@ -752,9 +752,7 @@ class Client:
 
     @allowed_mentions.setter
     def allowed_mentions(self, value):
-        if value is None:
-            self._connection.allowed_mentions = value
-        elif isinstance(value, AllowedMentions):
+        if value is None or isinstance(value, AllowedMentions):
             self._connection.allowed_mentions = value
         else:
             raise TypeError('allowed_mentions must be AllowedMentions not {0.__class__!r}'.format(value))
@@ -856,8 +854,7 @@ class Client:
         """
 
         for guild in self.guilds:
-            for channel in guild.channels:
-                yield channel
+            yield from guild.channels
 
     def get_all_members(self):
         """Returns a generator with every :class:`.Member` the client can see.
@@ -874,8 +871,7 @@ class Client:
             A member the client can see.
         """
         for guild in self.guilds:
-            for member in guild.members:
-                yield member
+            yield from guild.members
 
     # listeners/waiters
 
@@ -1063,11 +1059,7 @@ class Client:
             if me is None:
                 continue
 
-            if activity is not None:
-                me.activities = (activity,)
-            else:
-                me.activities = ()
-
+            me.activities = (activity, ) if activity is not None else ()
             me.status = status_enum
 
     # Guild stuff
@@ -1225,11 +1217,7 @@ class Client:
         if icon is not None:
             icon = utils._bytes_to_base64_data(icon)
 
-        if region is None:
-            region = VoiceRegion.us_west.value
-        else:
-            region = region.value
-
+        region = VoiceRegion.us_west.value if region is None else region.value
         if code:
             data = await self.http.create_from_template(code, name, region, icon)
         else:
@@ -1461,13 +1449,10 @@ class Client:
             raise InvalidData('Unknown channel type {type} for channel ID {id}.'.format_map(data))
 
         if ch_type in (ChannelType.group, ChannelType.private):
-            channel = factory(me=self.user, data=data, state=self._connection)
-        else:
-            guild_id = int(data['guild_id'])
-            guild = self.get_guild(guild_id) or Object(id=guild_id)
-            channel = factory(guild=guild, state=self._connection, data=data)
-
-        return channel
+            return factory(me=self.user, data=data, state=self._connection)
+        guild_id = int(data['guild_id'])
+        guild = self.get_guild(guild_id) or Object(id=guild_id)
+        return factory(guild=guild, state=self._connection, data=data)
 
     async def fetch_webhook(self, webhook_id):
         """|coro|

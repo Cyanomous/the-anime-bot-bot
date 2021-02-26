@@ -80,8 +80,7 @@ def parse_date(s):
 def get_lines_from_zip(zip_str):
     zip_file = ZipFile(BytesIO(zip_str))
     for name in zip_file.namelist():
-        for line in zip_file.read(name).decode('utf-8').splitlines():
-            yield line
+        yield from zip_file.read(name).decode('utf-8').splitlines()
 
 
 class RateNotFoundError(Exception):
@@ -202,8 +201,11 @@ class CurrencyConverter(object):
                     raise ValueError("Unknown fallback method {0!r}".format(method))
 
     def _compute_bounds(self):
-        self.bounds = dict((currency, Bounds(min(r), max(r)))
-                           for currency, r in iteritems(self._rates))
+        self.bounds = {
+            currency: Bounds(min(r), max(r))
+            for currency, r in iteritems(self._rates)
+        }
+
 
         self.bounds[self.ref_currency] = Bounds(
             min(b.first_date for b in itervalues(self.bounds)),

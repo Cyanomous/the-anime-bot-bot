@@ -25,8 +25,7 @@ class chat(commands.Cog):
         return
     @commands.command()
     async def chatgraph(self, ctx, *, limit:int=500):
-        if limit > 10000:
-            limit = 10000
+        limit = min(limit, 10000)
         await ctx.send("Collecting might take long")
         msg = Counter()
         counter = 0

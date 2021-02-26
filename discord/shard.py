@@ -413,7 +413,7 @@ class AutoShardedClient(Client):
 
         self._connection.shard_count = self.shard_count
 
-        shard_ids = self.shard_ids if self.shard_ids else range(self.shard_count)
+        shard_ids = self.shard_ids or range(self.shard_count)
         self._connection.shard_ids = shard_ids
 
         for shard_id in shard_ids:
@@ -430,11 +430,11 @@ class AutoShardedClient(Client):
             item = await self.__queue.get()
             if item.type == EventType.close:
                 await self.close()
-                if isinstance(item.error, ConnectionClosed):
-                    if item.error.code != 1000:
-                        raise item.error
-                    if item.error.code == 4014:
-                        raise PrivilegedIntentsRequired(item.shard.id) from None
+                if (
+                    isinstance(item.error, ConnectionClosed)
+                    and item.error.code != 1000
+                ):
+                    raise item.error
                 return
             elif item.type in (EventType.identify, EventType.resume):
                 await item.shard.reidentify(item.error)

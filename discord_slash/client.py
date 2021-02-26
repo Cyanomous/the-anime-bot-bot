@@ -344,7 +344,7 @@ class SlashCommand:
         """
         name = name or cmd.__name__
         name = name.lower()
-        guild_ids = guild_ids if guild_ids else []
+        guild_ids = guild_ids or []
         if name in self.commands:
             tgt = self.commands[name]
             if not tgt.has_subcommands:
@@ -412,7 +412,7 @@ class SlashCommand:
         name = name or cmd.__name__
         name = name.lower()
         description = description or getdoc(cmd)
-        guild_ids = guild_ids if guild_ids else []
+        guild_ids = guild_ids or []
 
         if base in self.commands:
             for x in guild_ids:
@@ -524,8 +524,9 @@ class SlashCommand:
         """
 
         def wrapper(cmd):
-            obj = self.add_slash_command(cmd, name, description, guild_ids, options, connector)
-            return obj
+            return self.add_slash_command(
+                cmd, name, description, guild_ids, options, connector
+            )
 
         return wrapper
 
@@ -595,8 +596,18 @@ class SlashCommand:
         subcommand_group_description = subcommand_group_description or sub_group_desc
 
         def wrapper(cmd):
-            obj = self.add_subcommand(cmd, base, subcommand_group, name, description, base_description, subcommand_group_description, guild_ids, options, connector)
-            return obj
+            return self.add_subcommand(
+                cmd,
+                base,
+                subcommand_group,
+                name,
+                description,
+                base_description,
+                subcommand_group_description,
+                guild_ids,
+                options,
+                connector,
+            )
 
         return wrapper
 
@@ -735,9 +746,9 @@ class SlashCommand:
 
             # This is to temporarily fix Issue #97, that on Android device
             # does not give option type from API.
-            temporary_auto_convert = {}
-            for x in selected_cmd.options:
-                temporary_auto_convert[x["name"].lower()] = x["type"]
+            temporary_auto_convert = {
+                x["name"].lower(): x["type"] for x in selected_cmd.options
+            }
 
             args = await self.process_options(ctx.guild, to_use["data"]["options"], selected_cmd.connector, temporary_auto_convert) \
                 if "options" in to_use["data"] else {}
@@ -775,9 +786,9 @@ class SlashCommand:
 
                 # This is to temporarily fix Issue #97, that on Android device
                 # does not give option type from API.
-                temporary_auto_convert = {}
-                for n in selected.options:
-                    temporary_auto_convert[n["name"].lower()] = n["type"]
+                temporary_auto_convert = {
+                    n["name"].lower(): n["type"] for n in selected.options
+                }
 
                 args = await self.process_options(ctx.guild, x["options"], selected.connector, temporary_auto_convert) \
                     if "options" in x else {}
@@ -788,9 +799,9 @@ class SlashCommand:
 
         # This is to temporarily fix Issue #97, that on Android device
         # does not give option type from API.
-        temporary_auto_convert = {}
-        for n in selected.options:
-            temporary_auto_convert[n["name"].lower()] = n["type"]
+        temporary_auto_convert = {
+            n["name"].lower(): n["type"] for n in selected.options
+        }
 
         args = await self.process_options(ctx.guild, sub_opts, selected.connector, temporary_auto_convert) \
             if "options" in sub else {}
@@ -823,10 +834,11 @@ class SlashCommand:
         :type ex: Exception
         :return:
         """
-        if self.has_listener:
-            if self._discord.extra_events.get('on_slash_command_error'):
-                self._discord.dispatch("slash_command_error", ctx, ex)
-                return
+        if self.has_listener and self._discord.extra_events.get(
+            'on_slash_command_error'
+        ):
+            self._discord.dispatch("slash_command_error", ctx, ex)
+            return
         if hasattr(self._discord, "on_slash_command_error"):
             self._discord.dispatch("slash_command_error", ctx, ex)
             return

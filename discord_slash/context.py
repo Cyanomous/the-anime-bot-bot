@@ -48,8 +48,13 @@ class SlashContext:
         self.bot = _discord
         self.logger = logger
         self.sent = False
-        self.guild_id = int(_json["guild_id"]) if "guild_id" in _json.keys() else None
-        self.author_id = int(_json["member"]["user"]["id"] if "member" in _json.keys() else _json["user"]["id"])
+        self.guild_id = int(_json["guild_id"]) if "guild_id" in _json else None
+        self.author_id = int(
+            _json["member"]["user"]["id"]
+            if "member" in _json
+            else _json["user"]["id"]
+        )
+
         self.channel_id = int(_json["channel_id"])
         if self.guild:
             self.author = discord.Member(data=_json["member"], state=self.bot._connection, guild=self.guild)

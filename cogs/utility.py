@@ -114,7 +114,7 @@ class Transformer(ast.NodeTransformer):
     ])
 
     def visit_Name(self, node):
-        if not node.id in self.ALLOWED_NAMES:
+        if node.id not in self.ALLOWED_NAMES:
             raise RuntimeError(f"Access denied for {node.id}")
 
         return self.generic_visit(node)
@@ -507,23 +507,28 @@ class utility(commands.Cog):
     async def mystbin(self, ctx, *, code:str=None):
         if ctx.message.reference:
             if ctx.message.reference.cached_message:
-                if ctx.message.reference.cached_message.attachments:
-                    if ctx.message.reference.cached_message.attachments[0].filename.endswith((".txt", ".py", ".json", ".html", ".csv")):
-                        message = await ctx.message.reference.cached_message.attachments[0].read()
-                        message = message.decode("utf-8")
-                        return await ctx.send(str(await self.bot.mystbin.post(message, syntax=ctx.message.reference.cached_message.attachments[0].filename.split(".")[1])))
+                if (
+                    ctx.message.reference.cached_message.attachments
+                    and ctx.message.reference.cached_message.attachments[
+                        0
+                    ].filename.endswith((".txt", ".py", ".json", ".html", ".csv"))
+                ):
+                    message = await ctx.message.reference.cached_message.attachments[0].read()
+                    message = message.decode("utf-8")
+                    return await ctx.send(str(await self.bot.mystbin.post(message, syntax=ctx.message.reference.cached_message.attachments[0].filename.split(".")[1])))
             else:
                 message = await self.bot.get_channel(ctx.message.reference.channel_id).fetch_message(ctx.message.reference.message_id)
-                if message.attachments:
-                    if message.attachments.filename.endswith((".txt", ".py", ".json", ".html", ".csv")):
-                        message_ = await message.attachments[0].read()
-                        message_ = message_.decode("utf-8")
-                        return await ctx.send(str(await self.bot.mystbin.post(message_, syntax=message.attachments[0].filename.split(".")[1])))
+                if message.attachments and message.attachments.filename.endswith(
+                    (".txt", ".py", ".json", ".html", ".csv")
+                ):
+                    message_ = await message.attachments[0].read()
+                    message_ = message_.decode("utf-8")
+                    return await ctx.send(str(await self.bot.mystbin.post(message_, syntax=message.attachments[0].filename.split(".")[1])))
 
-                    
 
 
-        if code == None:
+
+        if code is None:
             message = ctx.message.attachments[0]
             if message:
                 syntax = message.filename.split(".")[1]
@@ -539,7 +544,7 @@ class utility(commands.Cog):
                         message = message.decode("utf-8")
                         return await ctx.send(str(await self.bot.mystbin.post(message, syntax="html")))
                     except:
-                        
+
                         message = f"Unable to decode so here is the byte {message}"
                         return await ctx.send(str(await self.bot.mystbin.post(message, syntax="python")))
             await ctx.send(str(await self.bot.mystbin.post(code)))
@@ -559,7 +564,7 @@ class utility(commands.Cog):
         async with self.bot.session.get(website) as resp:
             soup = BeautifulSoup(await resp.text(), features="lxml")
             canonical = soup.find('link', {'rel': 'canonical'})
-            if canonical == None:
+            if canonical is None:
                 return await ctx.send(f"`{resp.real_url}`")
             await ctx.send(f"`{canonical['href']}`")
 
@@ -637,7 +642,7 @@ class utility(commands.Cog):
         """
     The first message send in that channel
     """
-        if channel == None:
+        if channel is None:
             channel = ctx.channel
         msg = await channel.history(around=channel.created_at,
                                     oldest_first=True,
@@ -676,8 +681,7 @@ class utility(commands.Cog):
             tree = ast.parse(thing, mode='eval')
             transformer.visit(tree)
             clause = compile(tree, '<AST>', 'eval')
-            result = eval(clause, dict(Decimal=decimal.Decimal))
-            return result
+            return eval(clause, dict(Decimal=decimal.Decimal))
         except OverflowError as e:
             raise e
         except Exception as e:
@@ -697,10 +701,6 @@ class utility(commands.Cog):
             return await ctx.send("nope don't even think about it")
         if "**" in thing:
             return await ctx.send("Power not supported")
-            lists = thing.split("**")
-            for i in lists:
-                if len(i) > 3:
-                    return await ctx.send("number too long")
         result = str(await
                      self.bot.loop.run_in_executor(None, self.calc, thing))
         if "None" in result:
@@ -720,10 +720,8 @@ class utility(commands.Cog):
     The max limit of it is 5000
     Avaible datatype: guild_update, channel_create, channel_update, channel_delete, etc. There are a tons of datatype is hmm hard to list them all here. List of datatypes: https://discordpy.readthedocs.io/en/latest/api.html#discord.AuditLogAction
     """
-        lists = []
-        if limit > 5000:
-            limit = 5000
-        if datatype == None:
+        limit = min(limit, 5000)
+        if datatype is None:
             entries = await ctx.guild.audit_logs(limit=limit).flatten()
         else:
             entries = await ctx.guild.audit_logs(limit=limit,
@@ -731,10 +729,11 @@ class utility(commands.Cog):
                                                      discord.AuditLogAction,
                                                      datatype)).flatten()
         paginator = commands.Paginator(max_size=1000)
-        for i in entries:
-            lists.append(
-                f"Action: {i.action}\nExtra info: {i.extra}\nBefore: {i.before}\nAfter: {i.after}\nDone by: {i.user}\nTime: {i.created_at}\nReason: {i.reason}\nTarget: {i.target}\n"
-            )
+        lists = [
+            f"Action: {i.action}\nExtra info: {i.extra}\nBefore: {i.before}\nAfter: {i.after}\nDone by: {i.user}\nTime: {i.created_at}\nReason: {i.reason}\nTarget: {i.target}\n"
+            for i in entries
+        ]
+
         for i in lists:
             paginator.add_line(i)
         interface = PaginatorInterface(ctx.bot, paginator, owner=ctx.author)
@@ -790,14 +789,13 @@ class utility(commands.Cog):
                 embed = discord.Embed(color=self.bot.color,
                                       title=partialemoji.name, description=f"`{str(partialemoji)}`\nCustom Emoji")
                 embed.set_image(url=link)
-                await ctx.send(embed=embed)
             else:
                 emoji_link = await emoji_to_url(emoji)
                 embed = discord.Embed(color=self.bot.color,
                                       title=unicodedata.name(
                                           emoji, "Can not find emoji\'s name"), description="Unicode emoji/Discord Emoji")
                 embed.set_image(url=emoji_link)
-                await ctx.send(embed=embed)
+            await ctx.send(embed=embed)
         except:
             emoji_link = await emoji_to_url(emoji)
             embed = discord.Embed(color=self.bot.color,
@@ -811,11 +809,8 @@ class utility(commands.Cog):
         """
     Parse a discord token
     """
-        counter = 0
-        for i in token:
-            if i == ".":
-                counter += 1
-        if not counter == 2:
+        counter = token.count(".")
+        if counter != 2:
             return await ctx.reply("Enter a valid token")
         TOKEN = token.split(".")
         id_ = base64.b64decode(TOKEN[0]).decode("utf-8")
@@ -872,10 +867,10 @@ class utility(commands.Cog):
       Shows you the guild's informations.
     """
         guild1 = guild
-        if guild1 == None:
+        if guild1 is None:
             guild1 = ctx.message.guild
         else:
-            if self.bot.get_guild(guild) == None:
+            if self.bot.get_guild(guild) is None:
                 return await ctx.send(
                     "Bot do not have permission to view that guild")
             else:
@@ -939,7 +934,7 @@ class utility(commands.Cog):
     Shows you the user's informations.
     """
         member1 = member
-        if member1 == None:
+        if member1 is None:
             member1 = ctx.guild.get_member(ctx.author.id)
         if isinstance(member1, discord.Member):
             embed = discord.Embed(color=self.bot.color)
@@ -1001,11 +996,6 @@ class utility(commands.Cog):
                 value=
                 f"**Bot:** {bot}\n**Account Created at:** {created_at}\n**Nickname:** {nickname}\n**UserId:** {id}\n**Joined Server at:** {joined_at}\n**Boosted Server since since:** {premium_since}\n**Discord Staff:** {staff}\n**Discord Partner:** {partner}\n**Hypesquad:** {hypesquad}\n**Bug Hunter:** {bug_hunter}\n**Early Supporter:** {early_supporter}\n**Verified Bot:** {verified_bot}\n**Early Verified Bot Developer:** {verified_bot_developer}\n**Avatar Animated:** {avatar_animated}\n**Top Role:** {toprole}"
             )
-            embed.set_footer(
-                text=
-                f"requested by {ctx.author} response time : {round(self.bot.latency * 1000)} ms",
-                icon_url=ctx.author.avatar_url)
-            await ctx.reply(embed=embed)
         else:
             embed = discord.Embed(color=self.bot.color)
             embed.set_author(name=member1)
@@ -1059,11 +1049,12 @@ class utility(commands.Cog):
                 value=
                 f"**Bot:** {bot}\n**Account Created at:** {created_at}\n**UserId:** {id}\n**Discord Staff:** {staff}\n**Discord Partner:** {partner}\n**Hypesquad:** {hypesquad}\n**Bug Hunter:** {bug_hunter}\n**Early Supporter:** {early_supporter}\n**Verified Bot:** {verified_bot}\n**Early Verified Bot Developer:** {verified_bot_developer}\n**Avatar Animated:** {avatar_animated}"
             )
-            embed.set_footer(
-                text=
-                f"requested by {ctx.author} response time : {round(self.bot.latency * 1000)} ms",
-                icon_url=ctx.author.avatar_url)
-            await ctx.reply(embed=embed)
+
+        embed.set_footer(
+            text=
+            f"requested by {ctx.author} response time : {round(self.bot.latency * 1000)} ms",
+            icon_url=ctx.author.avatar_url)
+        await ctx.reply(embed=embed)
 
     @commands.command()
     async def avatar(self, ctx, member: discord.User = None):
@@ -1072,7 +1063,7 @@ class utility(commands.Cog):
 
     """
         member1 = member
-        if member1 == None:
+        if member1 is None:
             member1 = ctx.author
         embed = discord.Embed(color=self.bot.color)
         embed.set_image(url=str(member1.avatar_url_as(static_format="png")))

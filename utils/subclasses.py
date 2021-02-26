@@ -62,9 +62,8 @@ class AnimeContext(commands.Context):
     if self.message.id in self.bot._message_cache:
       if self.message.edited_at:
         msg = self.bot._message_cache[self.message.id]
-        if content:
-            if "embed" in kwargs:
-              kwargs.pop("embed")
+        if content and "embed" in kwargs:
+          kwargs.pop("embed")
         await msg.edit(content=content, **kwargs)
         return msg
       else:
@@ -78,9 +77,8 @@ class AnimeContext(commands.Context):
     if self.message.id in self.bot._message_cache:
       if self.message.edited_at:
         msg = self.bot._message_cache[self.message.id]
-        if content:
-            if "embed" in kwargs:
-              kwargs.pop("embed")
+        if content and "embed" in kwargs:
+          kwargs.pop("embed")
         await msg.edit(content=content, **kwargs)
         return msg
       else:

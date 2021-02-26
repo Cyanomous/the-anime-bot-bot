@@ -136,22 +136,16 @@ class ManagementFeature(Feature):
             else:
                 text += f"\nWebsocket latency: {self.bot.latency * 1000:.2f}ms"
 
+            embed = discord.Embed(color=0x00ff6a, description=text)
+            before = time.perf_counter()
             # Now do the actual request and reading
             if message:
-                embed = discord.Embed(color=0x00ff6a, description=text)
-                before = time.perf_counter()
                 await message.edit(embed=embed)
-                after = time.perf_counter()
-
-                api_readings.append(after - before)
             else:
-                embed = discord.Embed(color=0x00ff6a, description=text)
-                before = time.perf_counter()
                 message = await ctx.send(embed=embed)
-                after = time.perf_counter()
+            after = time.perf_counter()
 
-                api_readings.append(after - before)
-
+            api_readings.append(after - before)
             # Ignore websocket latencies that are 0 or negative because they usually mean we've got bad heartbeats
             if self.bot.latency > 0.0:
                 websocket_readings.append(self.bot.latency)

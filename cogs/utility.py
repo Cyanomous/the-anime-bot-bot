@@ -445,7 +445,7 @@ class utility(commands.Cog):
     async def ip(self, ctx, ip):
         async with self.bot.session.get("https://api.ksoft.si/kumo/geoip", headers = {"Authorization": os.getenv("ksoft")}, params = {"ip": ip}) as resp:
             res = await resp.json()
-            if res.error:
+            if res.get("error"):
                 return await ctx.send(res.error)
             res.get("data").pop("apis")
             await ctx.send(json.dumps(res, indent=4))

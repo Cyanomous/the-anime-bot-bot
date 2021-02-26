@@ -325,7 +325,7 @@ class events(commands.Cog):
         elif payload.get("op") == 6:
             print(f"\033[92mSend Resume payload\033[0m")
         elif payload.get("op") == 8:
-            print(f"\033[92mRequested guild members\033[0m")
+            print(f"\033[92mRequested guild members Guild id: {payload.get("d").get("guild_id")}\033[0m")
 
     @commands.Cog.listener()
     async def on_socket_raw_receive(self, msg):
@@ -384,11 +384,7 @@ class events(commands.Cog):
     @staticmethod
     @asyncexe()
     def on_guild_join_(guild):
-        with open("prefixes.json", "r") as f:
-            prefixes = json.load(f)
-        prefixes[str(guild.id)] = "$"
-        with open("prefixes.json", "w") as f:
-            json.dump(prefixes, f, indent=4)
+        pass
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
@@ -401,12 +397,7 @@ class events(commands.Cog):
     @staticmethod
     @asyncexe()
     def on_guild_remove_(guild):
-        with open("prefixes.json", "r") as f:
-            prefixes = json.load(f)
-        prefixes.pop(str(guild.id))
-        with open("prefixes.json", "w") as f:
-            json.dump(prefixes, f, indent=4)
-
+        pass
     @commands.Cog.listener()
     async def on_guild_remove(self, guild):
         await self.on_guild_remove_(guild)

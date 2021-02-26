@@ -1,6 +1,7 @@
 import asyncio
 import difflib
 import functools
+import logging
 import os
 import re
 import sys
@@ -16,6 +17,15 @@ from discord_slash import SlashCommand
 from utils.HelpPaginator import CannotPaginate, HelpPaginator
 from utils.subclasses import AnimeBot
 
+logging.basicConfig(level=logging.INFO)
+
+logger = logging.getLogger('discord')
+logger.setLevel(logging.DEBUG)
+handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
+handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+logger.addHandler(handler)
+
+
 asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -27,6 +37,7 @@ TOKEN = os.getenv("TOKEN")
 bot = AnimeBot()
 slash = SlashCommand(bot, sync_commands=True,
                      sync_on_cog_reload=True, override_type=True)
+
 
 @slash.slash(name="wtf", guild_ids=[786359602241470464])
 async def wtf(ctx):

@@ -36,7 +36,7 @@ class AnimeContext(commands.Context):
       if ref and isinstance(ref.resolved, discord.Message):
           return ref.resolved.to_reference()
       return None
-  
+
   def big_embed(self):
     embed = discord.Embed(color=0x00ff6a, title="a"*256, description="a"*2048)
     embed.add_field(name="a"*256, value="a"*112)
@@ -59,8 +59,6 @@ class AnimeContext(commands.Context):
     #   embed = discord.Embed(color=0x2ecc71, description=content)
     #   message = super().send(content=None, embed=embed)
     #   return message
-    if not self.message.channel.permissions_for(self.me).text():
-      return False
     if self.message.id in self.bot._message_cache:
       if self.message.edited_at:
         msg = self.bot._message_cache[self.message.id]

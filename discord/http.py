@@ -194,7 +194,7 @@ class HTTPClient:
                         if remaining == '0' and r.status != 429:
                             # we've depleted our current bucket
                             delta = utils._parse_ratelimit_header(r, use_clock=self.use_clock)
-                            log.debug('A rate limit bucket has been exhausted (bucket: %s, retry: %s).', bucket, delta)
+                            log.info('A rate limit bucket has been exhausted (bucket: %s, retry: %s).', bucket, delta)
                             maybe_lock.defer()
                             self.loop.call_later(delta, lock.release)
 

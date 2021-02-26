@@ -33,6 +33,7 @@ POSTGRE_DATABASE_URL = os.getenv("POSTGRE_DATABASE_URL")
 class events(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.started = False
         self.bot.ws_recieved = 0
         self.bot.send = 0
         self.status.start(bot)
@@ -83,10 +84,15 @@ class events(commands.Cog):
     @tasks.loop(minutes=1)
     async def chunk(self):
         await self.bot.wait_until_ready()
+        if self.started == False:
+            print(f"\033[92mStarted chunking\033[0m")
         for guild in self.bot.guilds:
             if not guild.chunked:
                 await guild.chunk()
             await asyncio.sleep(1)
+        if self.started == False:
+            print(f"\033[92mFinshed chunking\033[0m")
+            self.started = True
 
     @tasks.loop(minutes=1)
     async def post(self, bot):
@@ -324,8 +330,6 @@ class events(commands.Cog):
             print(f"\033[92mSend Identify payload\033[0m")
         elif payload.get("op") == 6:
             print(f"\033[92mSend Resume payload\033[0m")
-        elif payload.get("op") == 8:
-            print(f"\033[92mRequested guild members Guild id: {payload.get('d').get('guild_id')}\033[0m")
 
     @commands.Cog.listener()
     async def on_socket_raw_receive(self, msg):

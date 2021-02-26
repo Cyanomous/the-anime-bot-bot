@@ -4,7 +4,6 @@ import itertools
 from utils.asyncstuff import asyncexe
 
 
-
 class utils:
     @asyncexe()
     def all_possible_caps(self, text):

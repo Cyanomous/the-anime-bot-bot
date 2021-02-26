@@ -325,7 +325,7 @@ class events(commands.Cog):
         elif payload.get("op") == 6:
             print(f"\033[92mSend Resume payload\033[0m")
         elif payload.get("op") == 8:
-            print(f"\033[92mRequested guild members Guild id: {payload.get("d").get("guild_id")}\033[0m")
+            print(f"\033[92mRequested guild members Guild id: {payload.get('d').get('guild_id')}\033[0m")
 
     @commands.Cog.listener()
     async def on_socket_raw_receive(self, msg):

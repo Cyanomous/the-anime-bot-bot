@@ -63,19 +63,22 @@ class events(commands.Cog):
 
     @tasks.loop(minutes=5)
     async def update(self, bot):
-        await bot.wait_until_ready()
-        message = bot.get_channel(809204640054640641).get_partial_message(
-            809205344814891040)
-        current_time = time.time()
-        lists = []
-        difference = int(current_time - bot.start_time) / 60
-        lists.append(
-            f"Received {bot.socket_receive} {bot.socket_receive//difference} per minute"
-        )
-        for i, (n, v) in enumerate(bot.socket_stats.most_common()):
-            lists.append(f"{n:<30} {v:<20} {round(v/difference, 3)} /minute")
-        lists = "\n".join(lists)
-        await message.edit(content=f"```\n{lists}\n```")
+        try:
+            await bot.wait_until_ready()
+            message = bot.get_channel(809204640054640641).get_partial_message(
+                809205344814891040)
+            current_time = time.time()
+            lists = []
+            difference = int(current_time - bot.start_time) / 60
+            lists.append(
+                f"Received {bot.socket_receive} {bot.socket_receive//difference} per minute"
+            )
+            for i, (n, v) in enumerate(bot.socket_stats.most_common()):
+                lists.append(f"{n:<30} {v:<20} {round(v/difference, 3)} /minute")
+            lists = "\n".join(lists)
+            await message.edit(content=f"```\n{lists}\n```")
+        except:
+            pass
 
     @tasks.loop(minutes=1)
     async def chunk(self):

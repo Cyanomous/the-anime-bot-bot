@@ -17,8 +17,6 @@ from discord_slash import SlashCommand
 from utils.HelpPaginator import CannotPaginate, HelpPaginator
 from utils.subclasses import AnimeBot
 
-logging.basicConfig(level=logging.INFO)
-
 logger = logging.getLogger('discord')
 logger.setLevel(logging.INFO)
 handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')

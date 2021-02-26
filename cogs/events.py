@@ -404,11 +404,14 @@ class events(commands.Cog):
         pass
     @commands.Cog.listener()
     async def on_guild_remove(self, guild):
-        await self.on_guild_remove_(guild)
-        channel = self.bot.get_channel(799806497118224415)
-        await channel.send(
-            f"**{guild.name}** just kicked the bot with **{guild.member_count}** members "
-        )
+        try:
+            await self.on_guild_remove_(guild)
+            channel = self.bot.get_channel(799806497118224415)
+            await channel.send(
+                f"**{guild.name}** just kicked the bot with **{guild.member_count}** members "
+            )
+        except:
+            pass
 
     @commands.Cog.listener()
     async def on_message(self, message):

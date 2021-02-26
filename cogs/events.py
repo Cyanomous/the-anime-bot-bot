@@ -306,8 +306,22 @@ class events(commands.Cog):
         pass
 
     @commands.Cog.listener()
+    async def on_socket_response(self, msg):
+        if msg.get("op") == 7:
+            print(f"\033[92mRecieved reconnect request\033[0m")
+        if msg.get("op") == 9:
+            print(f"\033[92mRecieved invalid session request\033[0m")
+        if msg.get("op") == 10:
+            print(f"\033[92mRecieved hello request\033[0m")
+
+    @commands.Cog.listener()
     async def on_socket_raw_send(self, payload):
-        pass
+        if payload.get("op") == 2:
+            print(f"\033[92mSend Identify payload\033[0m")
+        elif payload.get("op") == 6:
+            print(f"\033[92mSend Resume payload\033[0m")
+        elif payload.get("op") == 8:
+            print(f"\033[92mRequested guild members\033[0m")
 
     @commands.Cog.listener()
     async def on_socket_raw_receive(self, msg):
@@ -319,7 +333,7 @@ class events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_resumed(self):
-        pass
+        print(f"\033[92mResumed Discord session\033[0m")
 
     @commands.Cog.listener()
     async def on_shard_ready(self, shard_id):
@@ -331,7 +345,7 @@ class events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_disconnect(self):
-        pass
+        print(f"\033[93mDisconnected from Discord\033[0m")
 
     @commands.Cog.listener()
     async def on_shard_connect(self, shard_id):
@@ -339,7 +353,7 @@ class events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_connect(self):
-        pass
+        print(f"\033[92mConnected to Discord\033[0m")
 
     @commands.Cog.listener()
     async def on_raw_message_edit(self, payload):

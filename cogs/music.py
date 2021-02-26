@@ -317,7 +317,6 @@ class Music(commands.Cog):
         self.bot = bot
         self.voice_states = {}
 
-    @classmethod
     @asyncexe()
     def get_lyrics(self, song):
         genius = lg.Genius(TOKEN_ACCESS,

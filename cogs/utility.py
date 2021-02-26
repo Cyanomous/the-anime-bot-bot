@@ -448,7 +448,7 @@ class utility(commands.Cog):
             if res.get("error"):
                 return await ctx.send(res.error)
             res.get("data").pop("apis")
-            await ctx.send(json.dumps(res, indent=4))
+            await ctx.send(f"```\n{json.dumps(res, indent=4)}\n```)
     
     @commands.command()
     async def pypi(self, ctx, name):

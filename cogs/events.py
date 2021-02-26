@@ -316,6 +316,10 @@ class events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_socket_raw_send(self, payload):
+        try:
+            payload = json.loads(payload)
+        except:
+            return
         if payload.get("op") == 2:
             print(f"\033[92mSend Identify payload\033[0m")
         elif payload.get("op") == 6:

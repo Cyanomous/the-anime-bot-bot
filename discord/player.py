@@ -24,6 +24,7 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
 
+
 import threading
 import traceback
 import subprocess
@@ -51,10 +52,7 @@ __all__ = (
     'PCMVolumeTransformer',
 )
 
-if sys.platform != 'win32':
-    CREATE_NO_WINDOW = 0
-else:
-    CREATE_NO_WINDOW = 0x08000000
+CREATE_NO_WINDOW = 0 if sys.platform != 'win32' else 0x08000000
 
 class AudioSource:
     """Represents an audio stream.

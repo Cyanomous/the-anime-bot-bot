@@ -594,8 +594,8 @@ class GuildConverter(IDConverter):
         if result is None:
             result = discord.utils.get(ctx.bot.guilds, name=argument)
 
-            if result is None:
-                raise GuildNotFound(argument)
+        if result is None:
+            raise GuildNotFound(argument)
         return result
 
 class EmojiConverter(IDConverter):

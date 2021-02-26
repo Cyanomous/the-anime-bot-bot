@@ -165,10 +165,7 @@ class owners(commands.Cog):
                 )
             soup = BeautifulSoup(await resp.text(), features="lxml")
             canonical = soup.find('link', {'rel': 'canonical'})
-            if canonical == None:
-                website_ = str(resp.real_url)
-            else:
-                website_ = str(canonical['href'])
+            website_ = str(resp.real_url) if canonical is None else str(canonical['href'])
         if ctx.channel.nsfw == False:
             lists = [
                 "dick", "pussy", "horny", "porn", "cum", "cunt", "cock",

@@ -950,10 +950,8 @@ class MenuPages(Menu):
     async def show_checked_page(self, page_number):
         max_pages = self._source.get_max_pages()
         try:
-            if max_pages is None:
+            if max_pages is None or max_pages > page_number >= 0:
                 # If it doesn't give maximum pages, it cannot be checked
-                await self.show_page(page_number)
-            elif max_pages > page_number >= 0:
                 await self.show_page(page_number)
         except IndexError:
             # An error happened that can be handled, so ignore it.
@@ -1043,9 +1041,8 @@ class ListPageSource(PageSource):
         """
         if self.per_page == 1:
             return self.entries[page_number]
-        else:
-            base = page_number * self.per_page
-            return self.entries[base:base + self.per_page]
+        base = page_number * self.per_page
+        return self.entries[base:base + self.per_page]
 
 _GroupByEntry = namedtuple('_GroupByEntry', 'key items')
 
@@ -1145,7 +1142,7 @@ class AsyncIteratorPageSource(PageSource):
     async def _iterate(self, n):
         it = self.iterator
         cache = self._cache
-        for i in range(0, n):
+        for _ in range(n):
             try:
                 elem = await it.__anext__()
             except StopAsyncIteration:

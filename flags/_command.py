@@ -31,11 +31,7 @@ def group(**kwargs):
 
 def add_flag(*flag_names, **kwargs):
     def inner(func):
-        if isinstance(func, commands.Command):
-            nfunc = func.callback
-        else:
-            nfunc = func
-
+        nfunc = func.callback if isinstance(func, commands.Command) else func
         if not hasattr(nfunc, '_def_parser'):
             nfunc._def_parser = _parser.DontExitArgumentParser()
         nfunc._def_parser.add_argument(*flag_names, **kwargs)
@@ -108,9 +104,7 @@ class FlagCommand(commands.Command):
                 result.append('[%s]...' % name)
             elif self._is_typing_optional(param.annotation):
                 result.append('[%s]' % name)
-            elif param.kind == param.VAR_KEYWORD:
-                pass
-            else:
+            elif param.kind != param.VAR_KEYWORD:
                 result.append('<%s>' % name)
 
         return ' '.join(result)
@@ -207,9 +201,8 @@ class FlagCommand(commands.Command):
                 await self._parse_flag_arguments(ctx)
                 break
 
-        if not self.ignore_extra:
-            if not view.eof:
-                raise commands.TooManyArguments('Too many arguments passed to ' + self.qualified_name)
+        if not self.ignore_extra and not view.eof:
+            raise commands.TooManyArguments('Too many arguments passed to ' + self.qualified_name)
 
 
 class FlagGroup(FlagCommand, commands.Group):

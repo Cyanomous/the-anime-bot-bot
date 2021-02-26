@@ -829,13 +829,10 @@ class Guild(Hashable):
             payload = {
                 'allow': allow.value,
                 'deny': deny.value,
-                'id': target.id
+                'id': target.id,
+                'type': 'role' if isinstance(target, Role) else 'member',
             }
 
-            if isinstance(target, Role):
-                payload['type'] = 'role'
-            else:
-                payload['type'] = 'member'
 
             perms.append(payload)
 
@@ -1116,21 +1113,17 @@ class Guild(Hashable):
         except KeyError:
             icon = self.icon
         else:
-            if icon_bytes is not None:
-                icon = utils._bytes_to_base64_data(icon_bytes)
-            else:
-                icon = None
-
+            icon = None if icon_bytes is None else utils._bytes_to_base64_data(icon_bytes)
         try:
             banner_bytes = fields['banner']
         except KeyError:
             banner = self.banner
         else:
-            if banner_bytes is not None:
-                banner = utils._bytes_to_base64_data(banner_bytes)
-            else:
+            if banner_bytes is None:
                 banner = None
 
+            else:
+                banner = utils._bytes_to_base64_data(banner_bytes)
         try:
             vanity_code = fields['vanity_code']
         except KeyError:
@@ -1143,11 +1136,11 @@ class Guild(Hashable):
         except KeyError:
             splash = self.splash
         else:
-            if splash_bytes is not None:
-                splash = utils._bytes_to_base64_data(splash_bytes)
-            else:
+            if splash_bytes is None:
                 splash = None
 
+            else:
+                splash = utils._bytes_to_base64_data(splash_bytes)
         fields['icon'] = icon
         fields['banner'] = banner
         fields['splash'] = splash
@@ -1255,8 +1248,7 @@ class Guild(Hashable):
             if factory is None:
                 raise InvalidData('Unknown channel type {type} for channel ID {id}.'.format_map(data))
 
-            channel = factory(guild=self, state=self._state, data=d)
-            return channel
+            return factory(guild=self, state=self._state, data=d)
 
         return [convert(d) for d in data]
 
@@ -1791,10 +1783,8 @@ class Guild(Hashable):
                 raise InvalidArgument('%r is not a valid field.' % key)
 
         data = await self._state.http.create_role(self.id, reason=reason, **fields)
-        role = Role(guild=self, data=data, state=self._state)
-
         # TODO: add to cache
-        return role
+        return Role(guild=self, data=data, state=self._state)
 
     async def edit_role_positions(self, positions, *, reason=None):
         """|coro|

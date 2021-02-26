@@ -34,12 +34,10 @@ class cooldown(commands.Cog):
     async def global_cooldown(self, ctx: AnimeContext):
         bucket = self.normal_cooldown.get_bucket(ctx.message)
         retry_after = bucket.update_rate_limit()
-        if ctx.author.id == 590323594744168494:
+        if ctx.author.id == 590323594744168494 or not retry_after:
             return True
-        elif retry_after:
-            raise GlobalCooldown(bucket, retry_after)
         else:
-            return True
+            raise GlobalCooldown(bucket, retry_after)
 
 
 def setup(bot):

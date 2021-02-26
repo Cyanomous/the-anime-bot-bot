@@ -52,10 +52,7 @@ class others(commands.Cog):
         """
     Generate a completely random token from a server member THE TOKEN IS NOT VALID so don't be scared
     """
-        if not user:
-            member = random.choice(ctx.guild.members)
-        else:
-            member = user
+        member = random.choice(ctx.guild.members) if not user else user
         byte_first = str(member.id).encode('ascii')
         first_encode = base64.b64encode(byte_first)
         first = first_encode.decode('ascii')
@@ -71,7 +68,7 @@ class others(commands.Cog):
         cap = Pair(97, 122)  # a - z
         select = (num, cap_alp, cap)
         last = ""
-        for each in range(27):
+        for _ in range(27):
             pair = random.choice(select)
             last += str(chr(random.randint(pair.min, pair.max)))
         final = ".".join((first, middle, last))
@@ -175,8 +172,7 @@ class others(commands.Cog):
         """
   the bot will type for the time u provide yes idk what i made the max is 5 minute :O
     """
-        if seconds > 300:
-            seconds = 300
+        seconds = min(seconds, 300)
 
         async with ctx.channel.typing():
             await asyncio.sleep(seconds)
@@ -252,7 +248,7 @@ class others(commands.Cog):
     @commands.cooldown(1, 30, commands.BucketType.channel)
     async def rtt(self, ctx):
         lists = []
-        for i in range(5):
+        for _ in range(5):
             start = time.perf_counter()
             await ctx.trigger_typing()
             end = time.perf_counter()
@@ -464,7 +460,7 @@ class others(commands.Cog):
             counter = count_to
             message = await ctx.reply(
                 f"start counting down to {counter} will dm you when is done")
-            for x in range(counter):
+            for _ in range(counter):
                 counter -= 1
                 await asyncio.sleep(1)
                 if counter == 0:

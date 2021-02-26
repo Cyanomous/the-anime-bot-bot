@@ -273,11 +273,7 @@ class BaseUser(_BaseUser):
         if message.mention_everyone:
             return True
 
-        for user in message.mentions:
-            if user.id == self.id:
-                return True
-
-        return False
+        return any(user.id == self.id for user in message.mentions)
 
 class ClientUser(BaseUser):
     """Represents your Discord user.
@@ -456,11 +452,7 @@ class ClientUser(BaseUser):
         except KeyError:
             avatar = self.avatar
         else:
-            if avatar_bytes is not None:
-                avatar = _bytes_to_base64_data(avatar_bytes)
-            else:
-                avatar = None
-
+            avatar = None if avatar_bytes is None else _bytes_to_base64_data(avatar_bytes)
         not_bot_account = not self.bot
         password = fields.get('password')
         if not_bot_account and password is None:

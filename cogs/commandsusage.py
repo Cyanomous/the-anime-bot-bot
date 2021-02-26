@@ -18,8 +18,7 @@ class commandsusage(commands.Cog):
     @commands.command()
     async def commandsusage(self, ctx):
         counter = 0
-        lists = []
-        lists.append(f"Total {self.bot.command_counter} commands invoked")
+        lists = [f"Total {self.bot.command_counter} commands invoked"]
         for i, (n, v) in enumerate(self.bot.commandsusages.most_common()):
             counter += 1
             lists.append(f"`{counter}. {n:<20} {v}`")

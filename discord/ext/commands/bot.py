@@ -165,9 +165,8 @@ class BotBase(GroupMixin):
             return
 
         cog = context.cog
-        if cog:
-            if Cog._get_overridden_method(cog.cog_command_error) is not None:
-                return
+        if cog and Cog._get_overridden_method(cog.cog_command_error) is not None:
+            return
 
         print('Ignoring exception in command {}:'.format(context.command), file=sys.stderr)
         traceback.print_exception(type(exception), exception, exception.__traceback__, file=sys.stderr)
@@ -572,10 +571,12 @@ class BotBase(GroupMixin):
 
         # remove all the listeners from the module
         for event_list in self.extra_events.copy().values():
-            remove = []
-            for index, event in enumerate(event_list):
-                if event.__module__ is not None and _is_submodule(name, event.__module__):
-                    remove.append(index)
+            remove = [
+                index
+                for index, event in enumerate(event_list)
+                if event.__module__ is not None
+                and _is_submodule(name, event.__module__)
+            ]
 
             for index in reversed(remove):
                 del event_list[index]

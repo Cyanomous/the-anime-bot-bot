@@ -288,14 +288,17 @@ class utility(commands.Cog):
         def transform(tup):
             return tup[0]
 
-        matches = fuzzy.finder(obj, cache, key=lambda t: t[0], lazy=False)[:10]
+        matches = fuzzy.finder(obj, cache, key=lambda t: t[0], lazy=False)
 
         e = discord.Embed(colour=0x00ff6a)
         if len(matches) == 0:
             return await ctx.send("Can't find anything")
+        paginator = commands.Paginator(prefix="", suffix="", max_size=1980)
+        for i,v in matches:
+            paginator.add_line(f'[{i}]({v})')
 
-        e.description = '\n'.join(f'[{key}]({url})' for key, url in matches)
-        await ctx.send(embed=e, reference=ctx.replied_reference)
+        interface = PaginatorEmbedInterface(ctx.bot, paginator, owner=ctx.author)
+        await interface.send_to(ctx)
 
     @staticmethod
     def choosebstofcal(ctx, times, choices):

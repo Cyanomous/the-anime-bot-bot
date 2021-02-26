@@ -46,7 +46,7 @@ class RootCommand(Feature):
         """
 
         summary = [
-            f"Jishaku v{__version__}, discord.py `{package_version('discord.py')}`, "
+            f"Jishaku v{__version__}, discord.py `{discord.__version__}`, "
             f"`Python {sys.version}` on `{sys.platform}`".replace("\n", ""),
             f"Module was loaded {humanize.naturaltime(self.load_time)}, "
             f"cog was loaded {humanize.naturaltime(self.start_time)}.",

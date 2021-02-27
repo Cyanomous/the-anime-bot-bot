@@ -561,7 +561,7 @@ class utility(commands.Cog):
 
     @commands.command()
     async def replacespace(self, ctx, emoji, *, thing):
-        await ctx.send(thing.replace(" ", emoji))
+        await ctx.send(thing.replace(" ", emoji), allowed_mentions=discord.AllowedMentions.none())
 
     @commands.command()
     async def redirectcheck(self, ctx, *, website):

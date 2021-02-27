@@ -157,6 +157,9 @@ case_insensitive=True, allowed_mentions=discord.AllowedMentions(everyone=False, 
                               self.command_list.append(str(subcommand3))
                               self.command_list.extend([f"{subcommand2} {subcommand3_alias}" for subcommand3_alias in subcommand3.aliases])
     super().run(*args, **kwargs)
+  async def close(self):
+    await self.session.close()
+    await super().close()
   def get_message(self, message_id):
     return self._connection._get_message(message_id)
 

@@ -329,12 +329,13 @@ class others(commands.Cog):
     @staticmethod
     @asyncexe()
     def commits_():
-        lists = []
         repo = g.get_repo(
             "Cryptex-github/the-anime-bot-bot").get_commits()
-        for i in repo:
-            lists.append(
-                f"[`{i.commit.sha[:7]}`]({i.commit.html_url}) {i.commit.message}")
+        lists = [
+            f"[`{i.commit.sha[:7]}`]({i.commit.html_url}) {i.commit.message}"
+            for i in repo
+        ]
+
         paginator = commands.Paginator(prefix="", suffix="", max_size=1000)
         for i in lists:
             paginator.add_line(i)

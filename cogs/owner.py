@@ -151,6 +151,7 @@ class owners(commands.Cog):
         await ctx.send("no")
 
     @commands.command()
+    @commands.is_nsfw()
     async def takepic(self, ctx, *, website: str):
         """
     Disclaimer: even we already have nsfw check in sfw channel but we don't guarantee that is completely safe if anyone ever used the bot to screenshot nsfw website in sfw channel. We have 0 responsibility to that

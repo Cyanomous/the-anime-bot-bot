@@ -102,7 +102,7 @@ class AnimeColor(discord.Color):
 async def prefix_get(bot, message):
   return ['OVO ', 'OVO ', 'OVo ', 'OVo ', 'OvO ', 'OvO ', 'Ovo ', 'Ovo ', 'oVO ', 'oVO ', 'oVo ', 'oVo ', 'ovO ', 'ovO ', 'ovo ', 'ovo ']
 
-class AnimeBot(commands.AutoShardedBot):
+class AnimeBot(commands.Bot):
   def __init__(self):
     intents = discord.Intents.default()
     intents.members=True

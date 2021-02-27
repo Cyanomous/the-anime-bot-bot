@@ -118,7 +118,7 @@ description="""
   |_| |_| |_|\___| /_/   \_\_| |_|_|_| |_| |_|\___| |____/ \___/ \__|
 """,
 chunk_guilds_at_startup=False, 
-case_insensitive=True, allowed_mentions=discord.AllowedMentions(everyone=False, replied_user=False))
+case_insensitive=True, allowed_mentions=discord.AllowedMentions(everyone=False, replied_user=False, roles=False))
   def run(self, *args, **kwargs):
     # self.ipc.start()
     subprocess.check_output("pip install speedtest-cli", shell=True)

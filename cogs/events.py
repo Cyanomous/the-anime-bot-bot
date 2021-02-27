@@ -100,8 +100,7 @@ class events(commands.Cog):
         await bot.session.post("https://top.gg/api/bots/787927476177076234/stats",
                            headers={"Authorization": topgg},
                            data=json.dumps({
-                               "server_count": len(bot.guilds),
-                               "shard_count": bot.shard_count
+                               "server_count": len(bot.guilds)
                            }))
         await bot.session.post(
             "https://discordbotlist.com/api/v1/bots/anime-quotepic-bot/stats",
@@ -118,7 +117,6 @@ class events(commands.Cog):
                },
                data=json.dumps({
                    "guildCount": len(bot.guilds),
-                   "shardCount": len(bot.shards)
                })) as resp:
             pass
         await bot.session.post(
@@ -135,8 +133,7 @@ class events(commands.Cog):
                 "Content-Type": "application/json"
             },
             data=json.dumps(
-                {"shards": [len(bot.guilds) / 2,
-                            len(bot.guilds) / 2]}))
+                {"server_count": len(bot.guilds)}))
 
     @commands.Cog.listener()
     async def on_command_completion(self, ctx):
